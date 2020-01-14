@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/27 18:24:37 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/01/14 16:12:22 by qsharoly         ###   ########.fr       */
+/*   Updated: 2020/01/14 16:16:46 by qsharoly         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static t_fmt	get_format(const char * str)
 	return (f);
 }
 
-void	put(t_fmt fmt, va_list ap)
+static void	put(t_fmt fmt, va_list ap)
 {
 	char	*str;
 
