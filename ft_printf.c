@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/27 18:24:37 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/02/17 12:44:08 by qsharoly         ###   ########.fr       */
+/*   Updated: 2020/02/17 13:59:56 by qsharoly         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ static int	char_in_str(char needle, const char *hay)
 
 /*
 ** repeated flag symbols are skipped
-** if there is no type at end of format, set fmt.type to '\0'
 */
 
 static t_fmt	get_format(const char *str)
@@ -60,7 +59,12 @@ static t_fmt	get_format(const char *str)
 		fmt.specifier_length++;
 		ptr++;
 	}
-
+	fmt.min_field_width = ft_simple_atoi(ptr);
+	while (*ptr >= '0' && *ptr <= '9')
+	{
+		ptr++;
+		fmt.specifier_length++;
+	}
 	if (char_in_str(*ptr, "%sdixX"))
 	{
 		fmt.type = *ptr;
@@ -71,12 +75,13 @@ static t_fmt	get_format(const char *str)
 	return (fmt);
 }
 
-static void make_pad(char *pad, int padlen, char flags)
+static char *make_pad(int padlen, char flags)
 {
 	int		i;
+	char	*pad;
 	char	padchar;
 
-	if (flag_is_set(flags, PAD_WITH_ZEROS))
+	if (flag_is_set(flags, PAD_WITH_ZEROS) && !flag_is_set(flags, PAD_FROM_RIGHT))
 		padchar = '0';
 	else
 		padchar = ' ';
@@ -93,6 +98,7 @@ static void make_pad(char *pad, int padlen, char flags)
 		i++;
 	}
 	pad[padlen] = '\0';
+	return (pad);
 }
 
 static void	put(t_fmt fmt, va_list ap)
@@ -151,19 +157,22 @@ static void	put(t_fmt fmt, va_list ap)
 		str = NULL;
 	if (str)
 	{
-		if (ft_strlen(str) + ft_strlen(prefix) < fmt.min_field_width)
+		padlen = fmt.min_field_width - ft_strlen(str) - ft_strlen(prefix);
+		pad = NULL;
+		if (padlen > 0)
+			pad = make_pad(padlen, fmt.flags);
+		if (pad && !flag_is_set(fmt.flags, PAD_FROM_RIGHT))
 		{
-			padlen = fmt.min_field_width - ft_strlen(str) - ft_strlen(prefix);
-			pad = NULL;
-			make_pad(pad, padlen, fmt.flags);
-			if (pad)
-			{
-				write(1, pad, padlen);
-				free(pad);
-			}
+			write(1, pad, padlen);
+			free(pad);
 		}
 		write(1, prefix, ft_strlen(prefix));
 		write(1, str, ft_strlen(str));
+		if (pad && flag_is_set(fmt.flags, PAD_FROM_RIGHT))
+		{
+			write(1, pad, padlen);
+			free(pad);
+		}
 	}
 	if (fmt.type != 's' && fmt.type != '%')
 		free(str);

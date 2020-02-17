@@ -4,6 +4,7 @@
 int		main(void)
 {
 	int	i;
+	/*
 	//simple cases
 	ft_printf("just a string\n");
 	ft_printf("percent sign%%ef\n");
@@ -25,12 +26,20 @@ int		main(void)
 		ft_printf("Prefix pos with a space % d\n", i);
 		i++;
 	}
+	*/
+	//min width and padding flags
+	ft_printf("%10d\n", 12);
+	ft_printf("%010d\n", 10);
+	ft_printf("% 10d\n", 33);
+	ft_printf("%-10dtons\n", 100);
+	ft_printf("%-010dignorewhat\n", 23);
+	printf("%-010dignore\n", 19);
+	/*
 	//negative cases
 	ft_printf("no type % 0ratata %d\n", 13, 14);
 	printf("no type % 0ratata %d\n", 15, 16);
-	/*
 	ft_printf("type mi%smatch\n", 100500);//segfault
-	*/
 	ft_printf("what if %d\n", "i put a string there");//print some integer
+	*/
 	return (0);
 }

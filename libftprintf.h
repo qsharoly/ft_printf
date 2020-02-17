@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 15:31:58 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/02/17 12:19:52 by qsharoly         ###   ########.fr       */
+/*   Updated: 2020/02/17 13:21:43 by qsharoly         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ typedef			struct s_fmt
 
 int		ft_strlen(char *s);
 void	ft_strupper(char *s);
+int		ft_simple_atoi(const char *s);
 char	*ft_itoa_base(int value, int base);
 int		ft_printf(const char * format, ...);
 

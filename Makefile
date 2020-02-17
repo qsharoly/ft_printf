@@ -2,7 +2,7 @@ NAME = libftprintf.a
 WFLAGS = -Wall -Wextra -Werror
 OBJDIR = obj
 
-SRC = ft_printf.c ft_itoa_base.c ft_strlen.c ft_strupper.c
+SRC = ft_printf.c ft_itoa_base.c ft_simple_atoi.c ft_strlen.c ft_strupper.c
 OBJ = $(SRC:%.c=$(OBJDIR)/%.o)
 
 $(shell mkdir -p $(OBJDIR))
