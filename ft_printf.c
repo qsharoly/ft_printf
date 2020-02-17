@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/27 18:24:37 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/02/17 14:32:53 by qsharoly         ###   ########.fr       */
+/*   Updated: 2020/02/17 14:53:02 by qsharoly         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ static t_fmt	get_format(const char *str)
 		ptr++;
 		fmt.specifier_length++;
 	}
-	if (char_in_str(*ptr, "%sdixX"))
+	if (char_in_str(*ptr, "%sdioxX"))
 	{
 		fmt.type = *ptr;
 		fmt.specifier_length++;
