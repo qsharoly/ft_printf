@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/27 18:24:37 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/02/17 13:59:56 by qsharoly         ###   ########.fr       */
+/*   Updated: 2020/02/17 14:32:53 by qsharoly         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ static char *make_pad(int padlen, char flags)
 	return (pad);
 }
 
-static void	put(t_fmt fmt, va_list ap)
+static void	put(t_fmt fmt, va_list ap, int *total)
 {
 	char	*str;
 	char	*pad;
@@ -154,13 +154,20 @@ static void	put(t_fmt fmt, va_list ap)
 			prefix = "";
 	}
 	else
+	{
 		str = NULL;
+		prefix = "";
+	}
 	if (str)
 	{
+		*total += ft_strlen(str) + ft_strlen(prefix);
 		padlen = fmt.min_field_width - ft_strlen(str) - ft_strlen(prefix);
 		pad = NULL;
 		if (padlen > 0)
+		{
 			pad = make_pad(padlen, fmt.flags);
+			*total += padlen;
+		}
 		if (pad && !flag_is_set(fmt.flags, PAD_FROM_RIGHT))
 		{
 			write(1, pad, padlen);
@@ -184,7 +191,9 @@ int				ft_printf(const char * format, ...)
 	char	*cur;
 	va_list	ap;
 	t_fmt	f;
+	int		total;
 
+	total = 0;
 	start = (char *)format;
 	cur = (char *)format;
 	va_start(ap, format);
@@ -193,8 +202,9 @@ int				ft_printf(const char * format, ...)
 		if (*cur == '%')
 		{
 			write(1, start, cur - start);
+			total += cur - start;
 			f = get_format(cur);
-			put(f, ap);
+			put(f, ap, &total);
 			start = cur + f.specifier_length;
 			cur = start;
 		}
@@ -202,6 +212,7 @@ int				ft_printf(const char * format, ...)
 			cur++;
 	}
 	write(1, start, cur - start);
+	total += cur - start;
 	va_end(ap);
-	return (0);
+	return (total);
 }

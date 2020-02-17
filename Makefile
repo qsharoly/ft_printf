@@ -7,6 +7,8 @@ OBJ = $(SRC:%.c=$(OBJDIR)/%.o)
 
 $(shell mkdir -p $(OBJDIR))
 
+.PHONY: all clean fclean re
+
 all: $(NAME)
 
 $(NAME): $(OBJ)
@@ -14,3 +16,11 @@ $(NAME): $(OBJ)
 
 $(OBJDIR)/%.o: %.c
 	gcc $(WFLAGS) -c -o $@ $<
+
+clean:
+	rm -rf $(OBJDIR)
+fclean: clean
+	rm -f $(NAME)
+re: fclean
+	make all
+

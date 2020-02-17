@@ -11,9 +11,12 @@ int		main(void)
 	ft_printf("just an int %d def\n", 5);
 	ft_printf("%s well\n", "very");
 	ft_printf("my %s equals %d%%\n", "value", -123);
+	*/
+	ft_printf("abc %x %X %x %X", 42, 42, -42, -42);
 	//prefixes
 	ft_printf("High hex %#X\n", 255);
 	ft_printf("Lower hex %#x\n", 243);
+	/*
 	i = -1;
 	while (i <= 1)
 	{

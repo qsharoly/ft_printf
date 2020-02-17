@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 15:42:01 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/01/14 15:52:19 by qsharoly         ###   ########.fr       */
+/*   Updated: 2020/02/17 14:39:34 by qsharoly         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static int	my_abs(int nbr)
 
 static char	make_digit(int nbr)
 {
-	return (nbr < 10 ? '0' + nbr : 'A' + nbr - 10);
+	return (nbr < 10 ? '0' + nbr : 'a' + nbr - 10);
 }
 
 static void	do_itoa(char *str, int value, int base)
