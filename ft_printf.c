@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/27 18:24:37 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/02/21 16:29:07 by qsharoly         ###   ########.fr       */
+/*   Updated: 2020/02/21 17:36:44 by qsharoly         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ static t_fmt	get_format(const char *str)
 	ptr = (char *)str + 1;
 	fmt.min_field_width = 0;
 	fmt.specifier_length = 1;
+	fmt.precision = -1;
 	fmt.flags = 0;
 	while (char_in_str(*ptr, "0-+ #"))
 	{
@@ -64,6 +65,17 @@ static t_fmt	get_format(const char *str)
 	{
 		ptr++;
 		fmt.specifier_length++;
+	}
+	if (*ptr == '.')
+	{
+		ptr++;
+		fmt.specifier_length++;
+		fmt.precision = ft_simple_atoi(ptr);
+		while (*ptr >= '0' && *ptr <= '9')
+		{
+			ptr++;
+			fmt.specifier_length++;
+		}
 	}
 	if (char_in_str(*ptr, "%sdioxX"))
 	{
@@ -124,6 +136,10 @@ static void	put(t_fmt fmt, va_list ap, int *total)
 	else if (fmt.type == 'd' || fmt.type == 'i')
 	{
 		nb = va_arg(ap, int);
+		if (fmt.precision == 0)
+			str = "";
+		else
+			str = ft_itoa_base_abs(nb, 10);
 		if (nb >= 0)
 		{
 			if (flag_is_set(fmt.flags, PLUS_POSITIVE))
@@ -135,12 +151,14 @@ static void	put(t_fmt fmt, va_list ap, int *total)
 		}
 		else
 			prefix = "-";
-		str = ft_itoa_base_abs(nb, 10);
 	}
 	else if (fmt.type == 'o')
 	{
 		nb = va_arg(ap, int);
-		str = ft_itoa_base_unsigned((unsigned int)nb, 8);
+		if (fmt.precision == 0)
+			str = "";
+		else
+			str = ft_itoa_base_unsigned((unsigned int)nb, 8);
 		if (flag_is_set(fmt.flags, ALTERNATE_FORM) && nb != 0)
 			prefix = "0";
 		else
@@ -149,7 +167,10 @@ static void	put(t_fmt fmt, va_list ap, int *total)
 	else if (fmt.type == 'x' || fmt.type == 'X')
 	{
 		nb = va_arg(ap, int);
-		str = ft_itoa_base_unsigned((unsigned int)nb, 16);
+		if (fmt.precision == 0)
+			str = "";
+		else
+			str = ft_itoa_base_unsigned((unsigned int)nb, 16);
 		if (fmt.type == 'X')
 			ft_strupper(str);
 		if (flag_is_set(fmt.flags, ALTERNATE_FORM) && nb != 0)
@@ -199,7 +220,7 @@ static void	put(t_fmt fmt, va_list ap, int *total)
 		}
 		free(pad);
 	}
-	if (fmt.type != 's' && fmt.type != '%')
+	if (fmt.type != 's' && fmt.type != '%' && fmt.precision != 0)
 		free(str);
 }
 

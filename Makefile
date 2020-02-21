@@ -15,7 +15,7 @@ $(NAME): $(OBJ)
 	ar rcs $(NAME) $(OBJ)
 
 $(OBJDIR)/%.o: %.c
-	gcc $(WFLAGS) -c -o $@ $<
+	gcc -g $(WFLAGS) -c -o $@ $<
 
 clean:
 	rm -rf $(OBJDIR)

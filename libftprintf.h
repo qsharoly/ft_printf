@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 15:31:58 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/02/21 16:17:17 by qsharoly         ###   ########.fr       */
+/*   Updated: 2020/02/21 16:44:47 by qsharoly         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,10 @@ typedef			struct s_fmt
 {
 	int		specifier_length;
 	int		min_field_width;
+	int		precision;
 	char	flags;
 	char	type;
+	char	size;
 }				t_fmt;
 
 int		ft_strlen(char *s);

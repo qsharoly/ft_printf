@@ -14,8 +14,8 @@ int		main(void)
 	*/
 	ft_printf("abc %x %X %x %X", 42, 42, -42, -42);
 	//prefixes
-	ft_printf("High hex %#X\n", 255);
 	ft_printf("Lower hex %#x\n", 243);
+	ft_printf("High hex %#X\n", 255);
 	/*
 	i = -1;
 	while (i <= 1)
@@ -36,7 +36,7 @@ int		main(void)
 	ft_printf("% 10d\n", 33);
 	ft_printf("%-10dtons\n", 100);
 	ft_printf("%-010dignorewhat\n", 23);
-	printf("%-010dignore\n", 19);
+	ft_printf("zero precision shouldnt print zero%.o %.0o\n", 0, 0);
 	/*
 	//negative cases
 	ft_printf("no type % 0ratata %d\n", 13, 14);
