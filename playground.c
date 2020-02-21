@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <unistd.h>
 
 int		bit_is_set(int nb, int offset)
 {
@@ -107,5 +108,8 @@ int		main(void)
 	printf("% .200f\n", make_from_binary("0""01111111""00000000000000000000001"));
 	printf("%+d\n%+d\n%+d\n", -1, 0, 1);
 	printf("% d\n% d\n% d\n", -1, 0, 1);
+	printf("%#0o\n", 127);
+	printf("%#0o\n", 0);
+	write(1, NULL, 0);
 	return (0);
 }

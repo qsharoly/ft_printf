@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 15:31:58 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/02/17 13:21:43 by qsharoly         ###   ########.fr       */
+/*   Updated: 2020/02/21 16:17:17 by qsharoly         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ int		ft_strlen(char *s);
 void	ft_strupper(char *s);
 int		ft_simple_atoi(const char *s);
 char	*ft_itoa_base(int value, int base);
+char	*ft_itoa_base_abs(int value, int base);
+char	*ft_itoa_base_unsigned(unsigned int value, unsigned int base);
 int		ft_printf(const char * format, ...);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/27 18:24:37 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/02/17 14:53:02 by qsharoly         ###   ########.fr       */
+/*   Updated: 2020/02/21 16:29:07 by qsharoly         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,8 @@ static void	put(t_fmt fmt, va_list ap, int *total)
 	else if (fmt.type == 's')
 	{
 		str = va_arg(ap, char *);
+		if (str == NULL)
+			str = "(null)";
 		prefix = "";
 	}
 	else if (fmt.type == 'd' || fmt.type == 'i')
@@ -132,23 +134,25 @@ static void	put(t_fmt fmt, va_list ap, int *total)
 				prefix = "";
 		}
 		else
-			prefix = "";
-		str = ft_itoa_base(nb, 10);
+			prefix = "-";
+		str = ft_itoa_base_abs(nb, 10);
 	}
 	else if (fmt.type == 'o')
 	{
-		str = ft_itoa_base(va_arg(ap, int), 8);
-		if (flag_is_set(fmt.flags, ALTERNATE_FORM))
+		nb = va_arg(ap, int);
+		str = ft_itoa_base_unsigned((unsigned int)nb, 8);
+		if (flag_is_set(fmt.flags, ALTERNATE_FORM) && nb != 0)
 			prefix = "0";
 		else
 			prefix = "";
 	}
 	else if (fmt.type == 'x' || fmt.type == 'X')
 	{
-		str = ft_itoa_base(va_arg(ap, int), 16);
+		nb = va_arg(ap, int);
+		str = ft_itoa_base_unsigned((unsigned int)nb, 16);
 		if (fmt.type == 'X')
 			ft_strupper(str);
-		if (flag_is_set(fmt.flags, ALTERNATE_FORM))
+		if (flag_is_set(fmt.flags, ALTERNATE_FORM) && nb != 0)
 			prefix = fmt.type == 'x' ? "0x" : "0X";
 		else
 			prefix = "";
@@ -170,16 +174,30 @@ static void	put(t_fmt fmt, va_list ap, int *total)
 		}
 		if (pad && !flag_is_set(fmt.flags, PAD_FROM_RIGHT))
 		{
-			write(1, pad, padlen);
-			free(pad);
+			if (flag_is_set(fmt.flags, PAD_WITH_ZEROS) && (fmt.type == 'd' || fmt.type == 'i' || flag_is_set(fmt.flags, ALTERNATE_FORM)))
+			{
+				write(1, prefix, ft_strlen(prefix));
+				write(1, pad, padlen);
+			}
+			else
+			{
+				write(1, pad, padlen);
+				write(1, prefix, ft_strlen(prefix));
+			}
+			write(1, str, ft_strlen(str));
 		}
-		write(1, prefix, ft_strlen(prefix));
-		write(1, str, ft_strlen(str));
-		if (pad && flag_is_set(fmt.flags, PAD_FROM_RIGHT))
+		else if (pad && flag_is_set(fmt.flags, PAD_FROM_RIGHT))
 		{
+			write(1, prefix, ft_strlen(prefix));
+			write(1, str, ft_strlen(str));
 			write(1, pad, padlen);
-			free(pad);
 		}
+		else
+		{
+			write(1, prefix, ft_strlen(prefix));
+			write(1, str, ft_strlen(str));
+		}
+		free(pad);
 	}
 	if (fmt.type != 's' && fmt.type != '%')
 		free(str);
