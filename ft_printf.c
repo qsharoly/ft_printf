@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/27 18:24:37 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/02/21 18:02:24 by qsharoly         ###   ########.fr       */
+/*   Updated: 2020/02/26 14:42:43 by qsharoly         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 static int	flag_is_set(const char flags, const char which)
 {
-	return (flags & which);
+	return ((flags & which) != 0);
 }
 
 static int	char_in_str(char needle, const char *hay)
@@ -109,6 +109,7 @@ static void	put(t_fmt fmt, va_list ap, int *total)
 	char	*prefix;
 	int		nb;
 	int		padlen;
+	int		strlen;
 
 	if (fmt.type == '%')
 	{
@@ -174,8 +175,12 @@ static void	put(t_fmt fmt, va_list ap, int *total)
 	}
 	if (str)
 	{
-		*total += ft_strlen(str) + ft_strlen(prefix);
-		padlen = fmt.min_field_width - ft_strlen(str) - ft_strlen(prefix);
+		if (fmt.type == 's' && fmt.precision != -1 && fmt.precision < ft_strlen(str))
+			strlen = fmt.precision;
+		else
+			strlen = ft_strlen(str);
+		*total += strlen + ft_strlen(prefix);
+		padlen = fmt.min_field_width - strlen - ft_strlen(prefix);
 		pad = NULL;
 		if (padlen > 0)
 		{
@@ -194,18 +199,18 @@ static void	put(t_fmt fmt, va_list ap, int *total)
 				write(1, pad, padlen);
 				write(1, prefix, ft_strlen(prefix));
 			}
-			write(1, str, ft_strlen(str));
+			write(1, str, strlen);
 		}
 		else if (pad && flag_is_set(fmt.flags, PAD_FROM_RIGHT))
 		{
 			write(1, prefix, ft_strlen(prefix));
-			write(1, str, ft_strlen(str));
+			write(1, str, strlen);
 			write(1, pad, padlen);
 		}
 		else
 		{
 			write(1, prefix, ft_strlen(prefix));
-			write(1, str, ft_strlen(str));
+			write(1, str, strlen);
 		}
 		free(pad);
 	}
