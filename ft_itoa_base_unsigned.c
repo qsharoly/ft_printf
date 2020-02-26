@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/21 16:14:34 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/02/21 16:18:42 by qsharoly         ###   ########.fr       */
+/*   Updated: 2020/02/26 15:21:33 by qsharoly         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,14 +47,21 @@ static void	do_itoa(char *str, unsigned int value, unsigned int base)
 	}
 }
 
-char		*ft_itoa_base_unsigned(unsigned int value, unsigned int base)
+char		*ft_itoa_base_unsigned(unsigned int value, unsigned int base, int min_digits)
 {
 	char	*a;
 	int		n_digits;
+	int		pad_size;
 
 	n_digits = count_digits(value, base);
-	a = malloc(sizeof(*a) * (n_digits + 1));
-	do_itoa(a + n_digits - 1, value, base);
-	a[n_digits] = '\0';
+	pad_size = min_digits > n_digits ? min_digits - n_digits : 0;
+	a = malloc(sizeof(*a) * (pad_size + n_digits + 1));
+	do_itoa(a + pad_size + n_digits - 1, value, base);
+	a[pad_size + n_digits] = '\0';
+	while (pad_size > 0)
+	{
+		a[pad_size - 1] = '0';
+		pad_size--;
+	}
 	return (a);
 }

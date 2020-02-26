@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 15:42:01 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/02/21 16:14:25 by qsharoly         ###   ########.fr       */
+/*   Updated: 2020/02/26 15:22:54 by qsharoly         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,36 +52,21 @@ static void	do_itoa(char *str, int value, int base)
 	}
 }
 
-char		*ft_itoa_base(int value, int base)
+char		*ft_itoa_base_abs(int value, int base, int min_digits)
 {
 	char	*a;
 	int		n_digits;
+	int		pad_size;
 
 	n_digits = count_digits(value, base);
-	if (value < 0 && base == 10)
+	pad_size = min_digits > n_digits ? min_digits - n_digits : 0;
+	a = malloc(sizeof(*a) * (n_digits + pad_size + 1));
+	do_itoa(a + n_digits + pad_size - 1, value, base);
+	a[n_digits + pad_size] = '\0';
+	while (pad_size > 0)
 	{
-		a = malloc(sizeof(*a) * (n_digits + 2));
-		*a = '-';
-		do_itoa(a + n_digits, value, base);
-		a[n_digits + 1 ] = '\0';
+		a[pad_size - 1] = '0';
+		pad_size--;
 	}
-	else
-	{
-		a = malloc(sizeof(*a) * (n_digits + 1));
-		do_itoa(a + n_digits - 1, value, base);
-		a[n_digits] = '\0';
-	}
-	return (a);
-}
-
-char		*ft_itoa_base_abs(int value, int base)
-{
-	char	*a;
-	int		n_digits;
-
-	n_digits = count_digits(value, base);
-	a = malloc(sizeof(*a) * (n_digits + 1));
-	do_itoa(a + n_digits - 1, value, base);
-	a[n_digits] = '\0';
 	return (a);
 }

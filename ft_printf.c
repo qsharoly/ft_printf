@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/27 18:24:37 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/02/26 14:42:43 by qsharoly         ###   ########.fr       */
+/*   Updated: 2020/02/26 15:38:11 by qsharoly         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,10 +126,10 @@ static void	put(t_fmt fmt, va_list ap, int *total)
 	else if (fmt.type == 'd' || fmt.type == 'i')
 	{
 		nb = va_arg(ap, int);
-		if (fmt.precision == 0)
+		if (fmt.precision == 0 && nb == 0)
 			str = "";
 		else
-			str = ft_itoa_base_abs(nb, 10);
+			str = ft_itoa_base_abs(nb, 10, fmt.precision);
 		if (nb >= 0)
 		{
 			if (flag_is_set(fmt.flags, PLUS_POSITIVE))
@@ -145,11 +145,11 @@ static void	put(t_fmt fmt, va_list ap, int *total)
 	else if (fmt.type == 'o')
 	{
 		nb = va_arg(ap, int);
-		if (fmt.precision == 0)
+		if (fmt.precision == 0 && nb == 0)
 			str = "";
 		else
-			str = ft_itoa_base_unsigned((unsigned int)nb, 8);
-		if (flag_is_set(fmt.flags, ALTERNATE_FORM) && nb != 0)
+			str = ft_itoa_base_unsigned((unsigned int)nb, 8, fmt.precision);
+		if (flag_is_set(fmt.flags, ALTERNATE_FORM))
 			prefix = "0";
 		else
 			prefix = "";
@@ -157,10 +157,10 @@ static void	put(t_fmt fmt, va_list ap, int *total)
 	else if (fmt.type == 'x' || fmt.type == 'X')
 	{
 		nb = va_arg(ap, int);
-		if (fmt.precision == 0)
+		if (fmt.precision == 0 && nb == 0)
 			str = "";
 		else
-			str = ft_itoa_base_unsigned((unsigned int)nb, 16);
+			str = ft_itoa_base_unsigned((unsigned int)nb, 16, fmt.precision);
 		if (fmt.type == 'X')
 			ft_strupper(str);
 		if (flag_is_set(fmt.flags, ALTERNATE_FORM) && nb != 0)
