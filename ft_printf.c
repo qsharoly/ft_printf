@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/27 18:24:37 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/02/26 15:38:11 by qsharoly         ###   ########.fr       */
+/*   Updated: 2020/02/26 16:30:00 by qsharoly         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ static t_fmt	get_format(const char *str)
 		while (*ptr >= '0' && *ptr <= '9')
 			ptr++;
 	}
-	if (char_in_str(*ptr, "%sdioxX"))
+	if (char_in_str(*ptr, "%scdioxX"))
 		fmt.type = *ptr;
 	else
 		fmt.type = TYPE_MISSING;
@@ -123,6 +123,19 @@ static void	put(t_fmt fmt, va_list ap, int *total)
 			str = "(null)";
 		prefix = "";
 	}
+	else if (fmt.type == 'c')
+	{
+		nb = va_arg(ap, int);
+		str = malloc(2);
+		if (str == NULL)
+		{
+			write(2, "failed malloc\n", 14);
+			exit(1);
+		}
+		str[0] = (char)nb;
+		str[1] = '\0';
+		prefix = "";
+	}
 	else if (fmt.type == 'd' || fmt.type == 'i')
 	{
 		nb = va_arg(ap, int);
@@ -175,7 +188,9 @@ static void	put(t_fmt fmt, va_list ap, int *total)
 	}
 	if (str)
 	{
-		if (fmt.type == 's' && fmt.precision != -1 && fmt.precision < ft_strlen(str))
+		if (fmt.type == 'c')
+			strlen = 1;
+		else if (fmt.type == 's' && fmt.precision != -1 && fmt.precision < ft_strlen(str))
 			strlen = fmt.precision;
 		else
 			strlen = ft_strlen(str);
