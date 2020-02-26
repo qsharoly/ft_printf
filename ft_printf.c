@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/27 18:24:37 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/02/26 16:30:00 by qsharoly         ###   ########.fr       */
+/*   Updated: 2020/02/26 16:42:03 by qsharoly         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ static t_fmt	get_format(const char *str)
 		while (*ptr >= '0' && *ptr <= '9')
 			ptr++;
 	}
-	if (char_in_str(*ptr, "%scdioxX"))
+	if (char_in_str(*ptr, "%scdiuoxX"))
 		fmt.type = *ptr;
 	else
 		fmt.type = TYPE_MISSING;
@@ -154,6 +154,15 @@ static void	put(t_fmt fmt, va_list ap, int *total)
 		}
 		else
 			prefix = "-";
+	}
+	else if (fmt.type == 'u')
+	{
+		nb = va_arg(ap, int);
+		if (fmt.precision == 0 && nb == 0)
+			str = "";
+		else
+			str = ft_itoa_base_unsigned((unsigned int)nb, 10, fmt.precision);
+		prefix = "";
 	}
 	else if (fmt.type == 'o')
 	{
