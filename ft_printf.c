@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/27 18:24:37 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/02/26 16:42:03 by qsharoly         ###   ########.fr       */
+/*   Updated: 2020/02/26 18:08:48 by qsharoly         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,31 @@ static int	char_in_str(char needle, const char *hay)
 		hay++;
 	}
 	return (0);
+}
+
+static long long int arg_as_char(va_list ap)
+{
+	return ((char)va_arg(ap, int));
+}
+
+static long long int arg_as_short(va_list ap)
+{
+	return ((short)va_arg(ap, int));
+}
+
+static long long int arg_as_int(va_list ap)
+{
+	return (va_arg(ap, int));
+}
+
+static long long int arg_as_long(va_list ap)
+{
+	return (va_arg(ap, long int));
+}
+
+static long long int arg_as_longlong(va_list ap)
+{
+	return (va_arg(ap, long long int));
 }
 
 /*
@@ -67,6 +92,29 @@ static t_fmt	get_format(const char *str)
 		fmt.precision = ft_simple_atoi(ptr);
 		while (*ptr >= '0' && *ptr <= '9')
 			ptr++;
+	}
+	fmt.get_cast_arg = arg_as_int;
+	if (*ptr == 'h')
+	{
+		ptr++;
+		if (*ptr == 'h')
+		{
+			fmt.get_cast_arg = arg_as_char;
+			ptr++;
+		}
+		else
+			fmt.get_cast_arg = arg_as_short;
+	}
+	else if (*ptr == 'l')
+	{
+		ptr++;
+		if (*ptr == 'l')
+		{
+			fmt.get_cast_arg = arg_as_longlong;
+			ptr++;
+		}
+		else
+			fmt.get_cast_arg = arg_as_long;
 	}
 	if (char_in_str(*ptr, "%scdiuoxX"))
 		fmt.type = *ptr;
@@ -107,7 +155,7 @@ static void	put(t_fmt fmt, va_list ap, int *total)
 	char	*str;
 	char	*pad;
 	char	*prefix;
-	int		nb;
+	long long int		nb;
 	int		padlen;
 	int		strlen;
 
@@ -138,7 +186,7 @@ static void	put(t_fmt fmt, va_list ap, int *total)
 	}
 	else if (fmt.type == 'd' || fmt.type == 'i')
 	{
-		nb = va_arg(ap, int);
+		nb = fmt.get_cast_arg(ap);
 		if (fmt.precision == 0 && nb == 0)
 			str = "";
 		else
@@ -157,20 +205,20 @@ static void	put(t_fmt fmt, va_list ap, int *total)
 	}
 	else if (fmt.type == 'u')
 	{
-		nb = va_arg(ap, int);
+		nb = fmt.get_cast_arg(ap);
 		if (fmt.precision == 0 && nb == 0)
 			str = "";
 		else
-			str = ft_itoa_base_unsigned((unsigned int)nb, 10, fmt.precision);
+			str = ft_itoa_base_unsigned(nb, 10, fmt.precision);
 		prefix = "";
 	}
 	else if (fmt.type == 'o')
 	{
-		nb = va_arg(ap, int);
+		nb = fmt.get_cast_arg(ap);
 		if (fmt.precision == 0 && nb == 0)
 			str = "";
 		else
-			str = ft_itoa_base_unsigned((unsigned int)nb, 8, fmt.precision);
+			str = ft_itoa_base_unsigned(nb, 8, fmt.precision);
 		if (flag_is_set(fmt.flags, ALTERNATE_FORM))
 			prefix = "0";
 		else
@@ -178,11 +226,11 @@ static void	put(t_fmt fmt, va_list ap, int *total)
 	}
 	else if (fmt.type == 'x' || fmt.type == 'X')
 	{
-		nb = va_arg(ap, int);
+		nb = fmt.get_cast_arg(ap);
 		if (fmt.precision == 0 && nb == 0)
 			str = "";
 		else
-			str = ft_itoa_base_unsigned((unsigned int)nb, 16, fmt.precision);
+			str = ft_itoa_base_unsigned(nb, 16, fmt.precision);
 		if (fmt.type == 'X')
 			ft_strupper(str);
 		if (flag_is_set(fmt.flags, ALTERNATE_FORM) && nb != 0)

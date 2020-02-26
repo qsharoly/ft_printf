@@ -6,13 +6,13 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 15:42:01 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/02/26 15:22:54 by qsharoly         ###   ########.fr       */
+/*   Updated: 2020/02/26 17:40:02 by qsharoly         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 
-static int	count_digits(int value, int base)
+static int	count_digits(long long int value, int base)
 {
 	int	count;
 
@@ -35,9 +35,9 @@ static char	make_digit(int nbr)
 	return (nbr < 10 ? '0' + nbr : 'a' + nbr - 10);
 }
 
-static void	do_itoa(char *str, int value, int base)
+static void	do_itoa(char *str, long long int value, int base)
 {
-	int		quo;
+	long long int		quo;
 
 	quo = value / base;
 	if (quo == 0)
@@ -52,7 +52,7 @@ static void	do_itoa(char *str, int value, int base)
 	}
 }
 
-char		*ft_itoa_base_abs(int value, int base, int min_digits)
+char		*ft_itoa_base_abs(long long int value, int base, int min_digits)
 {
 	char	*a;
 	int		n_digits;

@@ -6,13 +6,13 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/21 16:14:34 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/02/26 15:21:33 by qsharoly         ###   ########.fr       */
+/*   Updated: 2020/02/26 17:40:48 by qsharoly         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 
-static int	count_digits(unsigned int value, unsigned int base)
+static int	count_digits(unsigned long long int value, unsigned int base)
 {
 	int	count;
 
@@ -30,9 +30,9 @@ static char	make_digit(unsigned int nbr)
 	return (nbr < 10 ? '0' + nbr : 'a' + nbr - 10);
 }
 
-static void	do_itoa(char *str, unsigned int value, unsigned int base)
+static void	do_itoa(char *str, unsigned long long int value, unsigned int base)
 {
-	unsigned int		quo;
+	unsigned long long int		quo;
 
 	quo = value / base;
 	if (quo == 0)
@@ -47,7 +47,7 @@ static void	do_itoa(char *str, unsigned int value, unsigned int base)
 	}
 }
 
-char		*ft_itoa_base_unsigned(unsigned int value, unsigned int base, int min_digits)
+char		*ft_itoa_base_unsigned(unsigned long long int value, unsigned int base, int min_digits)
 {
 	char	*a;
 	int		n_digits;
