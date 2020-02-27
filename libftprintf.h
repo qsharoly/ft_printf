@@ -13,6 +13,8 @@
 #ifndef LIBFTPRINTF_H
 # define LIBFTPRINTF_H
 
+#include <stdarg.h>
+
 # define TYPE_MISSING '\0'
 # define PAD_WITH_ZEROS 1
 # define PAD_FROM_RIGHT 2

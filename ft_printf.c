@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdarg.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include "libftprintf.h"
@@ -310,8 +309,8 @@ int				ft_printf(const char * format, ...)
 			total += cur - start;
 			f = get_format(cur);
 			put(f, ap, &total);
-			start = cur + f.specifier_length;
-			cur = start;
+			cur += f.specifier_length;
+			start = cur;
 		}
 		else
 			cur++;
