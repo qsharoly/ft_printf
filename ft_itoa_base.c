@@ -30,29 +30,24 @@ static int	my_abs(int nbr)
 	return (nbr > 0 ? nbr : -nbr);
 }
 
-static char	make_digit(int nbr)
-{
-	return (nbr < 10 ? '0' + nbr : 'a' + nbr - 10);
-}
-
-static void	do_itoa(char *str, long long int value, int base)
+static void	do_itoa(char *str, long long int value, int base, const char *alphabet)
 {
 	long long int		quo;
 
 	quo = value / base;
 	if (quo == 0)
 	{
-		*str = make_digit(my_abs(value));
+		*str = alphabet[my_abs(value)];
 		return ;
 	}
 	else
 	{
-		*str = make_digit(my_abs(value % base));
-		do_itoa(str - 1, quo, base);
+		*str = alphabet[my_abs(value % base)];
+		do_itoa(str - 1, quo, base, alphabet);
 	}
 }
 
-char		*ft_itoa_base_abs(long long int value, int base, int min_digits)
+char		*ft_itoa_base_abs(long long int value, int base, int min_digits, const char *alphabet)
 {
 	char	*a;
 	int		n_digits;
@@ -61,7 +56,7 @@ char		*ft_itoa_base_abs(long long int value, int base, int min_digits)
 	n_digits = count_digits(value, base);
 	pad_size = min_digits > n_digits ? min_digits - n_digits : 0;
 	a = malloc(sizeof(*a) * (n_digits + pad_size + 1));
-	do_itoa(a + n_digits + pad_size - 1, value, base);
+	do_itoa(a + n_digits + pad_size - 1, value, base, alphabet);
 	a[n_digits + pad_size] = '\0';
 	while (pad_size > 0)
 	{

@@ -28,6 +28,7 @@ typedef			struct s_fmt
 	int		min_field_width;
 	int		precision;
 	long long int	(*get_cast_arg)(va_list ap);
+	void	(*to_string)(char **str, char **prefix, struct s_fmt f, va_list ap);
 	char	flags;
 	char	type;
 }				t_fmt;
@@ -35,8 +36,8 @@ typedef			struct s_fmt
 int		ft_strlen(char *s);
 void	ft_strupper(char *s);
 int		ft_simple_atoi(const char *s);
-char	*ft_itoa_base_abs(long long int value, int base, int min_digits);
-char	*ft_itoa_base_unsigned(unsigned long long int value, unsigned int base, int min_digits);
+char	*ft_itoa_base_abs(long long int value, int base, int min_digits, const char *alphabet);
+char	*ft_itoa_base_unsigned(unsigned long long int value, unsigned int base, int min_digits, const char *alphabet);
 int		ft_printf(const char * format, ...);
 
 #endif
