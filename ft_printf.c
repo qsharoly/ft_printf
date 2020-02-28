@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/27 18:24:37 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/02/28 19:45:02 by qsharoly         ###   ########.fr       */
+/*   Updated: 2020/02/28 20:25:04 by qsharoly         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,10 +86,7 @@ static void	s_to_string(char **str, char **prefix, t_fmt f, va_list ap)
 {
 	(void)f;
 	*str = va_arg(ap, char *);
-	if (*str == NULL)
-		*prefix = ft_strdup("(null)");
-	else
-		*prefix = ft_strdup("");
+	*prefix = ft_strdup("");
 }
 
 /*
@@ -442,11 +439,14 @@ static t_fmt	get_format(const char *str)
 	else
 		size = REGULAR;
 	if (char_in_str(*ptr, "%cspdiuoxX"))
+	{
 		fmt.type = *ptr;
+		ptr++;
+	}
 	else
 		fmt.type = TYPE_MISSING;
 	fmt.to_string = choose_to_string_func(size, fmt.type);
-	fmt.specifier_length = ptr - str + 1;
+	fmt.specifier_length = ptr - str;
 	return (fmt);
 }
 
@@ -489,7 +489,7 @@ static void	put(t_fmt fmt, va_list ap, int *total)
 	str = NULL;
 	prefix = NULL;
 	fmt.to_string(&str, &prefix, fmt, ap);
-	if (str)
+	if (str != NULL)
 	{
 		if (fmt.type == 'c')
 			strlen = 1;
@@ -531,6 +531,11 @@ static void	put(t_fmt fmt, va_list ap, int *total)
 			write(1, str, strlen);
 		}
 		free(pad);
+	}
+	else if (fmt.type == 's')
+	{
+		*total += 6;
+		write(1, "(null)", 6);
 	}
 	if (fmt.type != 's')
 		free(str);

@@ -1,6 +1,6 @@
 NAME = libftprintf.a
 CC = gcc
-DBGFLAG =
+DBGFLAG = -g
 WFLAGS = -Wall -Wextra -Werror
 OBJDIR = obj
 
