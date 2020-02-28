@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/27 18:24:37 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/02/28 18:08:10 by qsharoly         ###   ########.fr       */
+/*   Updated: 2020/02/28 19:10:32 by qsharoly         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,18 @@ static void	c_to_string(char **str, char **prefix, t_fmt f, va_list ap)
 	(*str)[0] = (char)nb;
 	(*str)[1] = '\0';
 	*prefix = ft_strdup("");
+}
+
+static void	p_to_string(char **str, char **prefix, t_fmt f, va_list ap)
+{
+	unsigned long	adr;
+
+	adr = (unsigned long)va_arg(ap, void *);
+	if (f.precision == 0 && adr == 0)
+		*str = ft_strdup("");
+	else
+		*str = ft_itoa_base_unsigned(adr, 16, f.precision, "0123456789abcdef");
+	*prefix = ft_strdup("0x");
 }
 
 static void signed_to_string(char **str, char **prefix, t_fmt fmt, long long int nb)
@@ -354,6 +366,8 @@ void	(*choose_to_string_func(int size, char type))(char **, char **, t_fmt, va_l
 		return (c_to_string);
 	else if (type == 's')
 		return (s_to_string);
+	else if (type == 'p')
+		return (p_to_string);
 	else if (type == 'd' || type == 'i')
 		return (g_integer_to_string[SIGNED][size]);
 	else if (type == 'u')
@@ -426,7 +440,7 @@ static t_fmt	get_format(const char *str)
 	}
 	else
 		size = REGULAR;
-	if (char_in_str(*ptr, "%scdiuoxX"))
+	if (char_in_str(*ptr, "%cspdiuoxX"))
 		fmt.type = *ptr;
 	else
 		fmt.type = TYPE_MISSING;

@@ -5,6 +5,7 @@
 int		main(void)
 {
 	int	i;
+	char *s;
 	//simple cases
 	ft_printf("just a string\n");
 	ft_printf("percent sign%%ef\n");
@@ -56,6 +57,10 @@ int		main(void)
 	printf("%06.3i\n", 1);
 	ft_printf("%06.d %06.0d\n", 1, 2);
 	printf("%06.d %06.0d\n", 1, 2);
+	//pointers
+	s = "hello";
+	printf("%p %p %p\n", s, NULL, printf);
+	ft_printf("%p %p %p\n", s, NULL, printf);
 	/*
 	//negative cases
 	ft_printf("no type % 0ratata %d\n", 13, 14);
