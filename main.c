@@ -7,12 +7,20 @@ int		main(void)
 	int	i;
 	char *s;
 	//simple cases
+	ft_printf("");
 	ft_printf("just a string\n");
-	ft_printf("percent sign%%ef\n");
 	ft_printf("just an int %d def\n", 5);
 	ft_printf("%s well\n", "very");
 	ft_printf("my %s equals %d%%\n", "value", -123);
-	ft_printf("abc %x %X %x %X", 42, 42, -42, -42);
+	ft_printf("abc %x %X %x %X\n", 42, 42, -42, -42);
+	//modulo sign
+	ft_printf("percent sign%%ef\n");
+	ft_printf("ft_printf modulo no specifier:\n");
+	ft_printf("% ");
+	ft_printf("\n");
+	printf("printf modulo no specifier:\n");
+	printf("% ");
+	printf("\n");
 	//prefixes
 	ft_printf("Lower hex %#x\n", 243);
 	ft_printf("High hex %#X\n", 255);

@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/27 18:24:37 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/02/28 19:10:32 by qsharoly         ###   ########.fr       */
+/*   Updated: 2020/02/28 19:45:02 by qsharoly         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,8 +87,9 @@ static void	s_to_string(char **str, char **prefix, t_fmt f, va_list ap)
 	(void)f;
 	*str = va_arg(ap, char *);
 	if (*str == NULL)
-		*str = ft_strdup("(null)");
-	*prefix = ft_strdup("");
+		*prefix = ft_strdup("(null)");
+	else
+		*prefix = ft_strdup("");
 }
 
 /*
@@ -531,8 +532,9 @@ static void	put(t_fmt fmt, va_list ap, int *total)
 		}
 		free(pad);
 	}
-	if (fmt.type != 's' && fmt.type != '%' && fmt.precision != 0)
+	if (fmt.type != 's')
 		free(str);
+	free(prefix);
 }
 
 int				ft_printf(const char * format, ...)
