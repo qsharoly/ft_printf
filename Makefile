@@ -1,5 +1,6 @@
 NAME = libftprintf.a
 CC = gcc
+DBGFLAG =
 WFLAGS = -Wall -Wextra -Werror
 OBJDIR = obj
 
@@ -16,7 +17,7 @@ $(NAME): $(OBJ)
 	ar rcs $(NAME) $(OBJ)
 
 $(OBJDIR)/%.o: %.c
-	$(CC) -g $(WFLAGS) -c -o $@ $<
+	$(CC) $(DBGFLAG) $(WFLAGS) -c -o $@ $<
 
 clean:
 	rm -rf $(OBJDIR)
