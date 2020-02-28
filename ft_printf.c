@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/27 18:24:37 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/02/26 18:08:48 by qsharoly         ###   ########.fr       */
+/*   Updated: 2020/02/28 17:29:41 by qsharoly         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,24 +64,43 @@ static char	*ft_strdup(const char *src)
 	return (str);
 }
 
+/*
+** percent_sign_to_string:
+** (void)f; and (void)ap; suppress unused parameter warings
+*/
+
 static void	percent_sign_to_string(char **str, char **prefix, t_fmt f, va_list ap)
 {
+	(void)f;
+	(void)ap;
 	*str = ft_strdup("%");
 	*prefix = ft_strdup("");
 }
 
+/*
+** s_to_string:
+** (void)f; suppresses unused parameter warning
+*/
+
 static void	s_to_string(char **str, char **prefix, t_fmt f, va_list ap)
 {
+	(void)f;
 	*str = va_arg(ap, char *);
 	if (*str == NULL)
 		*str = ft_strdup("(null)");
 	*prefix = ft_strdup("");
 }
 
+/*
+** c_to_string:
+** (void)f; suppresses unused parameter warning
+*/
+
 static void	c_to_string(char **str, char **prefix, t_fmt f, va_list ap)
 {
 	int		nb;
 
+	(void)f;
 	nb = va_arg(ap, int);
 	*str = malloc(2);
 	if (*str == NULL)
@@ -260,7 +279,7 @@ static void hex_to_string(char **str, char **prefix, t_fmt fmt, unsigned long lo
 	else if (fmt.type == 'x')
 		*str = ft_itoa_base_unsigned(nb, 16, fmt.precision, "0123456789abcdef");
 	else
-		*str = ft_itoa_base_unsigned(nb, 16, fmt.precision, "0123456789ABDCEF");
+		*str = ft_itoa_base_unsigned(nb, 16, fmt.precision, "0123456789ABCDEF");
 	if (flag_is_set(fmt.flags, ALTERNATE_FORM) && nb != 0)
 		*prefix = fmt.type == 'x' ? ft_strdup("0x") : ft_strdup("0X");
 	else
@@ -307,8 +326,15 @@ static void llxX(char **str, char **prefix, t_fmt f, va_list ap)
 	hex_to_string(str, prefix, f, nb);
 }
 
+/*
+** default_to_string:
+** (void)f; and (void)ap; suppress unused parameter warnings
+*/
+
 static void	default_to_string(char **str, char **prefix, t_fmt f, va_list ap)
 {
+	(void)f;
+	(void)ap;
 	*str = NULL;
 	*prefix = ft_strdup("");
 }

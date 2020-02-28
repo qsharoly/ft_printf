@@ -1,6 +1,6 @@
 NAME = libftprintf.a
 CC = gcc
-#WFLAGS = -Wall -Wextra -Werror
+WFLAGS = -Wall -Wextra -Werror
 OBJDIR = obj
 
 SRC = ft_printf.c ft_itoa_base.c ft_itoa_base_unsigned.c ft_simple_atoi.c ft_strlen.c ft_strupper.c
