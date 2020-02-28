@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/27 18:24:37 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/02/28 20:25:04 by qsharoly         ###   ########.fr       */
+/*   Updated: 2020/02/28 20:53:49 by qsharoly         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -236,7 +236,7 @@ static void	octal_to_string(char **str, char **prefix, t_fmt fmt, unsigned long 
 		*str = ft_strdup("");
 	else
 		*str = ft_itoa_base_unsigned(nb, 8, fmt.precision, "01234567");
-	if (flag_is_set(fmt.flags, ALTERNATE_FORM))
+	if (flag_is_set(fmt.flags, ALTERNATE_FORM) && ((nb != 0 && fmt.precision <= 0) || (nb == 0 && fmt.precision == 0)))
 		*prefix = ft_strdup("0");
 	else
 		*prefix = ft_strdup("");

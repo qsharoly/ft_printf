@@ -21,9 +21,15 @@ int		main(void)
 	printf("printf modulo no specifier:\n");
 	printf("% ");
 	printf("\n");
-	//prefixes
+	//sharp flag
 	ft_printf("Lower hex %#x\n", 243);
 	ft_printf("High hex %#X\n", 255);
+	//+ octal zero
+	ft_printf("%#o\n", 0);
+	printf("%#o\n", 0);
+	//+ octal with precision
+	ft_printf("%#.3o %#o\n", 1, 1);
+	printf("%#.3o %#o\n", 1, 1);
 	/*
 	i = -1;
 	while (i <= 1)
