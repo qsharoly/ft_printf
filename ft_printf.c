@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/27 18:24:37 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/02/28 17:29:41 by qsharoly         ###   ########.fr       */
+/*   Updated: 2020/02/28 18:08:10 by qsharoly         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -435,15 +435,17 @@ static t_fmt	get_format(const char *str)
 	return (fmt);
 }
 
-static char *make_pad(int padlen, char flags)
+static char *make_pad(int padlen, t_fmt fmt)
 {
 	int		i;
 	char	*pad;
 	char	padchar;
 
-	if (flag_is_set(flags, PAD_WITH_ZEROS) && !flag_is_set(flags, PAD_FROM_RIGHT))
+	if (flag_is_set(fmt.flags, PAD_WITH_ZEROS) && !flag_is_set(fmt.flags, PAD_FROM_RIGHT))
 		padchar = '0';
 	else
+		padchar = ' ';
+	if (flag_is_set(fmt.flags, PAD_WITH_ZEROS) && (fmt.type == 'd' || fmt.type == 'i') && fmt.precision != -1)
 		padchar = ' ';
 	pad = malloc(padlen + 1);
 	if (pad == NULL)
@@ -485,7 +487,7 @@ static void	put(t_fmt fmt, va_list ap, int *total)
 		pad = NULL;
 		if (padlen > 0)
 		{
-			pad = make_pad(padlen, fmt.flags);
+			pad = make_pad(padlen, fmt);
 			*total += padlen;
 		}
 		if (pad && !flag_is_set(fmt.flags, PAD_FROM_RIGHT))

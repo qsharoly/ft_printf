@@ -49,6 +49,13 @@ int		main(void)
 	printf("%lu\n", -1);
 	printf("%llu\n", -1);
 	printf("%llu\n", ULLONG_MAX);
+	//precision
+	ft_printf("%06.3i\n", 0);
+	ft_printf("%06.3i\n", 1);
+	printf("%06.3i\n", 0);
+	printf("%06.3i\n", 1);
+	ft_printf("%06.d %06.0d\n", 1, 2);
+	printf("%06.d %06.0d\n", 1, 2);
 	/*
 	//negative cases
 	ft_printf("no type % 0ratata %d\n", 13, 14);
