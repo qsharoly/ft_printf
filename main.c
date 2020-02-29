@@ -51,6 +51,8 @@ int		main(void)
 	ft_printf("%-10dtons\n", 100);
 	ft_printf("%-010dignorewhat\n", 23);
 	ft_printf("zero precision shouldnt print zero%.o %.0o\n", 0, 0);
+	ft_printf("% 0+8.5d\n", 34);
+	ft_printf("% 0+8.3d\n", -8473);
 	//conversions
 	ft_printf("%d\n", INT_MIN);
 	ft_printf("%hhu\n", -1);
@@ -73,8 +75,8 @@ int		main(void)
 	printf("%06.d %06.0d\n", 1, 2);
 	//pointers
 	s = "hello";
-	printf("%p %p %p\n", s, NULL, printf);
 	ft_printf("%p %p %p\n", s, NULL, printf);
+	printf("%p %p %p\n", s, NULL, printf);
 	/*
 	//negative cases
 	ft_printf("no type % 0ratata %d\n", 13, 14);

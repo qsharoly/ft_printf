@@ -47,12 +47,17 @@ static void	do_itoa(char *str, long long int value, int base, const char *alphab
 	}
 }
 
-char		*ft_itoa_base_abs(long long int value, int base, int min_digits, const char *alphabet)
+char		*ft_itoa_base_abs(long long int value, int base, int min_digits, int upcase)
 {
 	char	*a;
+	char	*alphabet;
 	int		n_digits;
 	int		pad_size;
 
+	if (upcase)
+		alphabet = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	else
+		alphabet = "0123456789abcdefghijklmnopqrstuvwxyz";
 	n_digits = count_digits(value, base);
 	pad_size = min_digits > n_digits ? min_digits - n_digits : 0;
 	a = malloc(sizeof(*a) * (n_digits + pad_size + 1));
