@@ -44,15 +44,13 @@ void hex_to_string(char **str, char **prefix, t_fmt fmt, unsigned long long nb)
 {
 	int	upcase;
 
+	upcase = (fmt.type == 'X');
 	if (fmt.precision == 0 && nb == 0)
 		*str = ft_strclone("");
-	if (fmt.type == 'x')
-		upcase = 0;
 	else
-		upcase = 1;
-	*str = ft_itoa_base_unsigned(nb, 16, fmt.precision, upcase);
+		*str = ft_itoa_base_unsigned(nb, 16, fmt.precision, upcase);
 	if (flag_is_set(fmt.flags, ALTERNATE_FORM) && nb != 0)
-		*prefix = upcase ? ft_strclone("0x") : ft_strclone("0X");
+		*prefix = upcase ? ft_strclone("0X") : ft_strclone("0x");
 	else
 		*prefix = ft_strclone("");
 }
