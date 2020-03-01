@@ -111,5 +111,6 @@ int		main(void)
 	printf("%#0o\n", 127);
 	printf("%#0o\n", 0);
 	write(1, NULL, 0);
+	write(1, NULL, 10);
 	return (0);
 }

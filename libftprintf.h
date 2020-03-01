@@ -21,10 +21,11 @@
  * flags
  */
 # define PAD_WITH_ZEROS 1
-# define PAD_FROM_RIGHT 2
+# define LEFT_JUSTIFY 2
 # define SPACE_POSITIVE 4
 # define PLUS_POSITIVE 8
 # define ALTERNATE_FORM 16
+# define HAS_PRECISION 32
 /*
  * integer type sizes
  */

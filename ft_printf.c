@@ -71,7 +71,7 @@ static t_fmt	parse_format(const char *str)
 		if (*ptr == '0')
 			fmt.flags |= PAD_WITH_ZEROS;
 		else if (*ptr == '-')
-			fmt.flags |= PAD_FROM_RIGHT;
+			fmt.flags |= LEFT_JUSTIFY;
 		else if (*ptr == '+')
 			fmt.flags |= PLUS_POSITIVE;
 		else if (*ptr == ' ')
@@ -87,6 +87,7 @@ static t_fmt	parse_format(const char *str)
 	{
 		ptr++;
 		fmt.precision = ft_simple_atoi(ptr);
+		fmt.flags |= HAS_PRECISION;
 		while (*ptr >= '0' && *ptr <= '9')
 			ptr++;
 	}
@@ -130,11 +131,13 @@ static char *make_pad(int padlen, t_fmt fmt)
 	char	*pad;
 	char	padchar;
 
-	if (flag_is_set(fmt.flags, PAD_WITH_ZEROS) && !flag_is_set(fmt.flags, PAD_FROM_RIGHT))
+	if (padlen <= 0)
+		return (NULL);
+	if (flag_is_set(fmt.flags, PAD_WITH_ZEROS) && !flag_is_set(fmt.flags, LEFT_JUSTIFY))
 		padchar = '0';
 	else
 		padchar = ' ';
-	if (flag_is_set(fmt.flags, PAD_WITH_ZEROS) && (fmt.type == 'd' || fmt.type == 'i') && fmt.precision != 1)
+	if (flag_is_set(fmt.flags, PAD_WITH_ZEROS) && (char_in_str(fmt.type, "diuoxX")) && fmt.precision != 1)
 		padchar = ' ';
 	pad = malloc(padlen + 1);
 	if (pad == NULL)
@@ -152,6 +155,12 @@ static char *make_pad(int padlen, t_fmt fmt)
 	return (pad);
 }
 
+/*
+** This still works when there is no pad, because write does nothing
+** if passed a NULL pointer.
+** For 'c' type strlen is always 1 so that we do print a '\0' character.
+*/
+
 static void	put(t_fmt fmt, va_list ap, int *total)
 {
 	char	*str;
@@ -162,24 +171,29 @@ static void	put(t_fmt fmt, va_list ap, int *total)
 
 	str = NULL;
 	prefix = NULL;
+	pad = NULL;
 	fmt.to_string(&str, &prefix, fmt, ap);
-	if (str != NULL)
+	if (fmt.type == 's' && str == NULL)
+		str = "(null)";
+	if (str)
 	{
+		strlen = ft_strlen(str);
+		if (fmt.type == 's' && flag_is_set(fmt.flags, HAS_PRECISION) && fmt.precision < strlen)
+			strlen = fmt.precision;
 		if (fmt.type == 'c')
 			strlen = 1;
-		else if (fmt.type == 's' && fmt.precision != 1 && fmt.precision < ft_strlen(str))
-			strlen = fmt.precision;
-		else
-			strlen = ft_strlen(str);
-		*total += strlen + ft_strlen(prefix);
 		padlen = fmt.min_field_width - strlen - ft_strlen(prefix);
-		pad = NULL;
 		if (padlen > 0)
-		{
 			pad = make_pad(padlen, fmt);
-			*total += padlen;
+		else
+			padlen = 0;
+		if (flag_is_set(fmt.flags, LEFT_JUSTIFY))
+		{
+			write(1, prefix, ft_strlen(prefix));
+			write(1, str, strlen);
+			write(1, pad, padlen);
 		}
-		if (pad && !flag_is_set(fmt.flags, PAD_FROM_RIGHT))
+		else
 		{
 			if (flag_is_set(fmt.flags, PAD_WITH_ZEROS) && fmt.precision == 1 && (fmt.type == 'd' || fmt.type == 'i' || flag_is_set(fmt.flags, ALTERNATE_FORM)))
 			{
@@ -193,26 +207,11 @@ static void	put(t_fmt fmt, va_list ap, int *total)
 			}
 			write(1, str, strlen);
 		}
-		else if (pad && flag_is_set(fmt.flags, PAD_FROM_RIGHT))
-		{
-			write(1, prefix, ft_strlen(prefix));
-			write(1, str, strlen);
-			write(1, pad, padlen);
-		}
-		else
-		{
-			write(1, prefix, ft_strlen(prefix));
-			write(1, str, strlen);
-		}
-		free(pad);
-	}
-	else if (fmt.type == 's')
-	{
-		*total += 6;
-		write(1, "(null)", 6);
+		*total += padlen + strlen + ft_strlen(prefix);
 	}
 	if (fmt.type != 's')
 		free(str);
+	free(pad);
 	free(prefix);
 }
 
