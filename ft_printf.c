@@ -12,11 +12,17 @@
 
 #include "libftprintf.h"
 
-static void (*g_integer_to_string[4][5])(char **, char **, t_fmt, va_list) = {
-	{hhd, hd, d, ld, lld},
-	{hhu, hu, u, lu, llu},
-	{hho, ho, o, lo, llo},
-	{hhx, hx, x, lx, llx}
+static void (*g_to_string[10])(char **, char **, t_fmt, va_list) = {
+	modulo_to_string,
+	c_to_string,
+	s_to_string,
+	p_to_string,
+	signed_to_string,
+	signed_to_string,
+	unsigned_to_string,
+	octal_to_string,
+	hex_to_string,
+	hex_to_string
 };
 
 static int	char_in_str(char needle, const char *hay)
@@ -30,26 +36,42 @@ static int	char_in_str(char needle, const char *hay)
 	return (0);
 }
 
-static void	(*choose_to_string_func(int size, char type))(char **, char **, t_fmt, va_list)
+static int	ft_strchr_index(char needle, const char *hay)
 {
-	if (type == '%')
-		return (modulo_to_string);
-	else if (type == 'c')
-		return (c_to_string);
-	else if (type == 's')
-		return (s_to_string);
-	else if (type == 'p')
-		return (p_to_string);
-	else if (type == 'd' || type == 'i')
-		return (g_integer_to_string[SIGNED][size]);
-	else if (type == 'u')
-		return (g_integer_to_string[UNSIGNED][size]);
-	else if (type == 'o')
-		return (g_integer_to_string[OCTAL][size]);
-	else if (type == 'x' || type == 'X')
-		return (g_integer_to_string[HEX][size]);
+	int		i;
+
+	i = 0;
+	while (*hay)
+	{
+		if (*hay == needle)
+			return (i);
+		hay++;
+		i++;
+	}
+	return (-1);
+}
+
+static void	(*choose_to_string_func(char type))(char **, char **, t_fmt, va_list)
+{
+	int		i;
+
+	i = ft_strchr_index(type, "%cspdiuoxX");
+	if (i >= 0)
+		return (g_to_string[i]);
 	else
 		return (default_to_string);
+}
+
+static void		ft_bzero(char *ptr, int size)
+{
+	int		i;
+
+	i = 0;
+	while (i < size)
+	{
+		ptr[i] = 0;
+		i++;
+	}
 }
 
 /*
@@ -60,24 +82,22 @@ static t_fmt	parse_format(const char *str)
 {
 	t_fmt	fmt;
 	char	*ptr;
-	int		size;
 
 	ptr = (char *)str + 1;
-	fmt.min_field_width = 0;
+	ft_bzero((char *)&fmt, sizeof(t_fmt));
 	fmt.precision = 1;
-	fmt.flags = 0;
 	while (char_in_str(*ptr, "0-+ #"))
 	{
 		if (*ptr == '0')
-			fmt.flags |= PAD_WITH_ZEROS;
+			fmt.pad_with_zero = 1;
 		else if (*ptr == '-')
-			fmt.flags |= LEFT_JUSTIFY;
+			fmt.left_justify = 1;
 		else if (*ptr == '+')
-			fmt.flags |= PLUS_POSITIVE;
+			fmt.prepend_plus = 1;
 		else if (*ptr == ' ')
-			fmt.flags |= SPACE_POSITIVE;
+			fmt.prepend_space = 1;
 		else if (*ptr == '#')
-			fmt.flags |= ALTERNATE_FORM;
+			fmt.alternative_form = 1;
 		ptr++;
 	}
 	fmt.min_field_width = ft_simple_atoi(ptr);
@@ -87,32 +107,32 @@ static t_fmt	parse_format(const char *str)
 	{
 		ptr++;
 		fmt.precision = ft_simple_atoi(ptr);
-		fmt.flags |= HAS_PRECISION;
+		fmt.has_precision = 1;
 		while (*ptr >= '0' && *ptr <= '9')
 			ptr++;
 	}
 	if (*ptr == 'h' && *(ptr + 1) == 'h')
 	{
 		ptr += 2;
-		size = HH;
+		fmt.is_char = 1;
 	}
 	else if (*ptr == 'h')
 	{
 		ptr++;
-		size = H;
+		fmt.is_short = 1;
 	}
 	else if (*ptr == 'l' && *(ptr + 1) == 'l')
 	{
 		ptr += 2;
-		size = LL;
+		fmt.is_longlong = 1;
 	}
 	else if (*ptr == 'l')
 	{
 		ptr++;
-		size = L;
+		fmt.is_long = 1;
 	}
 	else
-		size = REGULAR;
+		fmt.is_int = 1;
 	if (char_in_str(*ptr, "%cspdiuoxX"))
 	{
 		fmt.type = *ptr;
@@ -120,8 +140,8 @@ static t_fmt	parse_format(const char *str)
 	}
 	else
 		fmt.type = TYPE_MISSING;
-	fmt.to_string = choose_to_string_func(size, fmt.type);
-	fmt.specifier_length = ptr - str;
+	fmt.to_string = choose_to_string_func(fmt.type);
+	fmt.spec_length = ptr - str;
 	return (fmt);
 }
 
@@ -133,11 +153,11 @@ static char *make_pad(int padlen, t_fmt fmt)
 
 	if (padlen <= 0)
 		return (NULL);
-	if (flag_is_set(fmt.flags, PAD_WITH_ZEROS) && !flag_is_set(fmt.flags, LEFT_JUSTIFY))
+	if (fmt.pad_with_zero && !fmt.left_justify)
 		padchar = '0';
 	else
 		padchar = ' ';
-	if (flag_is_set(fmt.flags, PAD_WITH_ZEROS) && (char_in_str(fmt.type, "diuoxX")) && fmt.precision != 1)
+	if (fmt.pad_with_zero && (char_in_str(fmt.type, "diuoxX")) && fmt.precision != 1)
 		padchar = ' ';
 	pad = malloc(padlen + 1);
 	if (pad == NULL)
@@ -178,7 +198,7 @@ static void	put(t_fmt fmt, va_list ap, int *total)
 	if (str)
 	{
 		strlen = ft_strlen(str);
-		if (fmt.type == 's' && flag_is_set(fmt.flags, HAS_PRECISION) && fmt.precision < strlen)
+		if (fmt.type == 's' && fmt.has_precision && fmt.precision < strlen)
 			strlen = fmt.precision;
 		if (fmt.type == 'c')
 			strlen = 1;
@@ -190,7 +210,7 @@ static void	put(t_fmt fmt, va_list ap, int *total)
 			pad = make_pad(padlen, fmt);
 		else
 			padlen = 0;
-		if (flag_is_set(fmt.flags, LEFT_JUSTIFY))
+		if (fmt.left_justify)
 		{
 			if (prefix)
 				write(1, prefix, ft_strlen(prefix));
@@ -201,7 +221,7 @@ static void	put(t_fmt fmt, va_list ap, int *total)
 		}
 		else
 		{
-			if (flag_is_set(fmt.flags, PAD_WITH_ZEROS) && fmt.precision == 1 && (fmt.type == 'd' || fmt.type == 'i' || flag_is_set(fmt.flags, ALTERNATE_FORM)))
+			if (fmt.pad_with_zero && fmt.precision == 1 && (fmt.type == 'd' || fmt.type == 'i' || fmt.alternative_form))
 			{
 				if (prefix)
 					write(1, prefix, ft_strlen(prefix));
@@ -248,7 +268,7 @@ int				ft_printf(const char * format, ...)
 			total += cur - start;
 			f = parse_format(cur);
 			put(f, ap, &total);
-			cur += f.specifier_length;
+			cur += f.spec_length;
 			start = cur;
 		}
 		else

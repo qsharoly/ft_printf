@@ -17,43 +17,28 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-/*
- * flags
- */
-# define PAD_WITH_ZEROS 1
-# define LEFT_JUSTIFY 2
-# define SPACE_POSITIVE 4
-# define PLUS_POSITIVE 8
-# define ALTERNATE_FORM 16
-# define HAS_PRECISION 32
-/*
- * integer type sizes
- */
-# define HH 0
-# define H 1
-# define REGULAR 2
-# define L 3
-# define LL 4
-/*
- * type conversions
- */
-# define SIGNED 0
-# define UNSIGNED 1
-# define OCTAL 2
-# define HEX 3
 # define TYPE_MISSING '\0'
 
 typedef			struct s_fmt
 {
-	int		specifier_length;
-	int		min_field_width;
-	int		precision;
-	void	(*to_string)(char **str, char **prefix, struct s_fmt f, va_list ap);
-	char	flags;
-	char	type;
+	unsigned	pad_with_zero:1;
+	unsigned	left_justify:1;
+	unsigned	prepend_space:1;
+	unsigned	prepend_plus:1;
+	unsigned	alternative_form:1;
+	unsigned	is_char:1;
+	unsigned	is_short:1;
+	unsigned	is_int:1;
+	unsigned	is_long:1;
+	unsigned	is_longlong:1;
+	unsigned	has_precision:1;
+	int			spec_length;
+	int			min_field_width;
+	int			precision;
+	char		type;
+	void		(*to_string)(char **str, char **prefix, struct s_fmt f, va_list ap);
 }				t_fmt;
 
-int		flag_is_set(char flags, char which);
 int		ft_strlen(char *s);
 char	*ft_strclone(const char *src);
 int		ft_simple_atoi(const char *s);
@@ -63,31 +48,11 @@ void	modulo_to_string(char **str, char **prefix, t_fmt f, va_list ap);
 void	s_to_string(char **str, char **prefix, t_fmt f, va_list ap);
 void	c_to_string(char **str, char **prefix, t_fmt f, va_list ap);
 void	p_to_string(char **str, char **prefix, t_fmt f, va_list ap);
-void	signed_to_string(char **str, char **prefix, t_fmt fmt, long long int nb);
-void	unsigned_to_string(char **str, char **prefix, t_fmt fmt, unsigned long long nb);
-void	octal_to_string(char **str, char **prefix, t_fmt fmt, unsigned long long nb);
-void	hex_to_string(char **str, char **prefix, t_fmt fmt, unsigned long long nb);
+void	signed_to_string(char **str, char **prefix, t_fmt fmt, va_list ap);
+void	unsigned_to_string(char **str, char **prefix, t_fmt fmt, va_list ap);
+void	octal_to_string(char **str, char **prefix, t_fmt fmt, va_list ap);
+void	hex_to_string(char **str, char **prefix, t_fmt fmt, va_list ap);
 void	default_to_string(char **str, char **prefix, t_fmt f, va_list ap);
-void	hhd(char **str, char **prefix, t_fmt f, va_list ap);
-void	hd(char **str, char **prefix, t_fmt f, va_list ap);
-void	d(char **str, char **prefix, t_fmt f, va_list ap);
-void	ld(char **str, char **prefix, t_fmt f, va_list ap);
-void	lld(char **str, char **prefix, t_fmt f, va_list ap);
-void	hhu(char **str, char **prefix, t_fmt f, va_list ap);
-void	hu(char **str, char **prefix, t_fmt f, va_list ap);
-void	u(char **str, char **prefix, t_fmt f, va_list ap);
-void	lu(char **str, char **prefix, t_fmt f, va_list ap);
-void	llu(char **str, char **prefix, t_fmt f, va_list ap);
-void	hho(char **str, char **prefix, t_fmt f, va_list ap);
-void	ho(char **str, char **prefix, t_fmt f, va_list ap);
-void	o(char **str, char **prefix, t_fmt f, va_list ap);
-void	lo(char **str, char **prefix, t_fmt f, va_list ap);
-void	llo(char **str, char **prefix, t_fmt f, va_list ap);
-void	hhx(char **str, char **prefix, t_fmt f, va_list ap);
-void	hx(char **str, char **prefix, t_fmt f, va_list ap);
-void	x(char **str, char **prefix, t_fmt f, va_list ap);
-void	lx(char **str, char **prefix, t_fmt f, va_list ap);
-void	llx(char **str, char **prefix, t_fmt f, va_list ap);
 int		ft_printf(const char * format, ...);
 
 #endif
