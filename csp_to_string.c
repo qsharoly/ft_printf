@@ -19,7 +19,7 @@ void	c_to_string(char **str, char **prefix, t_fmt f, va_list ap)
 	}
 	(*str)[0] = (char)nb;
 	(*str)[1] = '\0';
-	*prefix = ft_strclone("");
+	*prefix = NULL;
 }
 
 /*
@@ -31,7 +31,7 @@ void	s_to_string(char **str, char **prefix, t_fmt f, va_list ap)
 {
 	(void)f;
 	*str = va_arg(ap, char *);
-	*prefix = ft_strclone("");
+	*prefix = NULL;
 }
 
 void	p_to_string(char **str, char **prefix, t_fmt f, va_list ap)

@@ -10,7 +10,7 @@ void signed_to_string(char **str, char **prefix, t_fmt fmt, long long int nb)
 		else if (flag_is_set(fmt.flags, SPACE_POSITIVE))
 			*prefix = ft_strclone(" ");
 		else
-			*prefix = ft_strclone("");
+			*prefix = NULL;
 	}
 	else
 		*prefix = ft_strclone("-");
@@ -19,7 +19,7 @@ void signed_to_string(char **str, char **prefix, t_fmt fmt, long long int nb)
 void	unsigned_to_string(char **str, char **prefix, t_fmt fmt, unsigned long long nb)
 {
 	*str = ft_itoa_base_unsigned(nb, 10, fmt.precision, 0);
-	*prefix = ft_strclone("");
+	*prefix = NULL;
 }
 
 void	octal_to_string(char **str, char **prefix, t_fmt fmt, unsigned long long nb)
@@ -30,7 +30,7 @@ void	octal_to_string(char **str, char **prefix, t_fmt fmt, unsigned long long nb
 	if (flag_is_set(fmt.flags, ALTERNATE_FORM) && nb != 0 && fmt.precision <= 1)
 		*prefix = ft_strclone("0");
 	else
-		*prefix = ft_strclone("");
+		*prefix = NULL;
 }
 
 void hex_to_string(char **str, char **prefix, t_fmt fmt, unsigned long long nb)
@@ -42,5 +42,5 @@ void hex_to_string(char **str, char **prefix, t_fmt fmt, unsigned long long nb)
 	if (flag_is_set(fmt.flags, ALTERNATE_FORM) && nb != 0)
 		*prefix = upcase ? ft_strclone("0X") : ft_strclone("0x");
 	else
-		*prefix = ft_strclone("");
+		*prefix = NULL;
 }

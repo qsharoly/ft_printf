@@ -182,32 +182,45 @@ static void	put(t_fmt fmt, va_list ap, int *total)
 			strlen = fmt.precision;
 		if (fmt.type == 'c')
 			strlen = 1;
-		padlen = fmt.min_field_width - strlen - ft_strlen(prefix);
+		if (prefix)
+			padlen = fmt.min_field_width - strlen - ft_strlen(prefix);
+		else
+			padlen = fmt.min_field_width - strlen;
 		if (padlen > 0)
 			pad = make_pad(padlen, fmt);
 		else
 			padlen = 0;
 		if (flag_is_set(fmt.flags, LEFT_JUSTIFY))
 		{
-			write(1, prefix, ft_strlen(prefix));
-			write(1, str, strlen);
-			write(1, pad, padlen);
+			if (prefix)
+				write(1, prefix, ft_strlen(prefix));
+			if (str)
+				write(1, str, strlen);
+			if (pad)
+				write(1, pad, padlen);
 		}
 		else
 		{
 			if (flag_is_set(fmt.flags, PAD_WITH_ZEROS) && fmt.precision == 1 && (fmt.type == 'd' || fmt.type == 'i' || flag_is_set(fmt.flags, ALTERNATE_FORM)))
 			{
-				write(1, prefix, ft_strlen(prefix));
-				write(1, pad, padlen);
+				if (prefix)
+					write(1, prefix, ft_strlen(prefix));
+				if (pad)
+					write(1, pad, padlen);
 			}
 			else
 			{
-				write(1, pad, padlen);
-				write(1, prefix, ft_strlen(prefix));
+				if (pad)
+					write(1, pad, padlen);
+				if (prefix) 
+					write(1, prefix, ft_strlen(prefix));
 			}
-			write(1, str, strlen);
+			if (str)
+				write(1, str, strlen);
 		}
-		*total += padlen + strlen + ft_strlen(prefix);
+		*total += padlen + strlen;
+		if (prefix)
+			*total += ft_strlen(prefix);
 	}
 	if (fmt.type != 's')
 		free(str);
