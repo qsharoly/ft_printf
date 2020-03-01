@@ -64,7 +64,7 @@ static t_fmt	parse_format(const char *str)
 
 	ptr = (char *)str + 1;
 	fmt.min_field_width = 0;
-	fmt.precision = -1;
+	fmt.precision = 1;
 	fmt.flags = 0;
 	while (char_in_str(*ptr, "0-+ #"))
 	{
@@ -134,7 +134,7 @@ static char *make_pad(int padlen, t_fmt fmt)
 		padchar = '0';
 	else
 		padchar = ' ';
-	if (flag_is_set(fmt.flags, PAD_WITH_ZEROS) && (fmt.type == 'd' || fmt.type == 'i') && fmt.precision != -1)
+	if (flag_is_set(fmt.flags, PAD_WITH_ZEROS) && (fmt.type == 'd' || fmt.type == 'i') && fmt.precision != 1)
 		padchar = ' ';
 	pad = malloc(padlen + 1);
 	if (pad == NULL)
@@ -167,7 +167,7 @@ static void	put(t_fmt fmt, va_list ap, int *total)
 	{
 		if (fmt.type == 'c')
 			strlen = 1;
-		else if (fmt.type == 's' && fmt.precision != -1 && fmt.precision < ft_strlen(str))
+		else if (fmt.type == 's' && fmt.precision != 1 && fmt.precision < ft_strlen(str))
 			strlen = fmt.precision;
 		else
 			strlen = ft_strlen(str);
@@ -181,7 +181,7 @@ static void	put(t_fmt fmt, va_list ap, int *total)
 		}
 		if (pad && !flag_is_set(fmt.flags, PAD_FROM_RIGHT))
 		{
-			if (flag_is_set(fmt.flags, PAD_WITH_ZEROS) && fmt.precision == -1 && (fmt.type == 'd' || fmt.type == 'i' || flag_is_set(fmt.flags, ALTERNATE_FORM)))
+			if (flag_is_set(fmt.flags, PAD_WITH_ZEROS) && fmt.precision == 1 && (fmt.type == 'd' || fmt.type == 'i' || flag_is_set(fmt.flags, ALTERNATE_FORM)))
 			{
 				write(1, prefix, ft_strlen(prefix));
 				write(1, pad, padlen);

@@ -54,6 +54,12 @@ char		*ft_itoa_base_abs(long long int value, int base, int min_digits, int upcas
 	int		n_digits;
 	int		pad_size;
 
+	if (min_digits == 0 && value == 0)
+	{
+		a = malloc(sizeof(*a) * 1);
+		a[0] = '\0';
+		return (a);
+	}
 	if (upcase)
 		alphabet = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	else
