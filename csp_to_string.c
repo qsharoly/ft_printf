@@ -42,6 +42,6 @@ void	p_to_string(char **str, char **prefix, t_fmt f, va_list ap)
 	if (f.precision == 0 && adr == 0)
 		*str = ft_strclone("");
 	else
-		*str = ft_itoa_base_unsigned(adr, 16, f.precision, 0);
+		*str = ft_utoa_base(adr, 16, f.precision, 0);
 	*prefix = ft_strclone("0x");
 }

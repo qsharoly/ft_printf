@@ -43,7 +43,7 @@ int		ft_strlen(char *s);
 char	*ft_strclone(const char *src);
 int		ft_simple_atoi(const char *s);
 char	*ft_itoa_base_abs(long long int value, int base, int min_digits, int upcase);
-char	*ft_itoa_base_unsigned(unsigned long long int value, unsigned int base, int min_digits, int upcase);
+char	*ft_utoa_base(unsigned long long int value, unsigned int base, int min_digits, int upcase);
 void	modulo_to_string(char **str, char **prefix, t_fmt f, va_list ap);
 void	s_to_string(char **str, char **prefix, t_fmt f, va_list ap);
 void	c_to_string(char **str, char **prefix, t_fmt f, va_list ap);

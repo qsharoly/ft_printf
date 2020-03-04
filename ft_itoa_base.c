@@ -30,27 +30,27 @@ static int	my_abs(int nbr)
 	return (nbr > 0 ? nbr : -nbr);
 }
 
-static void	do_itoa(char *str, long long int value, int base, const char *alphabet)
+static void	do_itoa(char *str, long long int value, int base, const char *digits)
 {
 	long long int		quo;
 
 	quo = value / base;
 	if (quo == 0)
 	{
-		*str = alphabet[my_abs(value)];
+		*str = digits[my_abs(value)];
 		return ;
 	}
 	else
 	{
-		*str = alphabet[my_abs(value % base)];
-		do_itoa(str - 1, quo, base, alphabet);
+		*str = digits[my_abs(value % base)];
+		do_itoa(str - 1, quo, base, digits);
 	}
 }
 
 char		*ft_itoa_base_abs(long long int value, int base, int min_digits, int upcase)
 {
 	char	*a;
-	char	*alphabet;
+	char	*digits;
 	int		n_digits;
 	int		pad_size;
 
@@ -61,13 +61,13 @@ char		*ft_itoa_base_abs(long long int value, int base, int min_digits, int upcas
 		return (a);
 	}
 	if (upcase)
-		alphabet = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		digits = "0123456789ABCDEF";
 	else
-		alphabet = "0123456789abcdefghijklmnopqrstuvwxyz";
+		digits = "0123456789abcdef";
 	n_digits = count_digits(value, base);
 	pad_size = min_digits > n_digits ? min_digits - n_digits : 0;
 	a = malloc(sizeof(*a) * (n_digits + pad_size + 1));
-	do_itoa(a + n_digits + pad_size - 1, value, base, alphabet);
+	do_itoa(a + n_digits + pad_size - 1, value, base, digits);
 	a[n_digits + pad_size] = '\0';
 	while (pad_size > 0)
 	{
