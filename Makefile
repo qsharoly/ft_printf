@@ -6,6 +6,8 @@ SRCDIR = src
 CC = gcc
 CCFLAGS := -Wall -Wextra -Werror
 
+debug = yes
+
 ifeq ($(debug), yes)
 	CCFLAGS := -g $(CCFLAGS)
 endif

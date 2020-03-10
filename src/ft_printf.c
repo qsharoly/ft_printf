@@ -70,10 +70,6 @@ static void	(*choose_conv(char type))(char **, char **, t_fmt, va_list)
 		return (default_conv);
 }
 
-/*
-** repeated flag symbols are skipped
-*/
-
 static t_fmt	parse_format(const char *str)
 {
 	t_fmt	fmt;
@@ -171,20 +167,32 @@ static char *make_pad(int padlen, t_fmt fmt)
 	return (pad);
 }
 
-/*
-** This still works when there is no pad, because write does nothing
-** if passed a NULL pointer.
-** For 'c' type strlen is always 1 so that we do print a '\0' character.
-*/
-
-static void	put(t_fmt fmt, va_list ap, int *total)
+static void	pf_strnjoin(t_fat_string *tgt, const char *src, int size)
 {
+	char	*fresh;
+
+	fresh = ft_strnew(tgt->len + size);
+	if (fresh)
+	{
+		ft_memcpy(fresh, tgt->data, tgt->len);
+		ft_memcpy(fresh + tgt->len, src, size);
+	}
+	tgt->len += size;
+	free(tgt->data);
+	tgt->data = fresh;
+}
+
+static t_fat_string	arg_to_string(t_fmt fmt, va_list ap)
+{
+	t_fat_string	out;
 	char	*str;
 	char	*pad;
 	char	*prefix;
 	int		padlen;
 	int		strlen;
 
+	out.data = ft_strnew(0);
+	out.len = 0;
 	str = NULL;
 	prefix = NULL;
 	pad = NULL;
@@ -209,69 +217,120 @@ static void	put(t_fmt fmt, va_list ap, int *total)
 		if (fmt.left_justify)
 		{
 			if (prefix)
-				write(1, prefix, ft_strlen(prefix));
+				pf_strnjoin(&out, prefix, ft_strlen(prefix));
 			if (str)
-				write(1, str, strlen);
+				pf_strnjoin(&out, str, strlen);
 			if (pad)
-				write(1, pad, padlen);
+				pf_strnjoin(&out, pad, padlen);
 		}
 		else
 		{
 			if (fmt.pad_with_zero && fmt.precision == 1 && (fmt.type == 'd' || fmt.type == 'i' || fmt.alternative_form))
 			{
 				if (prefix)
-					write(1, prefix, ft_strlen(prefix));
+					pf_strnjoin(&out, prefix, ft_strlen(prefix));
 				if (pad)
-					write(1, pad, padlen);
+					pf_strnjoin(&out, pad, padlen);
 			}
 			else
 			{
 				if (pad)
-					write(1, pad, padlen);
+					pf_strnjoin(&out, pad, padlen);
 				if (prefix) 
-					write(1, prefix, ft_strlen(prefix));
+					pf_strnjoin(&out, prefix, ft_strlen(prefix));
 			}
 			if (str)
-				write(1, str, strlen);
+				pf_strnjoin(&out, str, strlen);
 		}
-		*total += padlen + strlen;
-		if (prefix)
-			*total += ft_strlen(prefix);
 	}
 	if (fmt.type != 's')
 		free(str);
 	free(pad);
 	free(prefix);
+	return (out);
 }
 
-int				ft_printf(const char * format, ...)
+static t_list	*convert_split(const char *format, va_list ap)
 {
-	char	*start;
+	t_list	*parts;
+	t_list	*elem;
+	t_fat_string	s;
 	char	*cur;
-	va_list	ap;
 	t_fmt	f;
-	int		total;
 
-	total = 0;
-	start = (char *)format;
+	parts = NULL;
 	cur = (char *)format;
-	va_start(ap, format);
 	while (*cur)
 	{
 		if (*cur == '%')
 		{
-			write(1, start, cur - start);
-			total += cur - start;
+			elem = ft_lstnew(format, cur - format);
+			ft_lst_push_tail(&parts, elem);
 			f = parse_format(cur);
-			put(f, ap, &total);
+			s = arg_to_string(f, ap);
+			elem = ft_lstnew(s.data, s.len);
+			free(s.data);
+			ft_lst_push_tail(&parts, elem);
 			cur += f.spec_length;
-			start = cur;
+			format = cur;
 		}
 		else
 			cur++;
 	}
-	write(1, start, cur - start);
-	total += cur - start;
+	elem = ft_lstnew(format, cur - format);
+	ft_lst_push_tail(&parts, elem);
+	return (parts);
+}
+
+static t_fat_string		concat(t_list *parts)
+{
+	t_list	*tmp;
+	int		i;
+	t_fat_string	s;
+
+	tmp = parts;
+	s.len = 0;
+	while (tmp)
+	{
+		s.len += tmp->content_size;
+		tmp = tmp->next;
+	}
+	s.data = (char *)malloc(sizeof(*s.data) * (s.len + 1));
+	s.data[s.len] = '\0';
+	i = 0;
+	while (parts)
+	{
+		ft_memcpy(&s.data[i], parts->content, parts->content_size);
+		i += parts->content_size;
+		parts = parts->next;
+	}
+	return (s);
+}
+
+/*
+** (void)size; suppresses unused parameter warning
+*/
+static void		pf_del(void *content, size_t size)
+{
+	(void)size;
+	free(content);
+}
+
+int				ft_printf(const char * format, ...)
+{
+	va_list	ap;
+	t_list	*parts;
+	t_fat_string	s;
+	int		total;
+
+	va_start(ap, format);
+	parts = convert_split(format, ap);
 	va_end(ap);
+	s = concat(parts);
+	ft_lstdel(&parts, pf_del);
+	total = write(1, s.data, s.len);
+	free(s.data);
+	if (total < 0)
+		pf_error("write error\n");
 	return (total);
 }

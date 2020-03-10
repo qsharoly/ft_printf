@@ -17,6 +17,12 @@
 
 # define TYPE_MISSING '\0'
 
+typedef			struct s_fat
+{
+	char	*data;
+	int		len;
+}				t_fat_string;
+
 typedef			struct s_fmt
 {
 	unsigned	pad_with_zero:1;
