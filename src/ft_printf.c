@@ -167,21 +167,6 @@ static char *make_pad(int padlen, t_fmt fmt)
 	return (pad);
 }
 
-static void	pf_strnjoin(t_fat_string *tgt, const char *src, int size)
-{
-	char	*fresh;
-
-	fresh = ft_strnew(tgt->len + size);
-	if (fresh)
-	{
-		ft_memcpy(fresh, tgt->data, tgt->len);
-		ft_memcpy(fresh + tgt->len, src, size);
-	}
-	tgt->len += size;
-	free(tgt->data);
-	tgt->data = fresh;
-}
-
 static t_fat_string	arg_to_string(t_fmt fmt, va_list ap)
 {
 	t_fat_string	out;
@@ -190,8 +175,9 @@ static t_fat_string	arg_to_string(t_fmt fmt, va_list ap)
 	char	*prefix;
 	int		padlen;
 	int		strlen;
+	int		prelen;
 
-	out.data = ft_strnew(0);
+	out.data = NULL;
 	out.len = 0;
 	str = NULL;
 	prefix = NULL;
@@ -207,40 +193,43 @@ static t_fat_string	arg_to_string(t_fmt fmt, va_list ap)
 		if (fmt.type == 'c')
 			strlen = 1;
 		if (prefix)
-			padlen = fmt.min_field_width - strlen - ft_strlen(prefix);
+			prelen = ft_strlen(prefix);
 		else
-			padlen = fmt.min_field_width - strlen;
+			prelen = 0;
+		padlen = fmt.min_field_width - strlen - prelen;
 		if (padlen > 0)
 			pad = make_pad(padlen, fmt);
 		else
 			padlen = 0;
+		out.len = prelen + strlen + padlen;
+		out.data = ft_strnew(out.len);
 		if (fmt.left_justify)
 		{
 			if (prefix)
-				pf_strnjoin(&out, prefix, ft_strlen(prefix));
+				ft_memcpy(out.data, prefix, prelen);
 			if (str)
-				pf_strnjoin(&out, str, strlen);
+				ft_memcpy(out.data + prelen, str, strlen);
 			if (pad)
-				pf_strnjoin(&out, pad, padlen);
+				ft_memcpy(out.data + prelen + strlen, pad, padlen);
 		}
 		else
 		{
 			if (fmt.pad_with_zero && fmt.precision == 1 && (fmt.type == 'd' || fmt.type == 'i' || fmt.alternative_form))
 			{
 				if (prefix)
-					pf_strnjoin(&out, prefix, ft_strlen(prefix));
+					ft_memcpy(out.data, prefix, prelen);
 				if (pad)
-					pf_strnjoin(&out, pad, padlen);
+					ft_memcpy(out.data + prelen, pad, padlen);
 			}
 			else
 			{
 				if (pad)
-					pf_strnjoin(&out, pad, padlen);
+					ft_memcpy(out.data, pad, padlen);
 				if (prefix) 
-					pf_strnjoin(&out, prefix, ft_strlen(prefix));
+					ft_memcpy(out.data + padlen, prefix, prelen);
 			}
 			if (str)
-				pf_strnjoin(&out, str, strlen);
+				ft_memcpy(out.data + prelen + padlen, str, strlen);
 		}
 	}
 	if (fmt.type != 's')
