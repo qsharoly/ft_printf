@@ -27,7 +27,7 @@ char    *pf_utoa_hex(unsigned long long int value, int min_digits, int prefix, i
 
 	digits = upper ? "0123456789ABCDEF" : "0123456789abcdef";
     end = max(min_digits, nb_size_hex(value));
-    end += 2 * prefix * (min_digits <= nb_size_hex(value));
+    end += 2 * prefix;
     buf = malloc(sizeof(char) * (end + 1));
     buf[end] = '\0';
     end--;

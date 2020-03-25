@@ -81,6 +81,8 @@ int		main(void)
 		ft_printf("% 0+8.3d\n", -8473);
 		ft_printf("%06.3i\n", 0);
 		ft_printf("%06.3i\n", 1);
+		ft_printf("%#.3x %#04x %#04.3x %#04.5x %#06.4x %#06.5x\n", 0x123, 0x123, 0x123, 0x123, 0x123, 0x123);
+		printf("%#.3x %#04x %#04.3x %#04.5x %#06.4x %#06.5x\n", 0x123, 0x123, 0x123, 0x123, 0x123, 0x123);
 		/*
 		   printf("%06.3i\n", 0);
 		   printf("%06.3i\n", 1);
@@ -104,10 +106,8 @@ int		main(void)
 		   printf("%-10.s\n%-10.0s\n%-10.1s\n", s, s, s);
 		   */
 		//pointers
-		ft_printf("%p %p %p\n", s, NULL, printf);
-		/*
-		   printf("%p %p %p\n", s, NULL, printf);
-		   */
+		ft_printf("%p %p %p, %.5p\n", s, NULL, printf, NULL);
+		printf("%p %p %p, %.5p\n", s, NULL, printf, NULL);
 		/*
 		//negative cases
 		ft_printf("no type % 0ratata %d\n", 13, 14);

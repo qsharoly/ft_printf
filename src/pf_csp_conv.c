@@ -35,11 +35,15 @@ void	s_conv(char **str, char **prefix, t_fmt f, va_list ap)
 void	p_conv(char **str, char **prefix, t_fmt f, va_list ap)
 {
 	unsigned long	adr;
+	int				need_prefix;
+	int				upcase;
 
 	adr = (unsigned long)va_arg(ap, void *);
-	if (f.precision == 0 && adr == 0)
-		*str = pf_strclone("");
+	need_prefix = 1;
+	upcase = 0;
+	if (f.precision == 1 && adr == 0)
+		*str = pf_strclone("0x0");
 	else
-		*str = pf_utoa_base(adr, 16, f.precision, 0);
-	*prefix = pf_strclone("0x");
+		*str = pf_utoa_hex(adr, f.precision, need_prefix, upcase);
+	*prefix = NULL;
 }
