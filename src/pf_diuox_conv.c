@@ -61,19 +61,15 @@ void	octal_conv(char **str, char **prefix, t_fmt fmt, va_list ap)
 		nb = va_arg(ap, unsigned long);
 	else// if (fmt.is_longlong)
 		nb = va_arg(ap, unsigned long long);
-	if (fmt.alternative_form && fmt.precision == 0 && nb == 0)
-		fmt.precision++;
-	*str = pf_utoa_base(nb, 8, fmt.precision, 0);
-	if (fmt.alternative_form && nb != 0 && fmt.precision <= 1)
-		*prefix = pf_strclone("0");
-	else
-		*prefix = NULL;
+	*str = pf_utoa_oct(nb, fmt.precision, fmt.alternative_form);
+	*prefix = NULL;
 }
 
 void hex_conv(char **str, char **prefix, t_fmt fmt, va_list ap)
 {
 	unsigned long long	nb;
 	int	upcase;
+	int	min_size;
 
 	if (fmt.is_char)
 		nb = (unsigned char)va_arg(ap, unsigned int);
@@ -86,9 +82,7 @@ void hex_conv(char **str, char **prefix, t_fmt fmt, va_list ap)
 	else //if (fmt.is_longlong)
 		nb = va_arg(ap, unsigned long long);
 	upcase = (fmt.type == 'X');
-	*str = pf_utoa_base(nb, 16, fmt.precision, upcase);
-	if (fmt.alternative_form && nb != 0)
-		*prefix = upcase ? pf_strclone("0X") : pf_strclone("0x");
-	else
-		*prefix = NULL;
+	min_size = (fmt.alternative_form && fmt.pad_with_zero && !fmt.left_justify && fmt.min_field_width > fmt.precision) ? fmt.min_field_width : fmt.precision;
+	*str = pf_utoa_hex(nb, min_size, fmt.alternative_form && nb > 0, upcase);
+	*prefix = NULL;
 }

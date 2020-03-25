@@ -48,6 +48,8 @@ char	*pf_strclone(const char *src);
 int		pf_simple_atoi(const char *s);
 char	*pf_itoa_base_abs(long long int value, int base, int min_digits, int upcase);
 char	*pf_utoa_base(unsigned long long int value, unsigned int base, int min_digits, int upcase);
+char    *pf_utoa_oct(unsigned long long int value, int min_digits, int prefix);
+char    *pf_utoa_hex(unsigned long long int value, int min_digits, int prefix, int upper);
 void	percent_conv(char **str, char **prefix, t_fmt f, va_list ap);
 void	s_conv(char **str, char **prefix, t_fmt f, va_list ap);
 void	c_conv(char **str, char **prefix, t_fmt f, va_list ap);

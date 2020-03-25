@@ -13,7 +13,8 @@ ifeq ($(debug), yes)
 endif
 
 SRC = ft_printf.c pf_strclone.c pf_itoa_base.c pf_utoa_base.c pf_simple_atoi.c\
-   	  pf_percent_conv.c pf_csp_conv.c pf_diuox_conv.c pf_default_conv.c
+   	  pf_percent_conv.c pf_csp_conv.c pf_diuox_conv.c pf_default_conv.c\
+	  pf_utoa_oct.c pf_utoa_hex.c
 
 OBJ = $(SRC:%.c=$(OBJDIR)/%.o)
 
