@@ -49,11 +49,6 @@ static void	do_itoa(char *str, long long int value, int base, const char *digits
 	}
 }
 
-static int	max(int a, int b)
-{
-	return (a > b ? a : b);
-}
-
 char		*pf_itoa_dec(long long int value, int min_digits, char prefix)
 {
 	char	*buf;
@@ -64,7 +59,7 @@ char		*pf_itoa_dec(long long int value, int min_digits, char prefix)
 	nb_digits = count_digits(value, 10);
 	if (value == 0)
 		nb_digits = 0;
-	end = max(min_digits, nb_digits);
+	end = pf_max(min_digits, nb_digits);
 	if (prefix)
 		end++;
 	buf = malloc(sizeof(char) * (end + 1));

@@ -1,11 +1,6 @@
 #include "libft.h"
 #include "libftprintf.h"
 
-int	max(int a, int b)
-{
-	return (a > b ? a : b);
-}
-
 void signed_conv(char **str, t_fmt fmt, va_list ap)
 {
 	long long int	nb;

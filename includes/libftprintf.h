@@ -44,6 +44,7 @@ typedef			struct s_fmt
 }				t_fmt;
 
 void	pf_error(const char *msg);
+int		pf_max(int a, int b);
 char	*pf_strclone(const char *src);
 int		pf_simple_atoi(const char *s);
 char	*pf_itoa_dec(long long int value, int min_digits, char positive_prefix);

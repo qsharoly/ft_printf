@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include "libftprintf.h"
 
 static int  nb_size_oct(unsigned long long value)
 {
@@ -13,18 +14,13 @@ static int  nb_size_oct(unsigned long long value)
     return (size);
 }
 
-static int  max(int a, int b)
-{
-    return (a > b ? a : b);
-}
-
 char    *pf_utoa_oct(unsigned long long int value, int min_digits, int prefix)
 {
     char    *buf;
     int     end;
     int     i;
 
-    end = max(min_digits, nb_size_oct(value));
+    end = pf_max(min_digits, nb_size_oct(value));
     end += prefix * (min_digits <= nb_size_oct(value));
     buf = malloc(sizeof(char) * (end + 1));
     buf[end] = '\0';

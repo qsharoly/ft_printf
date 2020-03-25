@@ -137,83 +137,58 @@ static t_fmt	parse_format(const char *str)
 	return (fmt);
 }
 
-static char *make_pad(int padlen, t_fmt fmt)
+static char choose_padchar(t_fmt fmt)
 {
-	int		i;
-	char	*pad;
 	char	padchar;
 
-	if (padlen <= 0)
-		return (NULL);
 	if (fmt.pad_with_zero && !fmt.left_justify)
 		padchar = '0';
 	else
 		padchar = ' ';
 	if (fmt.pad_with_zero && (char_in_str(fmt.type, "diuoxX")) && fmt.precision != 1)
 		padchar = ' ';
-	pad = malloc(padlen + 1);
-	if (pad == NULL)
-	{
-		write(2, "failed malloc", 13);
-		exit(1);
-	}
-	i = 0;
-	while (i < padlen)
-	{
-		pad[i] = padchar;
-		i++;
-	}
-	pad[padlen] = '\0';
-	return (pad);
+	return (padchar);
 }
 
 static t_fat_string	arg_to_string(t_fmt fmt, va_list ap)
 {
 	t_fat_string	out;
 	char	*str;
-	char	*pad;
+	char	padchar;
 	int		padlen;
 	int		strlen;
 
 	out.data = NULL;
 	out.len = 0;
 	str = NULL;
-	pad = NULL;
+	padchar = choose_padchar(fmt);
 	fmt.to_string(&str, fmt, ap);
 	if (fmt.type == 's' && str == NULL)
 		str = "(null)";
-	if (str)
+	if (str == NULL)
+		return (out);
+	strlen = ft_strlen(str);
+	if (fmt.type == 's' && fmt.has_precision && fmt.precision < strlen)
+		strlen = fmt.precision;
+	if (fmt.type == 'c')
+		strlen = 1;
+	padlen = fmt.min_field_width - strlen;
+	if (padlen < 0)
+		padlen = 0;
+	out.len = strlen + padlen;
+	out.data = ft_strnew(out.len);
+	if (fmt.left_justify)
 	{
-		strlen = ft_strlen(str);
-		if (fmt.type == 's' && fmt.has_precision && fmt.precision < strlen)
-			strlen = fmt.precision;
-		if (fmt.type == 'c')
-			strlen = 1;
-		padlen = fmt.min_field_width - strlen;
-		if (padlen > 0)
-			pad = make_pad(padlen, fmt);
-		else
-			padlen = 0;
-		out.len = strlen + padlen;
-		out.data = ft_strnew(out.len);
-		if (fmt.left_justify)
-		{
-			if (str)
-				ft_memcpy(out.data, str, strlen);
-			if (pad)
-				ft_memcpy(out.data + strlen, pad, padlen);
-		}
-		else
-		{
-			if (pad)
-				ft_memcpy(out.data, pad, padlen);
-			if (str)
-				ft_memcpy(out.data + padlen, str, strlen);
-		}
+		ft_memcpy(out.data, str, strlen);
+		ft_memset(out.data + strlen, padchar, padlen);
+	}
+	else
+	{
+		ft_memset(out.data, padchar, padlen);
+		ft_memcpy(out.data + padlen, str, strlen);
 	}
 	if (fmt.type != 's')
 		free(str);
-	free(pad);
 	return (out);
 }
 

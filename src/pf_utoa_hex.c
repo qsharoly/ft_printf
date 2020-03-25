@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include "libftprintf.h"
 
 static int  nb_size_hex(unsigned long long value)
 {
@@ -13,11 +14,6 @@ static int  nb_size_hex(unsigned long long value)
     return (size);
 }
 
-static int  max(int a, int b)
-{
-    return (a > b ? a : b);
-}
-
 char    *pf_utoa_hex(unsigned long long int value, int min_digits, int prefix, int upper)
 {
     char    *buf;
@@ -26,7 +22,7 @@ char    *pf_utoa_hex(unsigned long long int value, int min_digits, int prefix, i
     int     i;
 
 	digits = upper ? "0123456789ABCDEF" : "0123456789abcdef";
-    end = max(min_digits, nb_size_hex(value));
+    end = pf_max(min_digits, nb_size_hex(value));
     end += 2 * prefix;
     buf = malloc(sizeof(char) * (end + 1));
     buf[end] = '\0';
