@@ -211,8 +211,8 @@ static t_list	*convert_split(const char *format, va_list ap)
 			f = parse_format(cur);
 			s = arg_to_string(f, ap);
 			elem = ft_lstnew(s.data, s.len);
-			free(s.data);
 			ft_lst_push_tail(&parts, elem);
+			free(s.data);
 			cur += f.spec_length;
 			format = cur;
 		}
@@ -252,7 +252,7 @@ static t_fat_string		concat(t_list *parts)
 /*
 ** (void)size; suppresses unused parameter warning
 */
-static void		pf_del(void *content, size_t size)
+static void		simple_del(void *content, size_t size)
 {
 	(void)size;
 	free(content);
@@ -269,7 +269,7 @@ int				ft_printf(const char * format, ...)
 	parts = convert_split(format, ap);
 	va_end(ap);
 	s = concat(parts);
-	ft_lstdel(&parts, pf_del);
+	ft_lstdel(&parts, simple_del);
 	total = write(1, s.data, s.len);
 	free(s.data);
 	if (total < 0)
