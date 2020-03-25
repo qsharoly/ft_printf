@@ -1,9 +1,17 @@
 #include "libft.h"
 #include "libftprintf.h"
 
-void signed_conv(char **str, char **prefix, t_fmt fmt, va_list ap)
+int	max(int a, int b)
+{
+	return (a > b ? a : b);
+}
+
+void signed_conv(char **str, t_fmt fmt, va_list ap)
 {
 	long long int	nb;
+	int				min_size;
+	char			pre_char;
+	int				prefix_size;
 
 	if (fmt.is_char)
 		nb = (char)va_arg(ap, int);
@@ -15,21 +23,27 @@ void signed_conv(char **str, char **prefix, t_fmt fmt, va_list ap)
 		nb = va_arg(ap, long);
 	else// if (fmt.is_longlong)
 		nb = va_arg(ap, long long);
-	*str = pf_itoa_base_abs(nb, 10, fmt.precision, 0);
 	if (nb >= 0)
 	{
 		if (fmt.prepend_plus)
-			*prefix = pf_strclone("+");
+			pre_char = '+';
 		else if (fmt.prepend_space)
-			*prefix = pf_strclone(" ");
+			pre_char = ' ';
 		else
-			*prefix = NULL;
+			pre_char = 0;
 	}
 	else
-		*prefix = pf_strclone("-");
+		pre_char = '-';
+	prefix_size = 1;
+	if ((nb < 0 || fmt.prepend_plus || fmt.prepend_space)
+			&& fmt.pad_with_zero && !fmt.left_justify && !fmt.has_precision) 
+		min_size = fmt.min_field_width - prefix_size;
+	else
+		min_size = fmt.precision;
+	*str = pf_itoa_dec(nb, min_size, pre_char);
 }
 
-void	unsigned_conv(char **str, char **prefix, t_fmt fmt, va_list ap)
+void	unsigned_conv(char **str, t_fmt fmt, va_list ap)
 {
 	unsigned long long nb;
 
@@ -44,10 +58,9 @@ void	unsigned_conv(char **str, char **prefix, t_fmt fmt, va_list ap)
 	else //if (fmt.is_longlong)
 		nb = va_arg(ap, unsigned long long);
 	*str = pf_utoa_base(nb, 10, fmt.precision, 0);
-	*prefix = NULL;
 }
 
-void	octal_conv(char **str, char **prefix, t_fmt fmt, va_list ap)
+void	octal_conv(char **str, t_fmt fmt, va_list ap)
 {
 	unsigned long long	nb;
 
@@ -62,7 +75,6 @@ void	octal_conv(char **str, char **prefix, t_fmt fmt, va_list ap)
 	else// if (fmt.is_longlong)
 		nb = va_arg(ap, unsigned long long);
 	*str = pf_utoa_oct(nb, fmt.precision, fmt.alternative_form);
-	*prefix = NULL;
 }
 
 /*
@@ -71,7 +83,7 @@ void	octal_conv(char **str, char **prefix, t_fmt fmt, va_list ap)
 ** inside min_field_width
 */
 
-void hex_conv(char **str, char **prefix, t_fmt fmt, va_list ap)
+void hex_conv(char **str, t_fmt fmt, va_list ap)
 {
 	unsigned long long	nb;
 	int	upcase;
@@ -96,5 +108,4 @@ void hex_conv(char **str, char **prefix, t_fmt fmt, va_list ap)
 	else
 		min_size = fmt.precision;
 	*str = pf_utoa_hex(nb, min_size, fmt.alternative_form && nb > 0, upcase);
-	*prefix = NULL;
 }

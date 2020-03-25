@@ -40,25 +40,25 @@ typedef			struct s_fmt
 	int			min_field_width;
 	int			precision;
 	char		type;
-	void		(*to_string)(char **str, char **prefix, struct s_fmt f, va_list ap);
+	void		(*to_string)(char **str, struct s_fmt f, va_list ap);
 }				t_fmt;
 
 void	pf_error(const char *msg);
 char	*pf_strclone(const char *src);
 int		pf_simple_atoi(const char *s);
-char	*pf_itoa_base_abs(long long int value, int base, int min_digits, int upcase);
+char	*pf_itoa_dec(long long int value, int min_digits, char positive_prefix);
 char	*pf_utoa_base(unsigned long long int value, unsigned int base, int min_digits, int upcase);
 char    *pf_utoa_oct(unsigned long long int value, int min_digits, int prefix);
 char    *pf_utoa_hex(unsigned long long int value, int min_digits, int prefix, int upper);
-void	percent_conv(char **str, char **prefix, t_fmt f, va_list ap);
-void	s_conv(char **str, char **prefix, t_fmt f, va_list ap);
-void	c_conv(char **str, char **prefix, t_fmt f, va_list ap);
-void	p_conv(char **str, char **prefix, t_fmt f, va_list ap);
-void	signed_conv(char **str, char **prefix, t_fmt fmt, va_list ap);
-void	unsigned_conv(char **str, char **prefix, t_fmt fmt, va_list ap);
-void	octal_conv(char **str, char **prefix, t_fmt fmt, va_list ap);
-void	hex_conv(char **str, char **prefix, t_fmt fmt, va_list ap);
-void	default_conv(char **str, char **prefix, t_fmt f, va_list ap);
+void	percent_conv(char **str, t_fmt f, va_list ap);
+void	s_conv(char **str, t_fmt f, va_list ap);
+void	c_conv(char **str, t_fmt f, va_list ap);
+void	p_conv(char **str, t_fmt f, va_list ap);
+void	signed_conv(char **str, t_fmt fmt, va_list ap);
+void	unsigned_conv(char **str, t_fmt fmt, va_list ap);
+void	octal_conv(char **str, t_fmt fmt, va_list ap);
+void	hex_conv(char **str, t_fmt fmt, va_list ap);
+void	default_conv(char **str, t_fmt f, va_list ap);
 int		ft_printf(const char * format, ...);
 
 #endif

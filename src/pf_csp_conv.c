@@ -6,7 +6,7 @@
 ** (void)f; suppresses unused parameter warning
 */
 
-void	c_conv(char **str, char **prefix, t_fmt f, va_list ap)
+void	c_conv(char **str, t_fmt f, va_list ap)
 {
 	int		nb;
 
@@ -17,7 +17,6 @@ void	c_conv(char **str, char **prefix, t_fmt f, va_list ap)
 		pf_error("malloc error\n");
 	(*str)[0] = (char)nb;
 	(*str)[1] = '\0';
-	*prefix = NULL;
 }
 
 /*
@@ -25,14 +24,13 @@ void	c_conv(char **str, char **prefix, t_fmt f, va_list ap)
 ** (void)f; suppresses unused parameter warning
 */
 
-void	s_conv(char **str, char **prefix, t_fmt f, va_list ap)
+void	s_conv(char **str, t_fmt f, va_list ap)
 {
 	(void)f;
 	*str = va_arg(ap, char *);
-	*prefix = NULL;
 }
 
-void	p_conv(char **str, char **prefix, t_fmt f, va_list ap)
+void	p_conv(char **str, t_fmt f, va_list ap)
 {
 	unsigned long	adr;
 	int				need_prefix;
@@ -45,5 +43,4 @@ void	p_conv(char **str, char **prefix, t_fmt f, va_list ap)
 		*str = pf_strclone("0x0");
 	else
 		*str = pf_utoa_hex(adr, f.precision, need_prefix, upcase);
-	*prefix = NULL;
 }

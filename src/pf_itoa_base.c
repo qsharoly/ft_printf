@@ -11,6 +11,8 @@
 /* ************************************************************************** */
 
 #include <stdlib.h>
+#include "libft.h"
+#include "libftprintf.h"
 
 static int	count_digits(long long int value, int base)
 {
@@ -47,32 +49,35 @@ static void	do_itoa(char *str, long long int value, int base, const char *digits
 	}
 }
 
-char		*pf_itoa_base_abs(long long int value, int base, int min_digits, int upcase)
+static int	max(int a, int b)
 {
-	char	*a;
-	char	*digits;
-	int		n_digits;
-	int		pad_size;
+	return (a > b ? a : b);
+}
 
-	if (min_digits == 0 && value == 0)
+char		*pf_itoa_dec(long long int value, int min_digits, char prefix)
+{
+	char	*buf;
+	int		nb_digits;
+	int		end;
+	int		i;
+
+	nb_digits = count_digits(value, 10);
+	if (value == 0)
+		nb_digits = 0;
+	end = max(min_digits, nb_digits);
+	if (prefix)
+		end++;
+	buf = malloc(sizeof(char) * (end + 1));
+	buf[end] = '\0';
+	end--;
+	do_itoa(buf + end, value, 10, "0123456789");
+	i = nb_digits;
+	while (i < min_digits)
 	{
-		a = malloc(sizeof(*a) * 1);
-		a[0] = '\0';
-		return (a);
+		buf[end - i] = '0';
+		i++;
 	}
-	if (upcase)
-		digits = "0123456789ABCDEF";
-	else
-		digits = "0123456789abcdef";
-	n_digits = count_digits(value, base);
-	pad_size = min_digits > n_digits ? min_digits - n_digits : 0;
-	a = malloc(sizeof(*a) * (n_digits + pad_size + 1));
-	do_itoa(a + n_digits + pad_size - 1, value, base, digits);
-	a[n_digits + pad_size] = '\0';
-	while (pad_size > 0)
-	{
-		a[pad_size - 1] = '0';
-		pad_size--;
-	}
-	return (a);
+	if (prefix)
+		buf[0] = prefix;
+	return (buf);
 }

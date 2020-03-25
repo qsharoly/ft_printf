@@ -14,7 +14,7 @@
 #include "libft.h"
 #include "libftprintf.h"
 
-static void (*g_conversions[10])(char **, char **, t_fmt, va_list) = {
+static void (*g_conversions[10])(char **, t_fmt, va_list) = {
 	percent_conv,
 	c_conv,
 	s_conv,
@@ -44,7 +44,7 @@ static int	char_in_str(char needle, const char *hay)
 	return (0);
 }
 
-static int	pf_strchr_index(char needle, const char *hay)
+static int	strchr_index(char needle, const char *hay)
 {
 	int		i;
 
@@ -59,11 +59,11 @@ static int	pf_strchr_index(char needle, const char *hay)
 	return (-1);
 }
 
-static void	(*choose_conv(char type))(char **, char **, t_fmt, va_list)
+static void	(*choose_conv(char type))(char **, t_fmt, va_list)
 {
 	int		i;
 
-	i = pf_strchr_index(type, "%cspdiuoxX");
+	i = strchr_index(type, "%cspdiuoxX");
 	if (i >= 0)
 		return (g_conversions[i]);
 	else
@@ -172,17 +172,14 @@ static t_fat_string	arg_to_string(t_fmt fmt, va_list ap)
 	t_fat_string	out;
 	char	*str;
 	char	*pad;
-	char	*prefix;
 	int		padlen;
 	int		strlen;
-	int		prelen;
 
 	out.data = NULL;
 	out.len = 0;
 	str = NULL;
-	prefix = NULL;
 	pad = NULL;
-	fmt.to_string(&str, &prefix, fmt, ap);
+	fmt.to_string(&str, fmt, ap);
 	if (fmt.type == 's' && str == NULL)
 		str = "(null)";
 	if (str)
@@ -192,50 +189,31 @@ static t_fat_string	arg_to_string(t_fmt fmt, va_list ap)
 			strlen = fmt.precision;
 		if (fmt.type == 'c')
 			strlen = 1;
-		if (prefix)
-			prelen = ft_strlen(prefix);
-		else
-			prelen = 0;
-		padlen = fmt.min_field_width - strlen - prelen;
+		padlen = fmt.min_field_width - strlen;
 		if (padlen > 0)
 			pad = make_pad(padlen, fmt);
 		else
 			padlen = 0;
-		out.len = prelen + strlen + padlen;
+		out.len = strlen + padlen;
 		out.data = ft_strnew(out.len);
 		if (fmt.left_justify)
 		{
-			if (prefix)
-				ft_memcpy(out.data, prefix, prelen);
 			if (str)
-				ft_memcpy(out.data + prelen, str, strlen);
+				ft_memcpy(out.data, str, strlen);
 			if (pad)
-				ft_memcpy(out.data + prelen + strlen, pad, padlen);
+				ft_memcpy(out.data + strlen, pad, padlen);
 		}
 		else
 		{
-			if (fmt.pad_with_zero && fmt.precision == 1 && (fmt.type == 'd' || fmt.type == 'i' || fmt.alternative_form))
-			{
-				if (prefix)
-					ft_memcpy(out.data, prefix, prelen);
-				if (pad)
-					ft_memcpy(out.data + prelen, pad, padlen);
-			}
-			else
-			{
-				if (pad)
-					ft_memcpy(out.data, pad, padlen);
-				if (prefix) 
-					ft_memcpy(out.data + padlen, prefix, prelen);
-			}
+			if (pad)
+				ft_memcpy(out.data, pad, padlen);
 			if (str)
-				ft_memcpy(out.data + prelen + padlen, str, strlen);
+				ft_memcpy(out.data + padlen, str, strlen);
 		}
 	}
 	if (fmt.type != 's')
 		free(str);
 	free(pad);
-	free(prefix);
 	return (out);
 }
 

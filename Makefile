@@ -9,7 +9,7 @@ CCFLAGS := -Wall -Wextra -Werror
 debug = yes
 
 ifeq ($(debug), yes)
-	CCFLAGS := -g $(CCFLAGS)
+	CCFLAGS += -g
 endif
 
 SRC = ft_printf.c pf_strclone.c pf_itoa_base.c pf_utoa_base.c pf_simple_atoi.c\
