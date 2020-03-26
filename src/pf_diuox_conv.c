@@ -31,8 +31,8 @@ void signed_conv(char **str, t_fmt fmt, va_list ap)
 		pre_char = '-';
 	prefix_size = 1;
 	if ((nb < 0 || fmt.prepend_plus || fmt.prepend_space)
-			&& fmt.pad_with_zero && !fmt.left_justify && !fmt.has_precision) 
-		min_size = fmt.min_field_width - prefix_size;
+			&& fmt.pad_with_zero && !fmt.left_justify && !fmt.has_precision)
+		min_size = fmt.min_width - prefix_size;
 	else
 		min_size = fmt.precision;
 	*str = pf_itoa_dec(nb, min_size, pre_char);
@@ -74,8 +74,6 @@ void	octal_conv(char **str, t_fmt fmt, va_list ap)
 
 /*
 ** hex_conv:
-** in alternative_form when pad_with_zero == 1 and we have enough space, put prefix
-** inside min_field_width
 */
 
 void hex_conv(char **str, t_fmt fmt, va_list ap)
@@ -98,8 +96,8 @@ void hex_conv(char **str, t_fmt fmt, va_list ap)
 	upcase = (fmt.type == 'X');
 	prefix_size = 2;
 	if (fmt.alternative_form && fmt.pad_with_zero && !fmt.left_justify
-			&& fmt.min_field_width - prefix_size > fmt.precision) 
-		min_size = fmt.min_field_width - prefix_size;
+			&& fmt.min_width - prefix_size > fmt.precision)
+		min_size = fmt.min_width - prefix_size;
 	else
 		min_size = fmt.precision;
 	*str = pf_utoa_hex(nb, min_size, fmt.alternative_form && nb > 0, upcase);

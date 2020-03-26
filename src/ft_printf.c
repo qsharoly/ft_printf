@@ -70,70 +70,70 @@ static void	(*choose_conv(char type))(char **, t_fmt, va_list)
 		return (default_conv);
 }
 
-static t_fmt	parse_format(const char *str)
+static t_fmt	parse_specifier(const char *str)
 {
 	t_fmt	fmt;
-	char	*ptr;
+	char	*pos;
 
-	ptr = (char *)str + 1;
+	pos = (char *)str + 1;
 	ft_bzero((char *)&fmt, sizeof(t_fmt));
 	fmt.precision = 1;
-	while (char_in_str(*ptr, "0-+ #"))
+	while (char_in_str(*pos, "0-+ #"))
 	{
-		if (*ptr == '0')
+		if (*pos == '0')
 			fmt.pad_with_zero = 1;
-		else if (*ptr == '-')
+		else if (*pos == '-')
 			fmt.left_justify = 1;
-		else if (*ptr == '+')
+		else if (*pos == '+')
 			fmt.prepend_plus = 1;
-		else if (*ptr == ' ')
+		else if (*pos == ' ')
 			fmt.prepend_space = 1;
-		else if (*ptr == '#')
+		else if (*pos == '#')
 			fmt.alternative_form = 1;
-		ptr++;
+		pos++;
 	}
-	fmt.min_field_width = pf_simple_atoi(ptr);
-	while (*ptr >= '0' && *ptr <= '9')
-		ptr++;
-	if (*ptr == '.')
+	fmt.min_width = pf_simple_atoi(pos);
+	while (*pos >= '0' && *pos <= '9')
+		pos++;
+	if (*pos == '.')
 	{
-		ptr++;
-		fmt.precision = pf_simple_atoi(ptr);
+		pos++;
+		fmt.precision = pf_simple_atoi(pos);
 		fmt.has_precision = 1;
-		while (*ptr >= '0' && *ptr <= '9')
-			ptr++;
+		while (*pos >= '0' && *pos <= '9')
+			pos++;
 	}
-	if (*ptr == 'h' && *(ptr + 1) == 'h')
+	if (*pos == 'h' && *(pos + 1) == 'h')
 	{
-		ptr += 2;
+		pos += 2;
 		fmt.is_char = 1;
 	}
-	else if (*ptr == 'h')
+	else if (*pos == 'h')
 	{
-		ptr++;
+		pos++;
 		fmt.is_short = 1;
 	}
-	else if (*ptr == 'l' && *(ptr + 1) == 'l')
+	else if (*pos == 'l' && *(pos + 1) == 'l')
 	{
-		ptr += 2;
+		pos += 2;
 		fmt.is_longlong = 1;
 	}
-	else if (*ptr == 'l')
+	else if (*pos == 'l')
 	{
-		ptr++;
+		pos++;
 		fmt.is_long = 1;
 	}
 	else
 		fmt.is_int = 1;
-	if (char_in_str(*ptr, "%cspdiuoxX"))
+	if (char_in_str(*pos, "%cspdiuoxX"))
 	{
-		fmt.type = *ptr;
-		ptr++;
+		fmt.type = *pos;
+		pos++;
 	}
 	else
 		fmt.type = TYPE_MISSING;
 	fmt.to_string = choose_conv(fmt.type);
-	fmt.spec_length = ptr - str;
+	fmt.spec_length = pos - str;
 	return (fmt);
 }
 
@@ -150,13 +150,13 @@ static char choose_padchar(t_fmt fmt)
 	return (padchar);
 }
 
-static t_fat_string	arg_to_string(t_fmt fmt, va_list ap)
+static t_fatstr	arg_to_string(t_fmt fmt, va_list ap)
 {
-	t_fat_string	out;
-	char	*str;
-	char	padchar;
-	int		padlen;
-	int		strlen;
+	t_fatstr	out;
+	char		*str;
+	char		padchar;
+	int			padlen;
+	int			strlen;
 
 	out.data = NULL;
 	out.len = 0;
@@ -172,7 +172,7 @@ static t_fat_string	arg_to_string(t_fmt fmt, va_list ap)
 		strlen = fmt.precision;
 	if (fmt.type == 'c')
 		strlen = 1;
-	padlen = fmt.min_field_width - strlen;
+	padlen = fmt.min_width - strlen;
 	if (padlen < 0)
 		padlen = 0;
 	out.len = strlen + padlen;
@@ -192,13 +192,13 @@ static t_fat_string	arg_to_string(t_fmt fmt, va_list ap)
 	return (out);
 }
 
-static t_list	*convert_split(const char *format, va_list ap)
+static t_list	*split_convert(const char *format, va_list ap)
 {
-	t_list	*parts;
-	t_list	*elem;
-	t_fat_string	s;
-	char	*cur;
-	t_fmt	f;
+	t_list		*parts;
+	t_list		*elem;
+	t_fatstr	s;
+	t_fmt		fmt;
+	char		*cur;
 
 	parts = NULL;
 	cur = (char *)format;
@@ -208,12 +208,12 @@ static t_list	*convert_split(const char *format, va_list ap)
 		{
 			elem = ft_lstnew(format, cur - format);
 			ft_lst_push_tail(&parts, elem);
-			f = parse_format(cur);
-			s = arg_to_string(f, ap);
+			fmt = parse_specifier(cur);
+			s = arg_to_string(fmt, ap);
 			elem = ft_lstnew(s.data, s.len);
 			ft_lst_push_tail(&parts, elem);
 			free(s.data);
-			cur += f.spec_length;
+			cur += fmt.spec_length;
 			format = cur;
 		}
 		else
@@ -224,33 +224,33 @@ static t_list	*convert_split(const char *format, va_list ap)
 	return (parts);
 }
 
-static t_fat_string		concat(t_list *parts)
+static t_fatstr		concat(t_list *parts)
 {
-	t_list	*tmp;
-	int		i;
-	t_fat_string	s;
+	t_list		*tmp;
+	t_fatstr	whole;
+	int			pos;
 
 	tmp = parts;
-	s.len = 0;
+	whole.len = 0;
 	while (tmp)
 	{
-		s.len += tmp->content_size;
+		whole.len += tmp->content_size;
 		tmp = tmp->next;
 	}
-	s.data = (char *)malloc(sizeof(*s.data) * (s.len + 1));
-	s.data[s.len] = '\0';
-	i = 0;
+	whole.data = malloc(sizeof(*whole.data) * (whole.len + 1));
+	whole.data[whole.len] = '\0';
+	pos = 0;
 	while (parts)
 	{
-		ft_memcpy(&s.data[i], parts->content, parts->content_size);
-		i += parts->content_size;
+		ft_memcpy(whole.data + pos, parts->content, parts->content_size);
+		pos += parts->content_size;
 		parts = parts->next;
 	}
-	return (s);
+	return (whole);
 }
 
 /*
-** (void)size; suppresses unused parameter warning
+** size is unused
 */
 static void		simple_del(void *content, size_t size)
 {
@@ -260,13 +260,13 @@ static void		simple_del(void *content, size_t size)
 
 int				ft_printf(const char * format, ...)
 {
-	va_list	ap;
-	t_list	*parts;
-	t_fat_string	s;
-	int		total;
+	va_list		ap;
+	t_list		*parts;
+	t_fatstr	s;
+	int			total;
 
 	va_start(ap, format);
-	parts = convert_split(format, ap);
+	parts = split_convert(format, ap);
 	va_end(ap);
 	s = concat(parts);
 	ft_lstdel(&parts, simple_del);

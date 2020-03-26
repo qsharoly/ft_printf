@@ -1,10 +1,19 @@
 #include <stdlib.h>
 #include "libftprintf.h"
 
-/*
-** c_conv:
-** (void)f; suppresses unused parameter warning
-*/
+void	default_conv(char **str, t_fmt f, va_list ap)
+{
+	(void)f;
+	(void)ap;
+	*str = NULL;
+}
+
+void	percent_conv(char **str, t_fmt f, va_list ap)
+{
+	(void)f;
+	(void)ap;
+	*str = pf_strclone("%");
+}
 
 void	c_conv(char **str, t_fmt f, va_list ap)
 {
@@ -18,11 +27,6 @@ void	c_conv(char **str, t_fmt f, va_list ap)
 	(*str)[0] = (char)nb;
 	(*str)[1] = '\0';
 }
-
-/*
-** s_conv:
-** (void)f; suppresses unused parameter warning
-*/
 
 void	s_conv(char **str, t_fmt f, va_list ap)
 {
