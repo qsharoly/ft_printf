@@ -12,69 +12,30 @@
 
 #include "libft.h"
 
-static int	count_digits(int n)
-{
-	int		count;
-
-	if (n == 0)
-		return (1);
-	count = 0;
-	while (n != 0)
-	{
-		count++;
-		n /= 10;
-	}
-	return (count);
-}
-
-static int	mypow(int nb, int pow)
-{
-	int		res;
-
-	if (pow < 0)
-		return (0);
-	res = 1;
-	while (pow > 0)
-	{
-		res *= nb;
-		pow--;
-	}
-	return (res);
-}
-
-static void	itoa_simple_positive(char *s, int n, int digit_count)
-{
-	int		i;
-
-	i = 0;
-	while (i < digit_count)
-	{
-		s[i] = '0' + n / mypow(10, digit_count - i - 1) % 10;
-		i++;
-	}
-}
-
 char		*ft_itoa(int n)
 {
 	char	*a;
-	int		digit_count;
+	char	buf[ITOA_BUF_SIZE];
+	int		nb_digits;
+	int		is_neg;
 
-	digit_count = count_digits(n);
-	a = ft_strnew(digit_count + (n < 0 ? 1 : 0));
-	if (a)
+	nb_digits = 0;
+	is_neg = (n < 0);
+	if (n <= 0)
 	{
-		if (n == -2147483648)
-		{
-			ft_strcat(a, "-2");
-			digit_count -= 1;
-			n = 147483648;
-		}
-		if (n < 0)
-		{
-			a[0] = '-';
-			n = -n;
-		}
-		itoa_simple_positive(ft_strchr(a, '\0'), n, digit_count);
+		buf[ITOA_BUF_SIZE - nb_digits++] = -(n % 10) + '0';
+		n = -(n / 10);
 	}
+	while (n > 0)
+	{
+		buf[ITOA_BUF_SIZE - nb_digits++] = n % 10 + '0';
+		n = n / 10;
+	}
+	if (!(a = malloc(sizeof(*a) * (is_neg + nb_digits + 1))))
+			return (NULL);
+	if (is_neg)
+		a[0] = '-';
+	ft_memcpy(a + is_neg, buf + ITOA_BUF_SIZE - nb_digits + 1, nb_digits);
+	a[is_neg + nb_digits] = '\0';
 	return (a);
 }

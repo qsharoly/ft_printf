@@ -15,6 +15,8 @@
 
 # include <stdlib.h>
 
+# define ITOA_BUF_SIZE 65
+
 typedef struct	s_split_info
 {
 	size_t			source_len;
