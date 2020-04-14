@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_itoa_base_unsigned.c                            :+:      :+:    :+:   */
+/*   pf_utoa_dec.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/21 16:14:34 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/02/26 17:40:48 by qsharoly         ###   ########.fr       */
+/*   Updated: 2020/04/14 13:28:05 by qsharoly         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static int	count_digits(unsigned long long int value, unsigned int base)
 {
-	int	count;
+	int		count;
 
 	count = 1;
 	while (value / base != 0)
@@ -25,9 +25,10 @@ static int	count_digits(unsigned long long int value, unsigned int base)
 	return (count);
 }
 
-static void	do_itoa(char *str, unsigned long long int value, unsigned int base, const char *digits)
+static void	do_itoa(char *str, unsigned long long value,
+				unsigned base, const char *digits)
 {
-	unsigned long long int		quo;
+	unsigned long long	quo;
 
 	quo = value / base;
 	if (quo == 0)
@@ -42,7 +43,8 @@ static void	do_itoa(char *str, unsigned long long int value, unsigned int base, 
 	}
 }
 
-char		*pf_utoa_base(unsigned long long int value, unsigned int base, int min_digits, int upcase)
+char		*pf_utoa_base(unsigned long long value, unsigned base,
+				int min_digits, int upcase)
 {
 	char	*a;
 	char	*digits;
@@ -55,10 +57,7 @@ char		*pf_utoa_base(unsigned long long int value, unsigned int base, int min_dig
 		a[0] = '\0';
 		return (a);
 	}
-	if (upcase)
-		digits = "0123456789ABCDEF";
-	else
-		digits = "0123456789abcdef";
+	digits = upcase ? "0123456789ABCDEF" : "0123456789abcdef";
 	n = count_digits(value, base);
 	pad_size = min_digits > n ? min_digits - n : 0;
 	a = malloc(sizeof(*a) * (pad_size + n + 1));

@@ -1,24 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pf_strclone.c                                      :+:      :+:    :+:   */
+/*   pf_strchr_idx.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/04/14 13:26:51 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/04/14 13:27:05 by qsharoly         ###   ########.fr       */
+/*   Created: 2020/04/14 12:23:53 by qsharoly          #+#    #+#             */
+/*   Updated: 2020/04/14 12:23:55 by qsharoly         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-#include "libftprintf.h"
-
-char	*pf_strclone(const char *src)
+int		pf_strchr_idx(char needle, const char *hay)
 {
-	char	*clone;
+	int		i;
 
-	clone = ft_strdup(src);
-	if (!clone)
-		pf_error("malloc error");
-	return (clone);
+	i = 0;
+	while (hay[i])
+	{
+		if (hay[i] == needle)
+			return (i);
+		i++;
+	}
+	return (-1);
 }

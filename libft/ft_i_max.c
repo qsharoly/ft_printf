@@ -1,24 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pf_strclone.c                                      :+:      :+:    :+:   */
+/*   ft_i_max.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/04/14 13:26:51 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/04/14 13:27:05 by qsharoly         ###   ########.fr       */
+/*   Created: 2020/04/14 12:14:08 by qsharoly          #+#    #+#             */
+/*   Updated: 2020/04/14 12:14:19 by qsharoly         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-#include "libftprintf.h"
-
-char	*pf_strclone(const char *src)
+int		ft_i_max(int a, int b)
 {
-	char	*clone;
-
-	clone = ft_strdup(src);
-	if (!clone)
-		pf_error("malloc error");
-	return (clone);
+	return (a > b ? a : b);
 }

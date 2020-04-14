@@ -1,10 +1,12 @@
 NAME = libftprintf.a
-LIBFT = libft
-INCDIR = includes
+INCDIR = includes 
 OBJDIR = obj
 SRCDIR = src
+LIBFT = libft
+LFT_INCDIR = $(LIBFT)/includes
 CC = gcc
-CCFLAGS := -Wall -Wextra -Werror
+CCFLAGS = -Wall -Wextra -Werror
+INCFLAGS = -I$(INCDIR) -I$(LFT_INCDIR)
 
 debug = yes
 
@@ -12,9 +14,9 @@ ifeq ($(debug), yes)
 	CCFLAGS += -g
 endif
 
-SRC = ft_printf.c pf_strclone.c pf_itoa_base.c pf_utoa_base.c pf_simple_atoi.c\
-	  pf_basic_conv.c pf_diuox_conv.c\
-	  pf_utoa_oct.c pf_utoa_hex.c pf_max.c
+SRC = ft_printf.c pf_parse_specifier.c pf_arg_to_string.c pf_basic_conv.c pf_diuox_conv.c\
+	  pf_strchr_idx.c pf_strclone.c pf_simple_atoi.c\
+	  pf_itoa_dec.c pf_utoa_dec.c pf_utoa_oct.c pf_utoa_hex.c
 
 OBJ = $(SRC:%.c=$(OBJDIR)/%.o)
 
@@ -28,8 +30,8 @@ $(NAME): $(OBJ)
 	cp $(LIBFT)/libft.a ./$(NAME)
 	ar rcs $(NAME) $(OBJ)
 
-$(OBJDIR)/%.o: $(SRCDIR)/%.c $(INCDIR)/libftprintf.h
-	$(CC) $(CCFLAGS) -c -o $@ $< -I $(INCDIR)
+$(OBJDIR)/%.o: $(SRCDIR)/%.c includes/libftprintf.h
+	$(CC) $(CCFLAGS) -c -o $@ $< $(INCFLAGS)
 
 .PHONY: all clean fclean re
 

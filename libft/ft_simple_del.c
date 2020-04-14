@@ -1,24 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pf_strclone.c                                      :+:      :+:    :+:   */
+/*   ft_simple_del.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/04/14 13:26:51 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/04/14 13:27:05 by qsharoly         ###   ########.fr       */
+/*   Created: 2020/04/14 13:09:52 by qsharoly          #+#    #+#             */
+/*   Updated: 2020/04/14 13:09:59 by qsharoly         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include "libftprintf.h"
 
-char	*pf_strclone(const char *src)
+void	ft_simple_del(void *content, size_t size)
 {
-	char	*clone;
-
-	clone = ft_strdup(src);
-	if (!clone)
-		pf_error("malloc error");
-	return (clone);
+	(void)size;
+	free(content);
 }
