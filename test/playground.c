@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
 #include <strings.h>
 #include <limits.h>
@@ -47,7 +48,7 @@ void	print_char_bits(char c)
 	printf("\n");
 }
 
-double	bin2double(char *bit_values)
+double	bits2double(char *bit_values)
 {
 	int		i;
 	long	nb;
@@ -85,7 +86,7 @@ long	get_mantissa(double a)
 }
 
 
-#define	BIG_N_CHUNKS 4
+#define	BIG_N_CHUNKS 2
 #define CHUNK_TOP_BIT 63
 #define CHUNK_N_BITS 64
 #define HIGHEST_BIT_MASK (1L << CHUNK_TOP_BIT)
@@ -98,100 +99,118 @@ typedef	struct		s_big
 	t_chunk	val[BIG_N_CHUNKS];
 }					t_big;
 
-t_big	carry(t_big a, unsigned i)
+t_big	big_zero(void)
 {
-	while (a.val[i] == CHUNK_MAX_VALUE && i < BIG_N_CHUNKS - 1)
-		i++;
-	a.val[i] += 1;
+	t_big		a;
+
+	bzero(&a, sizeof(a));
+	return (a);
+}
+
+t_big	big_carry(t_big a, unsigned chunk_idx)
+{
+	while (a.val[chunk_idx] == CHUNK_MAX_VALUE && chunk_idx < BIG_N_CHUNKS - 1)
+		chunk_idx++;
+	a.val[chunk_idx] += 1;
 	return (a);
 }
 
 t_big	big_add(t_big a, t_big b)
 {
 	t_big		sum;
-	unsigned	i;
+	unsigned	chunk_idx;
 
-	bzero(&sum, sizeof(sum));
-	i = 0;
-	while (i < BIG_N_CHUNKS)
+	sum = big_zero();
+	chunk_idx = 0;
+	while (chunk_idx < BIG_N_CHUNKS)
 	{
-		sum.val[i] = a.val[i] + b.val[i];
-		if (a.val[i] > CHUNK_MAX_VALUE - b.val[i])
-			a = carry(a, i + 1);
-		i++;
+		sum.val[chunk_idx] = a.val[chunk_idx] + b.val[chunk_idx];
+		if (a.val[chunk_idx] > CHUNK_MAX_VALUE - b.val[chunk_idx])
+			a = big_carry(a, chunk_idx + 1);
+		chunk_idx++;
 	}
 	return (sum);
 }
 
+t_big	big_inc(t_big a)
+{
+	a = big_carry(a, 0);
+	return (a);
+}
+
 t_big	big_shl_one(t_big a)
 {
-	unsigned	i;
-	int			carry;
+	unsigned	chunk_idx;
+	int			need_carry;
 	int			hi_is_set;
 
-	i = 0;
-	carry = 0;
-	while (i < BIG_N_CHUNKS)
+	chunk_idx = 0;
+	need_carry = 0;
+	while (chunk_idx < BIG_N_CHUNKS)
 	{
-		hi_is_set = a.val[i] & HIGHEST_BIT_MASK;
-		a.val[i] <<= 1;
-		if (carry)
-			a.val[i] += 1;
-		carry = hi_is_set;
-		i++;
+		hi_is_set = a.val[chunk_idx] & HIGHEST_BIT_MASK;
+		a.val[chunk_idx] <<= 1;
+		if (need_carry)
+			a.val[chunk_idx] += 1;
+		need_carry = hi_is_set;
+		chunk_idx++;
 	}
 	return (a);
 }
 
-void	big_copy(t_big *dst, const t_big *src)
+t_big	big_shr_one(t_big a)
 {
-	unsigned	i;
+	unsigned	chunk_idx;
+	int			need_carry;
 
-	i = 0;
-	while (i < BIG_N_CHUNKS)
+	chunk_idx = 0;
+	while (chunk_idx < BIG_N_CHUNKS)
 	{
-		dst->val[i] = src->val[i];
-		i++;
+		need_carry = (chunk_idx < BIG_N_CHUNKS - 1) && (a.val[chunk_idx + 1] & 1L);
+		a.val[chunk_idx] >>= 1;
+		if (need_carry)
+			a.val[chunk_idx] |= HIGHEST_BIT_MASK;
+		chunk_idx++;
 	}
+	return (a);
 }
-
 t_big	big_mul(t_big a, t_big b)
 {
 	t_big		res;
-	unsigned	i;
+	unsigned	chunk_idx;
 	unsigned	j;
 
-	bzero(&res, sizeof(res));
-	i = 0;
-	while (i < BIG_N_CHUNKS)
+	res = big_zero();
+	chunk_idx = 0;
+	while (chunk_idx < BIG_N_CHUNKS)
 	{
 		j = 0;
 		while (j < CHUNK_N_BITS)
 		{
-			if (b.val[i] & (1L << j))
+			if (b.val[chunk_idx] & (1L << j))
 				res = big_add(res, a);
 			a = big_shl_one(a);
 			j++;
 		}
-		i++;
+		chunk_idx++;
 	}
 	return (res);
 }
 
 int		big_cmp(t_big a, t_big b)
 {
-	unsigned	i;
+	unsigned	chunk_idx;
 
-	i = BIG_N_CHUNKS - 1;
-	while (i >= 0)
+	chunk_idx = BIG_N_CHUNKS - 1;
+	while (chunk_idx >= 0)
 	{
-		if (a.val[i] < b.val[i])
+		if (a.val[chunk_idx] < b.val[chunk_idx])
 			return (-1);
-		if (a.val[i] > b.val[i])
+		if (a.val[chunk_idx] > b.val[chunk_idx])
 			return (1);
-		if (i == 0)
+		if (chunk_idx == 0)
 			break ;
-		i--;
+		chunk_idx--;
 	}
 	return (0);
 }
@@ -200,62 +219,126 @@ t_big	big_from_chunk(t_chunk small)
 {
 	t_big	big;
 
-	bzero(&big, sizeof(t_big));
+	big = big_zero();
 	big.val[0] = small;
 	return (big);
 }
 
-typedef struct		s_big_divmod_small
-{
-	t_big	factor;
-	t_chunk	remainder;
-}					t_big_divmod_small;
+void			big_print_bits(t_big);
 
-t_big_divmod_small	big_divmod_small(t_big top, t_chunk bot)
+t_big	big_sub(t_big a, t_big b)
 {
-	t_big_divmod_small	out;
-	t_big	accum;
+	t_big		diff;
+	unsigned	chunk_idx;
 
-	bzero(&out, sizeof(t_big_divmod_small));
-	accum = big_from_chunk(bot);
-	while (big_cmp(top, accum) > 0)
+	diff = big_zero();
+	chunk_idx = 0;
+	while (chunk_idx < BIG_N_CHUNKS)
 	{
-		out.factor = big_add(out.factor, big_from_chunk(1));
-		accum = big_add(accum, big_from_chunk(bot));
+		diff.val[chunk_idx] = a.val[chunk_idx] - b.val[chunk_idx];
+		if (a.val[chunk_idx] < b.val[chunk_idx])
+			b = big_carry(b, chunk_idx + 1);
+		chunk_idx++;
 	}
-	out.remainder = top.val[0] % bot;
+	return (diff);
+}
+
+unsigned		big_top_bit(t_big a)
+{
+	unsigned	chunk_idx;
+	t_chunk		top_chunk;
+	unsigned	i;
+
+	chunk_idx = BIG_N_CHUNKS - 1;
+	while (a.val[chunk_idx] == 0)
+		chunk_idx--;
+	i = chunk_idx * CHUNK_N_BITS;
+	top_chunk = a.val[chunk_idx];
+	while (top_chunk)
+	{
+		top_chunk >>= 1;
+		i++;
+	}
+	return (i);
+}
+
+typedef struct		s_big_divmod
+{
+	t_big	quo;
+	t_big	rem;
+}					t_big_divmod;
+
+t_big_divmod	big_divmod(t_big top, t_big bot)
+{
+	t_big_divmod	out;
+	unsigned		shift;
+	unsigned		i;
+
+	if (big_cmp(top, bot) < 0)
+	{
+		out.quo = big_zero();
+		out.rem = top;
+		return (out);
+	}
+	shift = big_top_bit(top) - big_top_bit(bot);
+	i = 0;
+	while (i < shift)
+	{
+		bot = big_shl_one(bot);
+		i++;
+	}
+	out.quo = big_zero();
+	i = shift;
+	while (i >= 0)
+	{
+		if (big_cmp(top, bot) >= 0)
+		{
+			top = big_sub(top, bot);
+			out.quo.val[i / CHUNK_N_BITS] |= (1L << (i % CHUNK_N_BITS));
+		}
+		bot = big_shr_one(bot);
+		if (i == 0)
+			break ;
+		i--;
+	}
+	out.rem = top;
 	return (out);
 }
 
-#define BIG_BUFSIZE 100
-void	big_print(t_big a)
+#define BIG_BUFSIZE 16
+char	*big_to_string(t_big a)
 {
-	t_big_divmod_small	intermediary;
-	char				buf[BIG_BUFSIZE];
-	int					i;
+	t_big_divmod	tmp;
+	char			buf[BIG_BUFSIZE];
+	char			*s;
+	int				i;
 
-	intermediary = big_divmod_small(a, 10);
-	buf[BIG_BUFSIZE - 1] = '\0';
-	i = 2;
-	while (big_cmp(intermediary.factor, big_from_chunk(0)) > 0)
+	tmp.quo = a;
+	i = 0;
+	while (big_cmp(tmp.quo, big_zero()) > 0)
 	{
-		buf[BIG_BUFSIZE - i] = '0' + (char)intermediary.remainder;
-		intermediary = big_divmod_small(intermediary.factor, 10);
+		tmp = big_divmod(tmp.quo, big_from_chunk(10));
+		buf[BIG_BUFSIZE - i - 1] = '0' + (char)tmp.rem.val[0];
 		i++;
 	}
-	printf("%s\n", &buf[BIG_BUFSIZE - i + 1]);
+	s = malloc(i + 1);
+	s[i] = '\0';
+	memcpy(s, &buf[BIG_BUFSIZE - i], i);
+	return (s);
 }
 
 void	big_print_bits(t_big a)
 {
-	int		i;
+	int		chunk_idx;
 
-	i = BIG_N_CHUNKS - 1;
-	while (i >= 0)
+	chunk_idx = BIG_N_CHUNKS - 1;
+	while (chunk_idx >= 0)
 	{
-		print_bits(&(a.val[i]), CHUNK_N_BITS);
-		i--;
+		print_bits(&(a.val[chunk_idx]), CHUNK_N_BITS);
+		printf(" ");
+		chunk_idx--;
 	}
+	printf("\n");
 }
 
 t_big	generate_pow(t_chunk small_base, t_chunk power)
@@ -274,50 +357,114 @@ t_big	generate_pow(t_chunk small_base, t_chunk power)
 	return (res);
 }
 
+char	*finalize(char *digits, int decimal_place, int precision)
+{
+	char			*ipart;
+	char			*fpart;
+	char			*s;
+	int				i;
+
+	i = strlen(digits);
+	if (decimal_place < 0)
+	{
+		decimal_place = -decimal_place;
+		fpart = malloc(decimal_place + 1);
+		fpart[decimal_place] = '\0';
+		memcpy(fpart, digits + i - decimal_place, decimal_place);
+		if (decimal_place >= i)
+		{
+			ipart = strdup("0");
+			memset(fpart, '0', decimal_place - i);
+		}
+		else
+		{
+			ipart = malloc(i - decimal_place);
+			memcpy(ipart, digits, (i - decimal_place));
+		}
+	}
+	else
+	{
+		fpart = malloc(precision + 1);
+		fpart[precision] = '\0';
+		memset(fpart, '0', precision);
+		ipart = malloc(i + decimal_place + 1);
+		ipart[i + decimal_place] = '\0';
+		memcpy(ipart, digits, i);
+		memset(ipart + i, '0', decimal_place);
+	}
+	s = malloc(strlen(ipart) + strlen(".") + strlen(fpart) + 1);
+	strcpy(s, ipart);
+	strcat(s, ".");
+	strcat(s, fpart);
+	return (s);
+}
+
+char	*pf_dtoa(double d, int precision)
+{
+	char			*s;
+	long			exponent;
+	unsigned long	mantissa;
+	long			dec_pow;
+	t_big			big;
+	int				is_subnormal;
+
+	exponent = get_exponent(d);
+	mantissa = get_mantissa(d);
+	is_subnormal = (exponent == 0);
+	exponent = is_subnormal + exponent - F64_EXPONENT_BIAS;
+	mantissa = mantissa + (!is_subnormal) * (1L << F64_MANTISSA_SIZE);
+	dec_pow = -F64_MANTISSA_SIZE;
+	while ((mantissa & 1L) == 0)
+	{
+		mantissa >>= 1;
+		dec_pow++;
+	}
+	if (exponent < 0)
+	{
+		dec_pow += exponent;
+		exponent = 0;
+	}
+#if 1
+	printf("mantissa = %lu, exponent = %ld, power = %ld\n", mantissa, exponent, dec_pow);
+#endif
+	big = big_mul(big_from_chunk(mantissa), generate_pow(5, (unsigned long)-dec_pow));
+	big = big_mul(big, generate_pow(2, (unsigned long)exponent));
+	printf("%lu %s * 10^%ld\n", big.val[0], big_to_string(big), dec_pow);
+	s = finalize(big_to_string(big), dec_pow, precision);
+	return (s);
+}
+
+void	test_big_sub(void)
+{
+	t_big	a;
+	t_big	b;
+	t_big	diff;
+	int		check;
+
+	a = big_zero();
+	a.val[0] = 100;
+	a.val[1] = 24;
+	b = big_zero();
+	b.val[0] = 120;
+	b.val[1] = 127;
+	diff = big_sub(a, b);
+	check = big_cmp(a, big_add(diff, b));
+	big_print_bits(a);
+	printf("\n");
+	big_print_bits(b);
+	printf("\n");
+	big_print_bits(diff);
+	printf("\n");
+	printf("cmp(a, diff + b) returned %d\n", check);
+}
 
 int		main(void)
 {
 	double	a;
-	long	exponent;
-	unsigned long	mantissa;
-	long	unbiased;
-	long	neg_pow;
-	unsigned long	small;
-	t_big	big;
-	int		is_subnormal;
 
-	a = 0.125;
-	printf("%f\n", a);
-	exponent = get_exponent(a);
-	mantissa = get_mantissa(a);
+	a = 50.125;
 	print_double_bits(a);
-	printf("              ");
-	print_bits(&exponent, F64_EXPONENT_SIZE);
-	printf(" ");
-	print_bits(&mantissa, F64_MANTISSA_SIZE);
-	printf("\n");
-	is_subnormal = (exponent == 0);
-	unbiased = is_subnormal + exponent - F64_EXPONENT_BIAS;
-	small = mantissa + (1L << F64_MANTISSA_SIZE) * (!is_subnormal);
-	printf("mantissa = %lu, exponent = %ld, unbiased = %ld\n", mantissa, exponent, unbiased);
-	print_bits(&small, 64);
-	printf("\n");
-	neg_pow = -F64_MANTISSA_SIZE;
-	while ((small & 1L) == 0)
-	{
-		small >>= 1;
-		neg_pow++;
-	}
-	if (unbiased < 0)
-	{
-		neg_pow += unbiased;
-		unbiased = 0;
-	}
-	big = big_mul(big_from_chunk(small), generate_pow(5, (unsigned long)-neg_pow));
-	big = big_mul(big, generate_pow(2, (unsigned long)unbiased));
-	big_print_bits(big);
-	printf("\n");
-	printf("%lu x 10^%ld\n", big.val[0], neg_pow);
-	big_print(big);
+	printf("%f %.0f\n", a, a);
+	printf("%s\n", pf_dtoa(a, 6));
 	return (0);
 }
