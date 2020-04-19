@@ -86,7 +86,7 @@ long	get_mantissa(double a)
 }
 
 
-#define	BIG_N_CHUNKS 2
+#define	BIG_N_CHUNKS 8
 #define CHUNK_TOP_BIT 63
 #define CHUNK_N_BITS 64
 #define HIGHEST_BIT_MASK (1L << CHUNK_TOP_BIT)
@@ -174,6 +174,7 @@ t_big	big_shr_one(t_big a)
 	}
 	return (a);
 }
+
 t_big	big_mul(t_big a, t_big b)
 {
 	t_big		res;
@@ -305,20 +306,24 @@ t_big_divmod	big_divmod(t_big top, t_big bot)
 	return (out);
 }
 
-#define BIG_BUFSIZE 16
+#define BIG_BUFSIZE 50
 char	*big_to_string(t_big a)
 {
 	t_big_divmod	tmp;
+	t_big			radix;
+	t_big			zero;
 	char			buf[BIG_BUFSIZE];
 	char			*s;
 	int				i;
 
 	tmp.quo = a;
+	zero = big_zero();
+	radix = big_from_chunk(10);
 	i = 0;
-	while (big_cmp(tmp.quo, big_zero()) > 0)
+	while (big_cmp(tmp.quo, zero) > 0)
 	{
-		tmp = big_divmod(tmp.quo, big_from_chunk(10));
-		buf[BIG_BUFSIZE - i - 1] = '0' + (char)tmp.rem.val[0];
+		tmp = big_divmod(tmp.quo, radix);
+		buf[BIG_BUFSIZE - 1 - i] = '0' + (char)tmp.rem.val[0];
 		i++;
 	}
 	s = malloc(i + 1);
@@ -357,19 +362,30 @@ t_big	generate_pow(t_chunk small_base, t_chunk power)
 	return (res);
 }
 
+int		i_max(int a, int b)
+{
+	if (a > b)
+		return (a);
+	else
+		return (b);
+}
+
 char	*finalize(char *digits, int decimal_place, int precision)
 {
 	char			*ipart;
 	char			*fpart;
 	char			*s;
 	int				i;
+	int				fsize;
 
 	i = strlen(digits);
 	if (decimal_place < 0)
 	{
 		decimal_place = -decimal_place;
-		fpart = malloc(decimal_place + 1);
-		fpart[decimal_place] = '\0';
+		fsize =	i_max(decimal_place, precision);
+		fpart = malloc(fsize + 1);
+		memset(fpart, '0', fsize);
+		fpart[fsize] = '\0';
 		memcpy(fpart, digits + i - decimal_place, decimal_place);
 		if (decimal_place >= i)
 		{
@@ -392,10 +408,13 @@ char	*finalize(char *digits, int decimal_place, int precision)
 		memcpy(ipart, digits, i);
 		memset(ipart + i, '0', decimal_place);
 	}
+	fpart[precision] = '\0';
 	s = malloc(strlen(ipart) + strlen(".") + strlen(fpart) + 1);
 	strcpy(s, ipart);
 	strcat(s, ".");
 	strcat(s, fpart);
+	free(ipart);
+	free(fpart);
 	return (s);
 }
 
@@ -425,11 +444,11 @@ char	*pf_dtoa(double d, int precision)
 		exponent = 0;
 	}
 #if 1
-	printf("mantissa = %lu, exponent = %ld, power = %ld\n", mantissa, exponent, dec_pow);
+	printf("shifted mantissa = %lu, exponent = %ld, power = %ld\n", mantissa, exponent, dec_pow);
 #endif
 	big = big_mul(big_from_chunk(mantissa), generate_pow(5, (unsigned long)-dec_pow));
 	big = big_mul(big, generate_pow(2, (unsigned long)exponent));
-	printf("%lu %s * 10^%ld\n", big.val[0], big_to_string(big), dec_pow);
+	printf("%s * 10^%ld\n", big_to_string(big), dec_pow);
 	s = finalize(big_to_string(big), dec_pow, precision);
 	return (s);
 }
@@ -462,9 +481,9 @@ int		main(void)
 {
 	double	a;
 
-	a = 50.125;
+	a = 0.3;
 	print_double_bits(a);
-	printf("%f %.0f\n", a, a);
+	printf("%f\n", a);
 	printf("%s\n", pf_dtoa(a, 6));
 	return (0);
 }
