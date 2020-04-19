@@ -1,8 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
-#include <strings.h>
+//#include <unistd.h>
 #include <limits.h>
+#ifdef __APPLE__
+	#include <strings.h>
+#elif __linux__
+	#include <string.h>
+#endif
 
 int		bit_is_set(unsigned long nb, int pos)
 {
