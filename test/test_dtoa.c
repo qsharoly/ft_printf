@@ -65,6 +65,10 @@ int		main(void)
 {
 	double	a;
 
+	a = -958.125;
+	print_double_bits(a);
+	printf("expected: %f\n", a);
+	ft_printf("  actual: %f\n", a);
 	a = 0.3;
 	print_double_bits(a);
 	printf("expected: %f\n", a);

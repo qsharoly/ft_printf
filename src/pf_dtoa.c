@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/12 04:49:33 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/05/12 05:20:20 by qsharoly         ###   ########.fr       */
+/*   Updated: 2020/05/12 06:11:21 by qsharoly         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ long	get_mantissa(double a)
 	return (m);
 }
 
-char	*finalize(char *digits, int decimal_place, int precision)
+char	*finalize(char *digits, int decimal_place, int precision, int is_neg)
 {
 	char			*ipart;
 	char			*fpart;
@@ -74,8 +74,10 @@ char	*finalize(char *digits, int decimal_place, int precision)
 		ft_memset(ipart + i, '0', decimal_place);
 	}
 	fpart[precision] = '\0';
-	s = malloc(ft_strlen(ipart) + ft_strlen(".") + ft_strlen(fpart) + 1);
-	ft_strcpy(s, ipart);
+	s = malloc(is_neg + ft_strlen(ipart) + ft_strlen(".") + ft_strlen(fpart) + 1);
+	ft_strcpy(s + is_neg, ipart);
+	if (is_neg)
+		s[0] = '-';
 	ft_strcat(s, ".");
 	ft_strcat(s, fpart);
 	free(ipart);
@@ -114,6 +116,6 @@ char	*pf_dtoa(double d, int precision)
 	printf("shifted mantissa = %lu, exponent = %ld, power = %ld\n", mantissa, exponent, dec_pow);
 	printf("integerized form: %s * 10^%ld\n", big_to_string(big), dec_pow);
 #endif
-	s = finalize(big_to_string(big), dec_pow, precision);
+	s = finalize(big_to_string(big), dec_pow, precision, (d < 0));
 	return (s);
 }
