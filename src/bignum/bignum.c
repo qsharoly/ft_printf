@@ -124,8 +124,6 @@ int		big_cmp(t_big a, t_big b)
 			return (-1);
 		if (a.val[chunk_idx] > b.val[chunk_idx])
 			return (1);
-		if (chunk_idx == 0)
-			break ;
 		chunk_idx--;
 	}
 	return (0);
@@ -197,7 +195,7 @@ t_big_quorem	big_divmod(t_big top, t_big bot)
 	}
 	out.quo = big_zero();
 	i = shift;
-	while (1)
+	while (i >= 0)
 	{
 		if (big_cmp(top, bot) >= 0)
 		{
@@ -205,8 +203,6 @@ t_big_quorem	big_divmod(t_big top, t_big bot)
 			out.quo.val[i / CHUNK_N_BITS] |= (1L << (i % CHUNK_N_BITS));
 		}
 		bot = big_shr_one(bot);
-		if (i == 0)
-			break ;
 		i--;
 	}
 	out.rem = top;
