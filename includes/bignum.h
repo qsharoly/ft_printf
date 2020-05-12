@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/12 04:19:11 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/05/12 05:20:41 by qsharoly         ###   ########.fr       */
+/*   Updated: 2020/05/12 23:55:59 by qsharoly         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # define CHUNK_N_BITS 64
 # define HIGHEST_BIT_MASK (1L << CHUNK_TOP_BIT)
 # define CHUNK_MAX_VALUE ULONG_MAX
-# define BIG_TO_STR_BUFSIZE 50
+# define BIG_TO_STR_BUFSIZE (20 * BIG_N_CHUNKS)
 
 typedef unsigned long	t_chunk;
 

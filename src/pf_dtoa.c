@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/12 04:49:33 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/05/12 06:11:21 by qsharoly         ###   ########.fr       */
+/*   Updated: 2020/05/12 23:36:35 by qsharoly         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,12 +87,12 @@ char	*finalize(char *digits, int decimal_place, int precision, int is_neg)
 
 char	*pf_dtoa(double d, int precision)
 {
-	char			*s;
 	long			exponent;
 	unsigned long	mantissa;
+	int				is_subnormal;
 	long			dec_pow;
 	t_big			big;
-	int				is_subnormal;
+	char			*s;
 
 	exponent = get_exponent(d);
 	mantissa = get_mantissa(d);

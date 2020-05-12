@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/12 04:10:05 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/05/12 05:26:54 by qsharoly         ###   ########.fr       */
+/*   Updated: 2020/05/13 00:54:09 by qsharoly         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,18 +56,18 @@ t_big	big_add(t_big a, t_big b)
 t_big	big_shl_one(t_big a)
 {
 	int		chunk_idx;
-	int		need_carry;
-	int		hi_is_set;
+	int		prev_top_bit;
+	int		top_bit;
 
 	chunk_idx = 0;
-	need_carry = 0;
+	prev_top_bit = 0;
 	while (chunk_idx < BIG_N_CHUNKS)
 	{
-		hi_is_set = a.val[chunk_idx] & HIGHEST_BIT_MASK;
+		top_bit = a.val[chunk_idx] >> CHUNK_TOP_BIT;
 		a.val[chunk_idx] <<= 1;
-		if (need_carry)
+		if (prev_top_bit)
 			a.val[chunk_idx] += 1;
-		need_carry = hi_is_set;
+		prev_top_bit = top_bit;
 		chunk_idx++;
 	}
 	return (a);
@@ -218,6 +218,9 @@ char	*big_to_string(t_big a)
 	char			*s;
 	int				i;
 
+#if 1
+	ft_memset(buf, 'q', BIG_TO_STR_BUFSIZE);
+#endif
 	tmp.quo = a;
 	zero = big_zero();
 	radix = big_from_chunk(10);
