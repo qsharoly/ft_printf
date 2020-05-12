@@ -6,12 +6,13 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/12 04:49:33 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/05/13 01:49:37 by qsharoly         ###   ########.fr       */
+/*   Updated: 2020/05/13 02:18:37 by qsharoly         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "bignum.h"
 #include "libft.h"
+#include "libftprintf.h"
 
 #define F64_EXPONENT_MASK 0x7ff0000000000000
 #define F64_MANTISSA_MASK 0x000fffffffffffff
@@ -35,7 +36,19 @@ long	get_mantissa(double a)
 	return (m);
 }
 
-char	*finalize(char *digits, int decimal_place, int precision, int is_neg)
+static char	sign_prefix(int is_negative, const t_fmt *fmt)
+{
+	if (is_negative)
+		return ('-');
+	else if (fmt->prepend_plus)
+		return ('+');
+	else if (fmt->prepend_space)
+		return (' ');
+	else
+		return (0);
+}
+
+char	*finalize(char *digits, int decimal_place, int precision, char sign_prefix, int alt_form)
 {
 	char			*ipart;
 	char			*fpart;
@@ -74,11 +87,12 @@ char	*finalize(char *digits, int decimal_place, int precision, int is_neg)
 		ft_memset(ipart + i, '0', decimal_place);
 	}
 	fpart[precision] = '\0';
-	s = malloc(is_neg + ft_strlen(ipart) + ft_strlen(".") + ft_strlen(fpart) + 1);
-	ft_strcpy(s + is_neg, ipart);
-	if (is_neg)
-		s[0] = '-';
-	ft_strcat(s, ".");
+	s = malloc((sign_prefix != 0) + ft_strlen(ipart) + (precision != 0 || alt_form) * ft_strlen(".") + ft_strlen(fpart) + 1);
+	if (sign_prefix != 0)
+		s[0] = sign_prefix;
+	ft_strcpy(s + (sign_prefix != 0), ipart);
+	if (precision != 0 || alt_form)
+		ft_strcat(s, ".");
 	ft_strcat(s, fpart);
 	free(ipart);
 	free(fpart);
@@ -88,7 +102,7 @@ char	*finalize(char *digits, int decimal_place, int precision, int is_neg)
 #if 0
 	#include <stdio.h>
 #endif
-char	*pf_dtoa(double d, int precision)
+char	*pf_dtoa(double d, int precision, const t_fmt *fmt)
 {
 	long			exponent;
 	unsigned long	mantissa;
@@ -120,6 +134,6 @@ char	*pf_dtoa(double d, int precision)
 	printf("digits: %s * 10^%ld\n", big_to_string(big), dec_pow);
 	printf("rounded: %s * 10^%ld\n", big_to_string_round(big, -(dec_pow + precision)), dec_pow);
 #endif
-	s = finalize(big_to_string_round(big, -(dec_pow + precision)), dec_pow, precision, (d < 0));
+	s = finalize(big_to_string_round(big, -(dec_pow + precision)), dec_pow, precision, sign_prefix(d < 0, fmt), fmt->alternative_form);
 	return (s);
 }
