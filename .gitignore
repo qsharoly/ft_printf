@@ -2,4 +2,4 @@
 *.out
 *.dSYM
 *.swp
-obj/*.o
+obj/**/*.o

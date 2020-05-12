@@ -118,7 +118,7 @@ int		big_cmp(t_big a, t_big b)
 	unsigned	chunk_idx;
 
 	chunk_idx = BIG_N_CHUNKS - 1;
-	while (chunk_idx >= 0)
+	while (1)
 	{
 		if (a.val[chunk_idx] < b.val[chunk_idx])
 			return (-1);
@@ -197,7 +197,7 @@ t_big_quorem	big_divmod(t_big top, t_big bot)
 	}
 	out.quo = big_zero();
 	i = shift;
-	while (i >= 0)
+	while (1)
 	{
 		if (big_cmp(top, bot) >= 0)
 		{
