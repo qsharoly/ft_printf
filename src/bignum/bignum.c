@@ -22,7 +22,7 @@ t_big	big_zero(void)
 	return (a);
 }
 
-t_big	big_carry(t_big a, unsigned chunk_idx)
+t_big	big_carry(t_big a, int chunk_idx)
 {
 	while (a.val[chunk_idx] == CHUNK_MAX_VALUE && chunk_idx < BIG_N_CHUNKS - 1)
 		chunk_idx++;
@@ -38,8 +38,8 @@ t_big	big_inc(t_big a)
 
 t_big	big_add(t_big a, t_big b)
 {
-	t_big		sum;
-	unsigned	chunk_idx;
+	t_big	sum;
+	int		chunk_idx;
 
 	sum = big_zero();
 	chunk_idx = 0;
@@ -55,9 +55,9 @@ t_big	big_add(t_big a, t_big b)
 
 t_big	big_shl_one(t_big a)
 {
-	unsigned	chunk_idx;
-	int			need_carry;
-	int			hi_is_set;
+	int		chunk_idx;
+	int		need_carry;
+	int		hi_is_set;
 
 	chunk_idx = 0;
 	need_carry = 0;
@@ -75,8 +75,8 @@ t_big	big_shl_one(t_big a)
 
 t_big	big_shr_one(t_big a)
 {
-	unsigned	chunk_idx;
-	int			need_carry;
+	int		chunk_idx;
+	int		need_carry;
 
 	chunk_idx = 0;
 	while (chunk_idx < BIG_N_CHUNKS)
@@ -92,9 +92,9 @@ t_big	big_shr_one(t_big a)
 
 t_big	big_mul(t_big a, t_big b)
 {
-	t_big		res;
-	unsigned	chunk_idx;
-	unsigned	j;
+	t_big	res;
+	int		chunk_idx;
+	int		j;
 
 	res = big_zero();
 	chunk_idx = 0;
@@ -115,10 +115,10 @@ t_big	big_mul(t_big a, t_big b)
 
 int		big_cmp(t_big a, t_big b)
 {
-	unsigned	chunk_idx;
+	int		chunk_idx;
 
 	chunk_idx = BIG_N_CHUNKS - 1;
-	while (1)
+	while (chunk_idx >= 0)
 	{
 		if (a.val[chunk_idx] < b.val[chunk_idx])
 			return (-1);
@@ -142,8 +142,8 @@ t_big	big_from_chunk(t_chunk small)
 
 t_big	big_sub(t_big a, t_big b)
 {
-	t_big		diff;
-	unsigned	chunk_idx;
+	t_big	diff;
+	int		chunk_idx;
 
 	diff = big_zero();
 	chunk_idx = 0;
@@ -159,9 +159,9 @@ t_big	big_sub(t_big a, t_big b)
 
 unsigned		big_top_bit(t_big a)
 {
-	unsigned	chunk_idx;
-	t_chunk		top_chunk;
-	unsigned	i;
+	int		chunk_idx;
+	t_chunk	top_chunk;
+	int		i;
 
 	chunk_idx = BIG_N_CHUNKS - 1;
 	while (a.val[chunk_idx] == 0)
@@ -179,8 +179,8 @@ unsigned		big_top_bit(t_big a)
 t_big_quorem	big_divmod(t_big top, t_big bot)
 {
 	t_big_quorem	out;
-	unsigned		shift;
-	unsigned		i;
+	int			shift;
+	int			i;
 
 	if (big_cmp(top, bot) < 0)
 	{
