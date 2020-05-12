@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/12 04:49:33 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/05/12 23:36:35 by qsharoly         ###   ########.fr       */
+/*   Updated: 2020/05/13 01:49:37 by qsharoly         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,9 @@ char	*finalize(char *digits, int decimal_place, int precision, int is_neg)
 	return (s);
 }
 
+#if 0
+	#include <stdio.h>
+#endif
 char	*pf_dtoa(double d, int precision)
 {
 	long			exponent;
@@ -114,8 +117,9 @@ char	*pf_dtoa(double d, int precision)
 	big = big_mul(big, big_raise(2, (unsigned long)exponent));
 #if 0
 	printf("shifted mantissa = %lu, exponent = %ld, power = %ld\n", mantissa, exponent, dec_pow);
-	printf("integerized form: %s * 10^%ld\n", big_to_string(big), dec_pow);
+	printf("digits: %s * 10^%ld\n", big_to_string(big), dec_pow);
+	printf("rounded: %s * 10^%ld\n", big_to_string_round(big, -(dec_pow + precision)), dec_pow);
 #endif
-	s = finalize(big_to_string(big), dec_pow, precision, (d < 0));
+	s = finalize(big_to_string_round(big, -(dec_pow + precision)), dec_pow, precision, (d < 0));
 	return (s);
 }

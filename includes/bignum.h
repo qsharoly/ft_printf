@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/12 04:19:11 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/05/12 23:55:59 by qsharoly         ###   ########.fr       */
+/*   Updated: 2020/05/13 01:36:14 by qsharoly         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,5 +41,6 @@ t_big	big_mul(t_big a, t_big b);
 t_big	big_from_chunk(t_chunk small);
 t_big	big_raise(t_chunk small_base, t_chunk power);
 char	*big_to_string(t_big a);
+char	*big_to_string_round(t_big a, int rounding_position);
 
 #endif
