@@ -6,14 +6,14 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/14 13:26:37 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/04/14 14:35:57 by qsharoly         ###   ########.fr       */
+/*   Updated: 2020/05/12 05:49:49 by qsharoly         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "libftprintf.h"
 
-static void (*g_conv_funcs[10])(char **, const t_fmt *, va_list) = {
+static void (*g_conv_funcs[11])(char **, const t_fmt *, va_list) = {
 	percent_conv,
 	c_conv,
 	s_conv,
@@ -23,14 +23,15 @@ static void (*g_conv_funcs[10])(char **, const t_fmt *, va_list) = {
 	unsigned_conv,
 	octal_conv,
 	hex_conv,
-	hex_conv
+	hex_conv,
+	double_conv
 };
 
 static void		(*choose_conv(char type))(char **, const t_fmt *, va_list)
 {
 	int		i;
 
-	i = pf_strchr_idx(type, "%cspdiuoxX");
+	i = pf_strchr_idx(type, "%cspdiuoxXf");
 	if (i >= 0)
 		return (g_conv_funcs[i]);
 	else
@@ -108,7 +109,7 @@ t_fmt			pf_parse_specifier(const char *str)
 		fmt.has_precision = 1;
 	}
 	pos = parse_length_modifier(pos, &fmt);
-	if (ft_strchr("%cspdiuoxX", *pos))
+	if (ft_strchr("%cspdiuoxXf", *pos))
 	{
 		fmt.type = *pos;
 		pos++;

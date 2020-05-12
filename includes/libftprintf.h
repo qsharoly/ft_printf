@@ -6,16 +6,17 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 15:31:58 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/04/14 14:34:44 by qsharoly         ###   ########.fr       */
+/*   Updated: 2020/05/12 05:41:39 by qsharoly         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIBFTPRINTF_H
 # define LIBFTPRINTF_H
 
-#include <stdarg.h>
+# include <stdarg.h>
 
 # define TYPE_MISSING '\0'
+# define DOUBLE_CONV_DEFAULT_PRECISION 6
 
 typedef			struct s_fat
 {
@@ -54,6 +55,7 @@ char		*pf_itoa_dec(long long value, int min_digits, char positive_prefix);
 char		*pf_utoa_base(unsigned long long value, unsigned int base, int min_digits, int upcase);
 char		*pf_utoa_oct(unsigned long long value, int min_digits, int prefix);
 char		*pf_utoa_hex(unsigned long long value, int min_digits, int prefix, int upper);
+char		*pf_dtoa(double d, int precision);
 void		default_conv(char **str, const t_fmt *fmt, va_list ap);
 void		percent_conv(char **str, const t_fmt *fmt, va_list ap);
 void		s_conv(char **str, const t_fmt *fmt, va_list ap);
@@ -63,6 +65,7 @@ void		signed_conv(char **str, const t_fmt *fmt, va_list ap);
 void		unsigned_conv(char **str, const t_fmt *fmt, va_list ap);
 void		octal_conv(char **str, const t_fmt *fmt, va_list ap);
 void		hex_conv(char **str, const t_fmt *fmt, va_list ap);
+void		double_conv(char **str, const t_fmt *fmt, va_list ap);
 int			ft_printf(const char * format, ...);
 
 #endif

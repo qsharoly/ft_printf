@@ -14,13 +14,25 @@ ifeq ($(debug), yes)
 	CCFLAGS += -g
 endif
 
-SRC = ft_printf.c pf_parse_specifier.c pf_arg_to_string.c pf_basic_conv.c pf_diuox_conv.c\
-	  pf_strchr_idx.c pf_strclone.c pf_simple_atoi.c\
-	  pf_itoa_dec.c pf_utoa_dec.c pf_utoa_oct.c pf_utoa_hex.c
+SRC = ft_printf.c\
+	  pf_parse_specifier.c\
+	  pf_arg_to_string.c\
+	  pf_basic_conv.c\
+	  pf_diuox_conv.c\
+	  pf_double_conv.c\
+	  pf_strchr_idx.c\
+	  pf_strclone.c\
+	  pf_simple_atoi.c\
+	  pf_itoa_dec.c\
+	  pf_utoa_dec.c\
+	  pf_utoa_oct.c\
+	  pf_utoa_hex.c\
+	  pf_dtoa.c\
+	  bignum/bignum.c
 
 OBJ = $(SRC:%.c=$(OBJDIR)/%.o)
 
-$(shell mkdir -p $(OBJDIR))
+$(shell mkdir -p $(OBJDIR); mkdir -p $(OBJDIR)/bignum)
 
 
 all: $(NAME)
