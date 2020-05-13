@@ -28,6 +28,7 @@ SRC = ft_printf.c\
 	  pf_utoa_oct.c\
 	  pf_utoa_hex.c\
 	  pf_dtoa.c\
+	  pf_ldtoa.c\
 	  bignum/bignum.c
 
 OBJ = $(SRC:%.c=$(OBJDIR)/%.o)

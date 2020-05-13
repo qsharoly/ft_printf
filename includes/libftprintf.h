@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 15:31:58 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/05/13 02:17:18 by qsharoly         ###   ########.fr       */
+/*   Updated: 2020/05/13 08:00:50 by qsharoly         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,30 @@
 
 # define TYPE_MISSING '\0'
 # define DOUBLE_CONV_DEFAULT_PRECISION 6
+# define F64_BIAS 1023
+# define F80_BIAS 16383
+
+union	f64
+{
+	double	d;
+	struct
+	{
+		unsigned long	mantissa:52;
+		unsigned int	exponent:11;
+		unsigned int	negative:1;
+	}	bits;
+};
+
+union	f80
+{
+	long double	d;
+	struct
+	{
+		unsigned long	mantissa:64;
+		unsigned int	exponent:15;
+		unsigned int	negative:1;
+	} bits;
+};
 
 typedef			struct s_fat
 {
@@ -36,6 +60,7 @@ typedef			struct s_fmt
 	unsigned	is_int:1;
 	unsigned	is_long:1;
 	unsigned	is_longlong:1;
+	unsigned	is_quad:1;
 	unsigned	has_precision:1;
 	int			spec_length;
 	int			min_width;
@@ -56,6 +81,7 @@ char		*pf_utoa_base(unsigned long long value, unsigned int base, int min_digits,
 char		*pf_utoa_oct(unsigned long long value, int min_digits, int prefix);
 char		*pf_utoa_hex(unsigned long long value, int min_digits, int prefix, int upper);
 char		*pf_dtoa(double d, int precision, const t_fmt *fmt);
+char		*pf_ldtoa(long double d, int precision, const t_fmt *fmt);
 void		default_conv(char **str, const t_fmt *fmt, va_list ap);
 void		percent_conv(char **str, const t_fmt *fmt, va_list ap);
 void		s_conv(char **str, const t_fmt *fmt, va_list ap);

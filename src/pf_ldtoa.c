@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pf_dtoa.c                                          :+:      :+:    :+:   */
+/*   pf_ldtoa.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/12 04:49:33 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/05/13 08:22:27 by qsharoly         ###   ########.fr       */
+/*   Updated: 2020/05/13 08:13:24 by qsharoly         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,26 +80,22 @@ static char	*finalize(char *digits, int decimal_place, int precision, char sign_
 #if 0
 	#include <stdio.h>
 #endif
-char	*pf_dtoa(double nb, int precision, const t_fmt *fmt)
+char	*pf_ldtoa(long double nb, int precision, const t_fmt *fmt)
 {
-	union f64		d;
-	long			exponent;
+	union f80 d;
+	long	exponent;
 	unsigned long	mantissa;
-	int				is_subnormal;
-	long			dec_pow;
-	t_big			big;
-	char			*s;
+	int		is_subnormal;
+	long	dec_pow;
+	t_big	big;
+	char	*s;
 
 	d.d = nb;
 	exponent = d.bits.exponent;
 	mantissa = d.bits.mantissa;
-#if 0
-	printf("extracted: exponent = %ld, mantissa = %lu\n", exponent, mantissa);
-#endif
 	is_subnormal = (exponent == 0);
-	exponent = is_subnormal + exponent - F64_BIAS;
-	mantissa += (!is_subnormal) * (1L << 52);
-	dec_pow = -52;
+	exponent = is_subnormal + exponent - F80_BIAS;
+	dec_pow = -63;
 	while ((mantissa & 1L) == 0)
 	{
 		mantissa >>= 1;
@@ -113,7 +109,7 @@ char	*pf_dtoa(double nb, int precision, const t_fmt *fmt)
 	big = big_mul(big_from_chunk(mantissa), big_raise(5, (unsigned long)-dec_pow));
 	big = big_mul(big, big_raise(2, (unsigned long)exponent));
 #if 0
-	printf("shifted mantissa = %lu, unbiased exponent = %ld, power = %ld\n", mantissa, exponent, dec_pow);
+	printf("shifted mantissa = %s, exponent = %ld, power = %ld\n", big_to_string(mantissa), exponent, dec_pow);
 	printf("digits: %s * 10^%ld\n", big_to_string(big), dec_pow);
 	printf("rounded: %s * 10^%ld\n", big_to_string_round(big, -(dec_pow + precision)), dec_pow);
 #endif

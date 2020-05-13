@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/14 13:26:37 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/05/12 05:49:49 by qsharoly         ###   ########.fr       */
+/*   Updated: 2020/05/13 02:52:12 by qsharoly         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,11 @@ static char		*parse_length_modifier(char *pos, t_fmt *fmt)
 	{
 		pos++;
 		fmt->is_long = 1;
+	}
+	else if (*pos == 'L')
+	{
+		pos++;
+		fmt->is_quad = 1;
 	}
 	else
 		fmt->is_int = 1;
