@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/12 04:10:05 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/05/14 11:01:07 by qsharoly         ###   ########.fr       */
+/*   Updated: 2020/05/14 12:25:48 by qsharoly         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -215,7 +215,7 @@ int		big_top_bit(t_big a)
 	}
 	return (i);
 }
-#include <stdio.h>
+
 t_big_quorem	big_divmod(t_big top, t_big bot)
 {
 	t_big_quorem	out;
@@ -304,6 +304,14 @@ char	*big_to_string_round(t_big a, int rounding_position)
 			tmp.quo = big_inc(tmp.quo);
 			ft_memset(buf + BIG_TO_STR_BUFSIZE - 1 - i, '0', i + 1);
 		}
+		tmp = big_divmod(tmp.quo, radix);
+		buf[BIG_TO_STR_BUFSIZE - 1 - i] = '0' + (char)tmp.rem.val[0];
+		i++;
+	}
+	if (i == rounding_position && tmp.rem.val[0] > 4)
+	{
+		tmp.quo = big_inc(tmp.quo);
+		ft_memset(buf + BIG_TO_STR_BUFSIZE - 1 - i, '0', i + 1);
 		tmp = big_divmod(tmp.quo, radix);
 		buf[BIG_TO_STR_BUFSIZE - 1 - i] = '0' + (char)tmp.rem.val[0];
 		i++;
