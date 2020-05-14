@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/12 04:49:33 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/05/13 08:22:27 by qsharoly         ###   ########.fr       */
+/*   Updated: 2020/05/14 11:40:55 by qsharoly         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,8 @@ static char	*finalize(char *digits, int decimal_place, int precision, char sign_
 		}
 		else
 		{
-			ipart = malloc(i - decimal_place);
+			ipart = malloc(i - decimal_place + 1);
+			ipart[i - decimal_place] = '\0';
 			ft_memcpy(ipart, digits, (i - decimal_place));
 		}
 	}

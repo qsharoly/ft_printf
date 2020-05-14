@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/27 18:24:37 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/04/14 14:34:56 by qsharoly         ###   ########.fr       */
+/*   Updated: 2020/05/14 06:40:30 by qsharoly         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,10 +84,6 @@ static t_fatstr	concat(t_list *parts)
 	}
 	return (whole);
 }
-
-/*
-** size is unused
-*/
 
 int				ft_printf(const char *format, ...)
 {

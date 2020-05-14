@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/12 04:10:05 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/05/13 01:49:03 by qsharoly         ###   ########.fr       */
+/*   Updated: 2020/05/14 11:01:07 by qsharoly         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,48 @@ t_big	big_shl_one(t_big a)
 			a.val[chunk_idx] += 1;
 		prev_top_bit = top_bit;
 		chunk_idx++;
+	}
+	return (a);
+}
+
+/*
+** big_shl:
+** If shift is bigger than total number of bits
+** this will return big_zero.
+** When local == 0 (shift is proportional to CHUNK_N_BITS),
+** a right shift by (CHUNK_N_BITS - local) causes a shift overflow
+** and the chunk's value is unchanged (or some other undefined behavior).
+** In this case we pretend that the chunk is shifted out entirely
+** (becomes 0).
+** TODO: protect from negative shift?
+*/
+
+t_big	big_shl(t_big a, int shift)
+{
+	int		global;
+	int		local;
+	int		chunk_idx;
+
+	global = shift / CHUNK_N_BITS;
+	if (global >= BIG_N_CHUNKS)
+		return (big_zero());
+	local = shift % CHUNK_N_BITS;
+	chunk_idx = BIG_N_CHUNKS - 1;
+	while (chunk_idx > global)
+	{
+		a.val[chunk_idx] = (a.val[chunk_idx - global] << local)
+			+ (local != 0) * (a.val[chunk_idx - global - 1] >> (CHUNK_N_BITS - local));
+		chunk_idx--;
+	}
+	if (chunk_idx >= 0)
+	{
+		a.val[chunk_idx] = a.val[0] << local;
+		chunk_idx--;
+	}
+	while (chunk_idx >= 0)
+	{
+		a.val[chunk_idx] = 0;
+		chunk_idx--;
 	}
 	return (a);
 }
@@ -155,7 +197,7 @@ t_big	big_sub(t_big a, t_big b)
 	return (diff);
 }
 
-unsigned		big_top_bit(t_big a)
+int		big_top_bit(t_big a)
 {
 	int		chunk_idx;
 	t_chunk	top_chunk;
@@ -173,12 +215,12 @@ unsigned		big_top_bit(t_big a)
 	}
 	return (i);
 }
-
+#include <stdio.h>
 t_big_quorem	big_divmod(t_big top, t_big bot)
 {
 	t_big_quorem	out;
 	int			shift;
-	int			i;
+	//int			i;
 
 	if (big_cmp(top, bot) < 0)
 	{
@@ -187,23 +229,24 @@ t_big_quorem	big_divmod(t_big top, t_big bot)
 		return (out);
 	}
 	shift = big_top_bit(top) - big_top_bit(bot);
-	i = 0;
+	bot = big_shl(bot, shift);
+	/*i = 0;
 	while (i < shift)
 	{
 		bot = big_shl_one(bot);
 		i++;
 	}
+	*/
 	out.quo = big_zero();
-	i = shift;
-	while (i >= 0)
+	while (shift >= 0)
 	{
 		if (big_cmp(top, bot) >= 0)
 		{
 			top = big_sub(top, bot);
-			out.quo.val[i / CHUNK_N_BITS] |= (1L << (i % CHUNK_N_BITS));
+			out.quo.val[shift / CHUNK_N_BITS] |= (1L << (shift % CHUNK_N_BITS));
 		}
 		bot = big_shr_one(bot);
-		i--;
+		shift--;
 	}
 	out.rem = top;
 	return (out);
@@ -270,6 +313,7 @@ char	*big_to_string_round(t_big a, int rounding_position)
 	ft_memcpy(s, &buf[BIG_TO_STR_BUFSIZE - i], i);
 	return (s);
 }
+
 t_big	big_raise(t_chunk small_base, t_chunk power)
 {
 	t_big	res;

@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/14 12:24:14 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/04/14 14:33:10 by qsharoly         ###   ########.fr       */
+/*   Updated: 2020/05/14 06:43:41 by qsharoly         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static char		choose_padchar(const t_fmt *fmt)
 	return (padchar);
 }
 
-static t_fatstr	empty(void)
+static t_fatstr	fatstr_empty(void)
 {
 	t_fatstr	out;
 
@@ -70,7 +70,7 @@ t_fatstr		pf_arg_to_string(const t_fmt *fmt, va_list ap)
 	if (fmt->type == 's' && value_str == NULL)
 		value_str = "(null)";
 	if (value_str == NULL)
-		return (empty());
+		return (fatstr_empty());
 	value_len = ft_strlen(value_str);
 	if (fmt->type == 's' && fmt->has_precision && fmt->precision < value_len)
 		value_len = fmt->precision;

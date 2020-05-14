@@ -67,38 +67,36 @@ double	bits2double(char *bit_values)
 	return (*((double *)&(nb)));
 }
 
+void	test_dbl(double a)
+{
+	print_double_bits(a);
+	printf("expected: %f\n", a);
+	ft_printf("actual  : %f\n", a);
+}
+
+void	test_ld(long double a)
+{
+	print_ld_bits(a);
+	printf("expected: %Lf\n", a);
+	ft_printf("actual  : %Lf\n", a);
+}
+
 int		main(void)
 {
 	double	a;
 
 	/*
-	a = -958.125;
-	print_double_bits(a);
-	printf("libc: %f\n", a);
-	ft_printf("you : %f\n", a);
-	a = 0.3;
-	print_double_bits(a);
-	printf("libc: %f\n", a);
-	ft_printf("you : %f\n", a);
-	a = DBL_MIN;
-	print_double_bits(a);
-	printf("expected: %f\n", a);
-	ft_printf("  actual: %f\n", a);
+	test_dbl(-958.125);
+	test_dbl(0.3);
+	test_dbl(DBL_MIN);
 	*/
-
-	long double	b;
-	b = -958.125;
-	print_ld_bits(b);
-	printf("expected: %Lf\n", b);
-	ft_printf("  actual: %Lf\n", b);
-	b = -0.3;
-	print_ld_bits(b);
-	printf("expected: %Lf\n", b);
-	ft_printf("  actual: %Lf\n", b);
+	test_dbl(0.000001);
+	test_dbl(DBL_MIN);
 	/*
-	printf("ldblmax = %Lf\n", LDBL_MAX);
-	print_ld_bits(LDBL_MAX);
-	ft_printf("lets try this. %Lf\n", LDBL_MAX);
+	long double	b;
+	test_ld(-958.125);
+	test_ld(-0.3);
+	test_ld(LDBL_MAX);
 	*/
 	return (0);
 }
