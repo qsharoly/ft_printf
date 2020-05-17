@@ -20,7 +20,6 @@ SRC = ft_printf.c\
 	  pf_diuox_conv.c\
 	  pf_double_conv.c\
 	  pf_strchr_idx.c\
-	  pf_strclone.c\
 	  pf_simple_atoi.c\
 	  pf_utoa_base.c\
 	  pf_dtoa.c\

@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/04 16:08:51 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/05/17 08:31:22 by qsharoly         ###   ########.fr       */
+/*   Updated: 2020/05/18 01:00:17 by qsharoly         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ char			*ft_strcat(char *s1, char const *s2);
 char			*ft_strncat(char *s1, char const *s2, size_t n);
 size_t			ft_strlcat(char *dst, char const *src, size_t size);
 char			*ft_strchr(char const *s, int c);
+char			*ft_strhas(char const *s, int c);
 char			*ft_strrchr(char const *s, int c);
 char			*ft_strstr(char const *haystack, char const *needle);
 char			*ft_strnstr(char const *haystack,

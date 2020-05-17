@@ -23,12 +23,21 @@ int		main(void)
 		//percent sign
 		ft_printf("percent sign%%ef\n");
 		//+ without specifier
+		ft_printf("%");
+		//+ with precision and width
+		ft_printf("lama");
+		ft_printf("%5");
+		ft_printf("goo");
+		ft_printf("%5");
+		ft_printf("\n");
+		//+ without specifier
 		printf("%");
 		//+ with precision and width
 		printf("lama");
 		printf("%5");
 		printf("goo");
 		printf("%5");
+		printf("\n");
 		/*
 		//alternative form
 		ft_printf("Lower hex %#x\n", 243);

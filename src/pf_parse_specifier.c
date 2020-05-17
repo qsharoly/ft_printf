@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/14 13:26:37 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/05/17 11:07:04 by qsharoly         ###   ########.fr       */
+/*   Updated: 2020/05/18 01:02:24 by qsharoly         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static void		(*choose_conv(char type))(t_buffer *, const t_fmt *, va_list)
 
 static char		*parse_flags(char *pos, t_fmt *fmt)
 {
-	while (ft_strchr("0-+ #", *pos))
+	while (ft_strhas("0-+ #", *pos))
 	{
 		if (*pos == '0')
 			fmt->pad_with_zero = 1;
@@ -108,7 +108,7 @@ static char		choose_padchar(const t_fmt *fmt)
 		padchar = '0';
 	else
 		padchar = ' ';
-	if (fmt->pad_with_zero && (ft_strchr("diuoxX", fmt->type))
+	if (fmt->pad_with_zero && (ft_strhas("diuoxX", fmt->type))
 			&& fmt->precision != 1)
 		padchar = ' ';
 	return (padchar);
@@ -131,7 +131,7 @@ t_fmt			pf_parse_specifier(const char *str)
 		fmt.has_precision = 1;
 	}
 	pos = parse_length_modifier(pos, &fmt);
-	if (ft_strchr("%cspdiuoxXf", *pos))
+	if (ft_strhas("%cspdiuoxXf", *pos))
 	{
 		fmt.type = *pos;
 		pos++;
