@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/14 12:23:11 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/05/17 11:51:09 by qsharoly         ###   ########.fr       */
+/*   Updated: 2020/05/18 01:07:47 by qsharoly         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,17 +57,11 @@ void	s_conv(t_buffer *out, const t_fmt *f, va_list ap)
 
 	s = va_arg(ap, char *);
 	if (!s)
-	{
 		s = "(null)";
-		value_len = ft_strlen(s);
-	}
+	if (f->has_precision)
+		value_len = ft_imin(ft_strlen(s), f->precision);
 	else
-	{
-		if (f->has_precision)
-			value_len = ft_imin(ft_strlen(s), f->precision);
-		else
-			value_len = ft_strlen(s);
-	}
+		value_len = ft_strlen(s);
 	pad_len = ft_imax(0, f->min_width - value_len);
 	while (!f->left_justify && pad_len-- > 0)
 		pf_putc(f->padchar, out);
