@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 15:31:58 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/05/17 11:06:32 by qsharoly         ###   ########.fr       */
+/*   Updated: 2020/05/17 15:30:34 by qsharoly         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 
 # include <stdarg.h>
 
+# define STDOUT_FD 1
+# define BUFFER_SIZE 4096
 # define MAXBUF_ITOA (sizeof(long long int) * 8) //enough for binary
 # define TYPE_MISSING '\0'
 # define DOUBLE_CONV_DEFAULT_PRECISION 6
@@ -42,8 +44,6 @@ union	f80
 		unsigned int	negative:1;
 	} bits;
 };
-
-#define BUFFER_SIZE 4096
 
 typedef struct		s_buffer
 {
@@ -82,7 +82,6 @@ void		pf_putc(int c, t_buffer *buf);
 void		pf_puts(char *s, t_buffer *b);
 void		pf_nputs(char *s, int len, t_buffer *b);
 t_fmt		pf_parse_specifier(const char *str);
-char		*pf_strclone(const char *src);
 int			pf_strchr_idx(char needle, const char *hay);
 int			pf_simple_atoi(const char *s);
 char		*pf_utoa_base(char *buffer, unsigned long long value,
