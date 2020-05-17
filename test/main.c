@@ -10,37 +10,44 @@ int		main(void)
 	s = "hello";
 	//while (1)
 	{
-		/*
 		//simple cases
+		/*
 		ft_printf("");
 		ft_printf("just a string\n");
 		ft_printf("just an int %d def\n", 5);
 		ft_printf("%s well\n", "very");
 		ft_printf("my %s equals %d%%\n", s, -123);
 		ft_printf("abc %x %X %x %X\n", 42, 42, -42, -42);
-		//modulo sign
+		printf("abc %x %X %x %X\n", 42, 42, -42, -42);
+		*/
+		//percent sign
 		ft_printf("percent sign%%ef\n");
-		ft_printf("% ");
-		ft_printf("\n");
-		printf("% ");
-		printf("\n");
-		ft_printf("%");
-		ft_printf("\n");
+		//+ without specifier
 		printf("%");
-		printf("\n");
+		//+ with precision and width
+		printf("lama");
+		printf("%5");
+		printf("goo");
+		printf("%5");
+		/*
 		//alternative form
 		ft_printf("Lower hex %#x\n", 243);
 		ft_printf("Upper hex %#X\n", 255);
-		*/
 		//+ octal zero
-		ft_printf("%#o\n", 0);
-		printf("%#o\n", 0);
+		ft_printf("%#o %#.o %#.0o\n", 0, 0, 0);
+		printf("%#o %#.o %#.0o\n", 0, 0, 0);
 		//+ octal with precision
 		ft_printf("%#.3o %#o %#.1o\n", 1, 1, 1);
 		printf("%#.3o %#o %#.1o\n", 1, 1, 1);
+		//+ octal with width
+		ft_printf("%#6o\n", 3);
+		printf("%#6o\n", 3);
+		ft_printf("%#-6o\n", 3);
+		printf("%#-6o\n", 3);
 		//+ hex precision
 		ft_printf("%#.3x %#04x %#04.3x %#04.5x %#06.4x %#06.5x\n", 0x123, 0x123, 0x123, 0x123, 0x123, 0x123);
 		printf("%#.3x %#04x %#04.3x %#04.5x %#06.4x %#06.5x\n", 0x123, 0x123, 0x123, 0x123, 0x123, 0x123);
+		*/
 		/*
 		//conversions
 		ft_printf("%d\n", INT_MIN);
@@ -66,7 +73,6 @@ int		main(void)
 		ft_printf("%-10dtons\n", 100);
 		ft_printf("%-010dignorewhat\n", 23);
 		//+ precision
-		ft_printf("zero precision shouldnt print zero%.o %.0o\n", 0, 0);
 		*/
 		ft_printf("%.5d\n", 34);
 		printf("%.5d\n", 34);

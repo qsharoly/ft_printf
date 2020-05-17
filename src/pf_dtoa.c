@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/12 04:49:33 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/05/14 11:40:55 by qsharoly         ###   ########.fr       */
+/*   Updated: 2020/05/17 09:05:54 by qsharoly         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static char	*finalize(char *digits, int decimal_place, int precision, char sign_
 	if (decimal_place < 0)
 	{
 		decimal_place = -decimal_place;
-		fsize =	ft_i_max(decimal_place, precision);
+		fsize =	ft_imax(decimal_place, precision);
 		fpart = malloc(fsize + 1);
 		ft_memset(fpart, '0', fsize);
 		fpart[fsize] = '\0';

@@ -6,13 +6,14 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/12 05:31:25 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/05/13 02:52:31 by qsharoly         ###   ########.fr       */
+/*   Updated: 2020/05/17 09:05:25 by qsharoly         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "libftprintf.h"
 
+/*
 void		double_conv(char **str, const t_fmt *fmt, va_list ap)
 {
 	long double		lnb;
@@ -32,4 +33,4 @@ void		double_conv(char **str, const t_fmt *fmt, va_list ap)
 	else
 		*str = pf_dtoa(nb, precision, fmt);
 }
-
+*/

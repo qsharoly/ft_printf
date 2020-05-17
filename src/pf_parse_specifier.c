@@ -6,14 +6,14 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/14 13:26:37 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/05/13 02:52:12 by qsharoly         ###   ########.fr       */
+/*   Updated: 2020/05/17 11:07:04 by qsharoly         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "libftprintf.h"
 
-static void (*g_conv_funcs[11])(char **, const t_fmt *, va_list) = {
+static void (*g_conv_funcs[10])(t_buffer *, const t_fmt *, va_list) = {
 	percent_conv,
 	c_conv,
 	s_conv,
@@ -24,14 +24,17 @@ static void (*g_conv_funcs[11])(char **, const t_fmt *, va_list) = {
 	octal_conv,
 	hex_conv,
 	hex_conv,
-	double_conv
+	//double_conv
 };
 
-static void		(*choose_conv(char type))(char **, const t_fmt *, va_list)
+static void		(*choose_conv(char type))(t_buffer *, const t_fmt *, va_list)
 {
 	int		i;
+	char	*types;
 
-	i = pf_strchr_idx(type, "%cspdiuoxXf");
+	//types = "%cspdiuoxXf";
+	types = "%cspdiuoxX";
+	i = pf_strchr_idx(type, types);
 	if (i >= 0)
 		return (g_conv_funcs[i]);
 	else
@@ -97,6 +100,20 @@ static char		*parse_a_number(char *pos, int *value)
 	return (pos);
 }
 
+static char		choose_padchar(const t_fmt *fmt)
+{
+	char	padchar;
+
+	if (fmt->pad_with_zero && !fmt->left_justify)
+		padchar = '0';
+	else
+		padchar = ' ';
+	if (fmt->pad_with_zero && (ft_strchr("diuoxX", fmt->type))
+			&& fmt->precision != 1)
+		padchar = ' ';
+	return (padchar);
+}
+
 t_fmt			pf_parse_specifier(const char *str)
 {
 	t_fmt	fmt;
@@ -121,7 +138,8 @@ t_fmt			pf_parse_specifier(const char *str)
 	}
 	else
 		fmt.type = TYPE_MISSING;
-	fmt.to_string = choose_conv(fmt.type);
+	fmt.write_arg = choose_conv(fmt.type);
+	fmt.padchar = choose_padchar(&fmt);
 	fmt.spec_length = pos - str;
 	return (fmt);
 }

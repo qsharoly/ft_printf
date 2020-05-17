@@ -6,57 +6,73 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/14 12:23:11 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/05/14 06:45:31 by qsharoly         ###   ########.fr       */
+/*   Updated: 2020/05/17 11:51:09 by qsharoly         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include "libftprintf.h"
+#include "libft.h"
 
-void	default_conv(char **str, const t_fmt *f, va_list ap)
+void	default_conv(t_buffer *buf, const t_fmt *f, va_list ap)
 {
+	(void)buf;
 	(void)f;
 	(void)ap;
-	*str = NULL;
 }
 
-void	percent_conv(char **str, const t_fmt *f, va_list ap)
+void	percent_conv(t_buffer *out, const t_fmt *f, va_list ap)
 {
-	(void)f;
+	int		pad_len;
+
 	(void)ap;
-	*str = pf_strclone("%");
+	pad_len = ft_imax(0, f->min_width - 1);
+	while (!f->left_justify && pad_len-- > 0)
+		pf_putc(f->padchar, out);
+	pf_putc('%', out);
+	while (f->left_justify && pad_len-- > 0)
+		pf_putc(f->padchar, out);
 }
 
-void	c_conv(char **str, const t_fmt *f, va_list ap)
+void	c_conv(t_buffer *out, const t_fmt *f, va_list ap)
 {
 	int		c;
+	int		pad_len;
 
 	(void)f;
 	c = va_arg(ap, int);
-	*str = malloc(2);
-	if (*str == NULL)
-		pf_error("malloc error\n");
-	(*str)[0] = (char)c;
-	(*str)[1] = '\0';
+	pad_len = ft_imax(0, f->min_width - 1);
+	while (!f->left_justify && pad_len-- > 0)
+		pf_putc(f->padchar, out);
+	pf_putc(c, out);
+	while (f->left_justify && pad_len-- > 0)
+		pf_putc(f->padchar, out);
 }
 
-void	s_conv(char **str, const t_fmt *f, va_list ap)
+void	s_conv(t_buffer *out, const t_fmt *f, va_list ap)
 {
-	(void)f;
-	*str = va_arg(ap, char *);
-}
+	char	*s;
+	int		value_len;
+	int		pad_len;
 
-void	p_conv(char **str, const t_fmt *f, va_list ap)
-{
-	unsigned long	adr;
-	int				has_prefix;
-	int				upcase;
-
-	adr = (unsigned long)va_arg(ap, void *);
-	has_prefix = 1;
-	upcase = 0;
-	if (f->precision == 1 && adr == 0)
-		*str = pf_strclone("0x0");
+	s = va_arg(ap, char *);
+	if (!s)
+	{
+		s = "(null)";
+		value_len = ft_strlen(s);
+	}
 	else
-		*str = pf_utoa_hex(adr, f->precision, has_prefix, upcase);
+	{
+		if (f->has_precision)
+			value_len = ft_imin(ft_strlen(s), f->precision);
+		else
+			value_len = ft_strlen(s);
+	}
+	pad_len = ft_imax(0, f->min_width - value_len);
+	while (!f->left_justify && pad_len-- > 0)
+		pf_putc(f->padchar, out);
+	pf_nputs(s, value_len, out);
+	while (f->left_justify && pad_len-- > 0)
+		pf_putc(f->padchar, out);
 }
+

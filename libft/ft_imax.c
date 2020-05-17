@@ -1,18 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pf_arg_to_string.c                                 :+:      :+:    :+:   */
+/*   ft_imax.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/04/14 12:24:14 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/05/17 08:19:56 by qsharoly         ###   ########.fr       */
+/*   Created: 2020/05/17 08:28:21 by qsharoly          #+#    #+#             */
+/*   Updated: 2020/05/17 08:28:24 by qsharoly         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-#include "libftprintf.h"
-
-void	pf_write_arg(t_buffer *b, const t_fmt *fmt, va_list ap)
+int		ft_imax(int a, int b)
 {
+	return (a > b ? a : b);
 }
