@@ -4,8 +4,8 @@
 
 int		main(void)
 {
-	int	i;
-	char *s;
+	int		i;
+	char	*s;
 
 	s = "hello";
 	//while (1)
@@ -42,6 +42,7 @@ int		main(void)
 		//alternative form
 		ft_printf("Lower hex %#x\n", 243);
 		ft_printf("Upper hex %#X\n", 255);
+		*/
 		//+ octal zero
 		ft_printf("%#o %#.o %#.0o\n", 0, 0, 0);
 		printf("%#o %#.o %#.0o\n", 0, 0, 0);
@@ -53,6 +54,7 @@ int		main(void)
 		printf("%#6o\n", 3);
 		ft_printf("%#-6o\n", 3);
 		printf("%#-6o\n", 3);
+		/*
 		//+ hex precision
 		ft_printf("%#.3x %#04x %#04.3x %#04.5x %#06.4x %#06.5x\n", 0x123, 0x123, 0x123, 0x123, 0x123, 0x123);
 		printf("%#.3x %#04x %#04.3x %#04.5x %#06.4x %#06.5x\n", 0x123, 0x123, 0x123, 0x123, 0x123, 0x123);
