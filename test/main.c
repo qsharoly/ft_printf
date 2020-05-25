@@ -112,6 +112,8 @@ int		main(void)
 		//pointers
 		ft_printf("%p %p %p, %.2p\n", s, NULL, printf, NULL);
 		printf("%p %p %p, %.2p\n", s, NULL, printf, NULL);
+		ft_printf("%20p %-20p\n", NULL, NULL);
+		printf("%20p %-20p\n", NULL, NULL);
 		/*
 		*/
 		/*

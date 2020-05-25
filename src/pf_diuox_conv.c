@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/14 12:55:31 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/05/17 11:37:35 by qsharoly         ###   ########.fr       */
+/*   Updated: 2020/05/25 07:32:04 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,19 @@ void	p_conv(t_buffer *out, const t_fmt *fmt, va_list ap)
 	int				min_size;
 
 	adr = (unsigned long)va_arg(ap, void *);
+#if __linux__
+	if (adr == 0)
+	{
+		prefix = "(nil)";
+		pad_len = ft_imax(0, fmt->min_width - ft_strlen(prefix));
+		while (!fmt->left_justify && pad_len-- > 0)
+			pf_putc(fmt->padchar, out);
+		pf_puts(prefix, out);
+		while (fmt->left_justify && pad_len-- > 0)
+			pf_putc(fmt->padchar, out);
+		return ;
+	}
+#endif
 	value_start = pf_utoa_base(str, adr, 16, LOWCASE);
 	prefix = "0x";
 	pre_len = ft_strlen(prefix);
