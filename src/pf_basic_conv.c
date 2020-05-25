@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/14 12:23:11 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/05/25 07:05:06 by debby            ###   ########.fr       */
+/*   Updated: 2020/05/25 08:24:56 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	default_conv(t_buffer *buf, const t_fmt *f, va_list ap)
 
 void	percent_conv(t_buffer *out, const t_fmt *f, va_list ap)
 {
-#if __APPLE
+#if __APPLE__
 	int		pad_len;
 
 	(void)ap;
