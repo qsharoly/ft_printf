@@ -108,9 +108,11 @@ int		main(void)
 		//+ left-justify
 		ft_printf("%-10.s\n%-10.0s\n%-10.1s\n", s, s, s);
 		printf("%-10.s\n%-10.0s\n%-10.1s\n", s, s, s);
+		*/
 		//pointers
-		ft_printf("%p %p %p, %.5p\n", s, NULL, printf, NULL);
-		printf("%p %p %p, %.5p\n", s, NULL, printf, NULL);
+		ft_printf("%p %p %p, %.2p\n", s, NULL, printf, NULL);
+		printf("%p %p %p, %.2p\n", s, NULL, printf, NULL);
+		/*
 		*/
 		/*
 		//negative cases
