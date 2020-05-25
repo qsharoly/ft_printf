@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/14 12:55:31 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/05/25 07:32:04 by debby            ###   ########.fr       */
+/*   Updated: 2020/05/25 23:28:38 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,49 @@
 #define LOWCASE 0
 #define UPCASE 1
 
-/*
-** default arg length is [unsigned] int
-*/
+void	pf_putnbr(t_buffer *out, char *value_start, char *prefix, const t_fmt *fmt)
+{
+	int				value_len;
+	int				pre_len;
+	int				zero_fill;
+	int				pad_len;
 
-static char	choose_sign_prefix(long long nb, const t_fmt *fmt)
+	value_len = ft_strlen(value_start);
+	pre_len = ft_strlen(prefix);
+	if (fmt->pad_with_zero && !fmt->left_justify && !fmt->has_precision)
+		zero_fill = ft_imax(0, fmt->min_width - value_len - pre_len);
+	else
+		zero_fill = ft_imax(0, fmt->precision - value_len);
+	pad_len = fmt->min_width - pre_len - zero_fill - value_len;
+	while (!fmt->left_justify && (pad_len-- > 0))
+		pf_putc(fmt->padchar, out);
+	if (pre_len)
+		pf_puts(prefix, out);
+	while (zero_fill-- > 0)
+		pf_putc('0', out);
+	pf_puts(value_start, out);
+	while (fmt->left_justify && (pad_len-- > 0))
+		pf_putc(fmt->padchar, out);
+}
+
+void	p_conv(t_buffer *out, const t_fmt *fmt, va_list ap)
+{
+	char			str[MAXBUF_ITOA];
+	unsigned long	adr;
+	char			*value_start;
+
+	adr = (unsigned long)va_arg(ap, void *);
+#if __linux__
+	if (adr == 0)
+	{
+		pf_putnbr(out, "(nil)", "", fmt);
+	}
+#endif
+	value_start = pf_utoa_base(str, adr, 16, LOWCASE);
+	pf_putnbr(out, value_start, "0x", fmt);
+}
+
+static char	sign_prefix(long long nb, const t_fmt *fmt)
 {
 	if (nb < 0)
 		return ('-');
@@ -32,56 +70,13 @@ static char	choose_sign_prefix(long long nb, const t_fmt *fmt)
 		return (0);
 }
 
-void	p_conv(t_buffer *out, const t_fmt *fmt, va_list ap)
-{
-	char			str[MAXBUF_ITOA];
-	char			*value_start;
-	unsigned long	adr;
-	char			*prefix;
-	int				value_len;
-	int				pad_len;
-	int				pre_len;
-	int				min_size;
-
-	adr = (unsigned long)va_arg(ap, void *);
-#if __linux__
-	if (adr == 0)
-	{
-		prefix = "(nil)";
-		pad_len = ft_imax(0, fmt->min_width - ft_strlen(prefix));
-		while (!fmt->left_justify && pad_len-- > 0)
-			pf_putc(fmt->padchar, out);
-		pf_puts(prefix, out);
-		while (fmt->left_justify && pad_len-- > 0)
-			pf_putc(fmt->padchar, out);
-		return ;
-	}
-#endif
-	value_start = pf_utoa_base(str, adr, 16, LOWCASE);
-	prefix = "0x";
-	pre_len = ft_strlen(prefix);
-	value_len = ft_strlen(value_start);
-	min_size = ft_imax(value_len, fmt->precision);
-	pad_len = ft_imax(0, fmt->min_width - min_size - pre_len);
-	while (!fmt->left_justify && pad_len-- > 0)
-		pf_putc(fmt->padchar, out);
-	pf_puts(prefix, out);
-	while (min_size-- > value_len)
-		pf_putc('0', out);
-	pf_puts(value_start, out);
-	while (fmt->left_justify && pad_len-- > 0)
-		pf_putc(fmt->padchar, out);
-}
-
+#define MAXBUF_SIGN_PREFIX 2
 void		signed_conv(t_buffer *out, const t_fmt *fmt, va_list ap)
 {
 	char			str[MAXBUF_ITOA];
-	char			*value_start;
+	char			prefix[MAXBUF_SIGN_PREFIX];
 	long long int	nb;
-	int				min_size;
-	int				value_len;
-	int				pad_len;
-	char			sign_prefix;
+	char			*value_start;
 
 	if (fmt->is_char)
 		nb = (char)va_arg(ap, int);
@@ -93,28 +88,13 @@ void		signed_conv(t_buffer *out, const t_fmt *fmt, va_list ap)
 		nb = va_arg(ap, long long);
 	else
 		nb = va_arg(ap, int);
-	if ((nb < 0 || fmt->prepend_plus || fmt->prepend_space)
-			&& fmt->pad_with_zero && !fmt->left_justify && !fmt->has_precision)
-		min_size = fmt->min_width - 1;
-	else
-		min_size = fmt->precision;
 	if (nb < 0)
 		value_start = pf_utoa_base(str, (unsigned long long)-nb, 10, LOWCASE);
 	else
 		value_start = pf_utoa_base(str, (unsigned long long)nb, 10, LOWCASE);
-	value_len = ft_strlen(value_start);
-	min_size = ft_imax(value_len, min_size);
-	sign_prefix = choose_sign_prefix(nb, fmt);
-	pad_len = ft_imax(0, fmt->min_width - min_size - (sign_prefix != 0));
-	while (!fmt->left_justify && (pad_len-- > 0))
-		pf_putc(fmt->padchar, out);
-	if (sign_prefix)
-		pf_putc(sign_prefix, out);
-	while (min_size-- > value_len)
-		pf_putc('0', out);
-	pf_puts(value_start, out);
-	while (fmt->left_justify && (pad_len-- > 0))
-		pf_putc(fmt->padchar, out);
+	ft_bzero(prefix, MAXBUF_SIGN_PREFIX);
+	prefix[0] = sign_prefix(nb, fmt);
+	pf_putnbr(out, value_start, prefix, fmt);
 }
 
 void		unsigned_conv(t_buffer *out, const t_fmt *fmt, va_list ap)
@@ -122,9 +102,6 @@ void		unsigned_conv(t_buffer *out, const t_fmt *fmt, va_list ap)
 	char				str[MAXBUF_ITOA];
 	unsigned long long	nb;
 	char				*value_start;
-	int					value_len;
-	int					min_size;
-	int					pad_len;
 
 	if (fmt->is_char)
 		nb = (unsigned char)va_arg(ap, unsigned int);
@@ -137,16 +114,7 @@ void		unsigned_conv(t_buffer *out, const t_fmt *fmt, va_list ap)
 	else
 		nb = va_arg(ap, unsigned int);
 	value_start = pf_utoa_base(str, nb, 10, 0);
-	value_len = ft_strlen(value_start);
-	min_size = ft_imax(value_len, fmt->precision);
-	pad_len = ft_imax(0, fmt->min_width - min_size);
-	while (!fmt->left_justify && pad_len-- > 0)
-		pf_putc(fmt->padchar, out);
-	while (min_size-- > value_len)
-		pf_putc('0', out);
-	pf_puts(value_start, out);
-	while (fmt->left_justify && pad_len-- > 0)
-		pf_putc(fmt->padchar, out);
+	pf_putnbr(out, value_start, "", fmt);
 }
 
 void		octal_conv(t_buffer *out, const t_fmt *fmt, va_list ap)
@@ -154,10 +122,6 @@ void		octal_conv(t_buffer *out, const t_fmt *fmt, va_list ap)
 	char				str[MAXBUF_ITOA];
 	unsigned long long	nb;
 	char				*value_start;
-	int					value_len;
-	int					min_size;
-	int					pad_len;
-	int					pre_len;
 
 	if (fmt->is_char)
 		nb = (unsigned char)va_arg(ap, unsigned int);
@@ -170,19 +134,10 @@ void		octal_conv(t_buffer *out, const t_fmt *fmt, va_list ap)
 	else
 		nb = va_arg(ap, unsigned int);
 	value_start = pf_utoa_base(str, nb, 8, 0);
-	value_len = ft_strlen(value_start);
-	pre_len = fmt->alternative_form;
-	min_size = ft_imax(value_len, fmt->precision - pre_len);
-	pad_len = ft_imax(0, fmt->min_width - min_size - pre_len);
-	while (!fmt->left_justify && pad_len-- > 0)
-		pf_putc(fmt->padchar, out);
-	if (pre_len)
-		pf_putc('0', out);
-	while (min_size-- > value_len)
-		pf_putc('0', out);
-	pf_puts(value_start, out);
-	while (fmt->left_justify && pad_len-- > 0)
-		pf_putc(fmt->padchar, out);
+	if (fmt->alternative_form)
+		pf_putnbr(out, value_start, "0", fmt);
+	else
+		pf_putnbr(out, value_start, "", fmt);
 }
 
 #define HEX_PREFIX_LEN 2
@@ -190,13 +145,9 @@ void		hex_conv(t_buffer *out, const t_fmt *fmt, va_list ap)
 {
 	char				str[MAXBUF_ITOA];
 	unsigned long long	nb;
-	int					min_size;
+	char				*value_start;
 	char				*prefix;
 	int					upcase;
-	char				*value_start;
-	int					value_len;
-	int					pad_len;
-	int					pre_len;
 
 	if (fmt->is_char)
 		nb = (unsigned char)va_arg(ap, unsigned int);
@@ -209,27 +160,10 @@ void		hex_conv(t_buffer *out, const t_fmt *fmt, va_list ap)
 	else
 		nb = va_arg(ap, unsigned int);
 	upcase = (fmt->type == 'X');
+	value_start = pf_utoa_base(str, nb, 16, upcase);
 	if (fmt->alternative_form && nb > 0)
 		prefix = upcase ? "0X" : "0x";
 	else
-		prefix = NULL;
-	pre_len = prefix ? ft_strlen(prefix) : 0;
-	if (fmt->alternative_form && fmt->pad_with_zero && !fmt->left_justify
-			&& fmt->min_width - pre_len > fmt->precision)
-		min_size = fmt->min_width - pre_len;
-	else
-		min_size = fmt->precision;
-	value_start = pf_utoa_base(str, nb, 16, upcase);
-	value_len = ft_strlen(value_start);
-	min_size = ft_imax(value_len, min_size);
-	pad_len = ft_imax(0, fmt->min_width - min_size - pre_len);
-	while (!fmt->left_justify && pad_len-- > 0)
-		pf_putc(fmt->padchar, out);
-	if (prefix)
-		pf_puts(prefix, out);
-	while (min_size-- > value_len)
-		pf_putc('0', out);
-	pf_puts(value_start, out);
-	while (fmt->left_justify && pad_len-- > 0)
-		pf_putc(fmt->padchar, out);
+		prefix = "";
+	pf_putnbr(out, value_start, prefix, fmt);
 }
