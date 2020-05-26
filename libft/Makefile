@@ -7,8 +7,6 @@ OBJDIR = objects
 DEPDIR = deps
 DEPFLAGS = -MT $@ -MMD -MP -MF $(DEPDIR)/$*.d
 
-debug = yes
-
 ifeq ($(debug), yes)
 	CCFLAGS += -g
 endif
@@ -24,7 +22,7 @@ $(shell mkdir -p $(DEPDIR))
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	@echo --- link ---
+	@echo "# packing $(NAME)"
 	ar rcs $(NAME) $(OBJ)
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c

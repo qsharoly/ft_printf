@@ -6,14 +6,14 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/14 13:26:37 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/05/18 01:02:24 by qsharoly         ###   ########.fr       */
+/*   Updated: 2020/05/26 02:37:05 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "libftprintf.h"
 
-static void (*g_conv_funcs[10])(t_buffer *, const t_fmt *, va_list) = {
+static void (*g_conv_funcs[11])(t_buffer *, const t_fmt *, va_list) = {
 	percent_conv,
 	c_conv,
 	s_conv,
@@ -24,7 +24,7 @@ static void (*g_conv_funcs[10])(t_buffer *, const t_fmt *, va_list) = {
 	octal_conv,
 	hex_conv,
 	hex_conv,
-	//double_conv
+	double_conv
 };
 
 static void		(*choose_conv(char type))(t_buffer *, const t_fmt *, va_list)
@@ -32,8 +32,8 @@ static void		(*choose_conv(char type))(t_buffer *, const t_fmt *, va_list)
 	int		i;
 	char	*types;
 
-	//types = "%cspdiuoxXf";
-	types = "%cspdiuoxX";
+	types = "%cspdiuoxXf";
+	//types = "%cspdiuoxX";
 	i = pf_strchr_idx(type, types);
 	if (i >= 0)
 		return (g_conv_funcs[i]);

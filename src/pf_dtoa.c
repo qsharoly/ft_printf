@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/12 04:49:33 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/05/17 09:05:54 by qsharoly         ###   ########.fr       */
+/*   Updated: 2020/05/26 08:24:36 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,62 +26,98 @@ static char	sign_prefix(int is_negative, const t_fmt *fmt)
 		return (0);
 }
 
-static char	*finalize(char *digits, int decimal_place, int precision, char sign_prefix, int alt_form)
+static void	repeat(char c, int times, t_buffer *out)
 {
-	char			*ipart;
-	char			*fpart;
-	char			*s;
-	int				i;
-	int				fsize;
+	while (times-- > 0)
+		pf_putc(c, out);
+}
 
-	i = ft_strlen(digits);
-	if (decimal_place < 0)
+#include <stdio.h>
+static void	put_float(char *digits, int decimal_power, char sign_prefix, const t_fmt *fmt, t_buffer *out)
+{
+	int		pad_len;
+	int		dot_idx;
+	int		fsize;
+	int		prec;
+	int		include_dot;
+
+	prec = fmt->has_precision ? fmt->precision : DTOA_DEFAULT_PRECISION;
+	include_dot = (prec > 0 || fmt->alternative_form);
+	if (sign_prefix)
+		pf_putc(sign_prefix, out);
+	if (decimal_power < 0)
 	{
-		decimal_place = -decimal_place;
-		fsize =	ft_imax(decimal_place, precision);
-		fpart = malloc(fsize + 1);
-		ft_memset(fpart, '0', fsize);
-		fpart[fsize] = '\0';
-		ft_memcpy(fpart, digits + i - decimal_place, decimal_place);
-		if (decimal_place >= i)
+		dot_idx = ft_strlen(digits) + decimal_power;
+		if (dot_idx > 0)
 		{
-			ipart = ft_strdup("0");
-			ft_memset(fpart, '0', decimal_place - i);
+			/*
+			 * number of form 12345.678900
+			 */
+			printf("path a");
+			pad_len = fmt->min_width - (sign_prefix != 0 + dot_idx + include_dot + ft_imin(ft_strlen(digits + dot_idx), prec));
+			if (!fmt->left_justify)
+				repeat(fmt->padchar, pad_len, out);
+			pf_nputs(digits, dot_idx, out);
+			if (include_dot)
+				pf_putc('.', out);
+			fsize = ft_imin(ft_strlen(digits + dot_idx), prec);
+			pf_nputs(digits + dot_idx, fsize, out);
+			repeat('0', prec - fsize, out);
+			if (fmt->left_justify)
+				repeat(fmt->padchar, pad_len, out);
 		}
 		else
 		{
-			ipart = malloc(i - decimal_place + 1);
-			ipart[i - decimal_place] = '\0';
-			ft_memcpy(ipart, digits, (i - decimal_place));
+			/*
+			 * number of form 0.00012345
+			 */
+			//printf("digits = %s, prec = %d, dot_idx = %d, len = %ld, decimal_power = %d ", digits, prec, dot_idx, ft_strlen(digits), decimal_power);
+			printf("path b");
+			dot_idx = -dot_idx;
+			pad_len = fmt->min_width - (1 + include_dot + ft_imin(prec, dot_idx) + ft_imax(0, prec - dot_idx));
+			if (!fmt->left_justify)
+				repeat(fmt->padchar, pad_len, out);
+			pf_putc('0', out);
+			if (include_dot)
+				pf_putc('.', out);
+			repeat('0', ft_imin(prec, dot_idx), out);
+			pf_nputs(digits, ft_imax(0, prec - dot_idx), out);
+			if (fmt->left_justify)
+				repeat(fmt->padchar, pad_len, out);
 		}
 	}
 	else
 	{
-		fpart = malloc(precision + 1);
-		fpart[precision] = '\0';
-		ft_memset(fpart, '0', precision);
-		ipart = malloc(i + decimal_place + 1);
-		ipart[i + decimal_place] = '\0';
-		ft_memcpy(ipart, digits, i);
-		ft_memset(ipart + i, '0', decimal_place);
+		/*
+		 * number of form 123450000.00
+		 */
+		printf("path c");
+		pad_len = fmt->min_width - (ft_strlen(digits) + decimal_power + include_dot + prec);
+		if (!fmt->left_justify)
+			repeat(fmt->padchar, pad_len, out);
+		pf_puts(digits, out);
+		repeat('0', decimal_power, out);
+		if (include_dot)
+			pf_putc('.', out);
+		repeat('0', prec, out);
+		if (fmt->left_justify)
+			repeat(fmt->padchar, pad_len, out);
 	}
-	fpart[precision] = '\0';
-	s = malloc((sign_prefix != 0) + ft_strlen(ipart) + (precision != 0 || alt_form) * ft_strlen(".") + ft_strlen(fpart) + 1);
+	/*
 	if (sign_prefix != 0)
-		s[0] = sign_prefix;
-	ft_strcpy(s + (sign_prefix != 0), ipart);
-	if (precision != 0 || alt_form)
-		ft_strcat(s, ".");
-	ft_strcat(s, fpart);
-	free(ipart);
-	free(fpart);
+		pf_putc(sign_prefix, out);
+	pf_puts(ipart, out);
+	if (prec != 0 || fmt->alternative_form)
+		pf_putc('.', out);
+	pf_puts(fpart, out);
 	return (s);
+	*/
 }
 
 #if 0
 	#include <stdio.h>
 #endif
-char	*pf_dtoa(double nb, int precision, const t_fmt *fmt)
+void	pf_dtoa(t_buffer *out, double nb, int precision, const t_fmt *fmt)
 {
 	union f64		d;
 	long			exponent;
@@ -89,7 +125,6 @@ char	*pf_dtoa(double nb, int precision, const t_fmt *fmt)
 	int				is_subnormal;
 	long			dec_pow;
 	t_big			big;
-	char			*s;
 
 	d.d = nb;
 	exponent = d.bits.exponent;
@@ -118,6 +153,5 @@ char	*pf_dtoa(double nb, int precision, const t_fmt *fmt)
 	printf("digits: %s * 10^%ld\n", big_to_string(big), dec_pow);
 	printf("rounded: %s * 10^%ld\n", big_to_string_round(big, -(dec_pow + precision)), dec_pow);
 #endif
-	s = finalize(big_to_string_round(big, -(dec_pow + precision)), dec_pow, precision, sign_prefix(d.d < 0, fmt), fmt->alternative_form);
-	return (s);
+	put_float(big_to_string_round(big, -(dec_pow + precision)), dec_pow, sign_prefix(d.d < 0, fmt), fmt, out);
 }

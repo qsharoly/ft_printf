@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 15:31:58 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/05/17 15:30:34 by qsharoly         ###   ########.fr       */
+/*   Updated: 2020/05/26 02:45:49 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # define BUFFER_SIZE 4096
 # define MAXBUF_ITOA (sizeof(long long int) * 8) //enough for binary
 # define TYPE_MISSING '\0'
-# define DOUBLE_CONV_DEFAULT_PRECISION 6
+# define DTOA_DEFAULT_PRECISION 6
 # define F64_BIAS 1023
 # define F80_BIAS 16383
 
@@ -86,8 +86,8 @@ int			pf_strchr_idx(char needle, const char *hay);
 int			pf_simple_atoi(const char *s);
 char		*pf_utoa_base(char *buffer, unsigned long long value,
 				unsigned base, int upcase);
-char		*pf_dtoa(double d, int precision, const t_fmt *fmt);
-char		*pf_ldtoa(long double d, int precision, const t_fmt *fmt);
+void		pf_dtoa(t_buffer *out, double d, int precision, const t_fmt *fmt);
+//void		pf_ldtoa(t_buffer *out, long double d, int precision, const t_fmt *fmt);
 void		default_conv(t_buffer *out, const t_fmt *fmt, va_list ap);
 void		percent_conv(t_buffer *out, const t_fmt *fmt, va_list ap);
 void		s_conv(t_buffer *out, const t_fmt *fmt, va_list ap);
@@ -97,7 +97,7 @@ void		signed_conv(t_buffer *out, const t_fmt *fmt, va_list ap);
 void		unsigned_conv(t_buffer *out, const t_fmt *fmt, va_list ap);
 void		octal_conv(t_buffer *out, const t_fmt *fmt, va_list ap);
 void		hex_conv(t_buffer *out, const t_fmt *fmt, va_list ap);
-//void		double_conv(t_buffer *out, const t_fmt *fmt, va_list ap);
+void		double_conv(t_buffer *out, const t_fmt *fmt, va_list ap);
 int			ft_printf(const char * format, ...);
 
 #endif

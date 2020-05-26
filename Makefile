@@ -33,8 +33,10 @@ $(shell mkdir -p $(OBJDIR); mkdir -p $(OBJDIR)/bignum)
 
 all: $(NAME)
 
+export debug
 $(NAME): $(OBJ)
 	make -C $(LIBFT)
+	@echo "# packing $(NAME)"
 	cp $(LIBFT)/libft.a ./$(NAME)
 	ar rcs $(NAME) $(OBJ)
 

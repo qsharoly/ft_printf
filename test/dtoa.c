@@ -1,4 +1,4 @@
-#include "../includes/libftprintf.h"
+#include "libftprintf.h"
 #include <stdio.h>
 #include <float.h>
 #include <strings.h>
@@ -34,16 +34,16 @@ void	print_bits2(void *a, int n_bits)
 
 void	print_double_bits(double a)
 {
-	printf("% 10f = \n", a);
+	printf("(0b");
 	print_bits(&a, 64);
-	printf("\n");
+	printf(")\n");
 }
 
 void	print_ld_bits(long double a)
 {
-	printf("%Lf = \n", a);
+	printf("(0b");
 	print_bits2(&a, 80);
-	printf("\n");
+	printf(")\n");
 }
 
 void	print_char_bits(char c)
@@ -67,16 +67,19 @@ double	bits2double(char *bit_values)
 	return (*((double *)&(nb)));
 }
 
-void	test_dbl(double a)
+void	test_dbl(const char *format, double a, const char *a_literal)
 {
-	print_double_bits(a);
-	printf("expected: %f\n", a);
-	ft_printf("actual  : %f\n", a);
+	printf("checking (\"%s\", %s)\n", format, a_literal);
+	printf("expected: \"");
+	printf(format, a);
+	printf("\"\n  actual: \"");
+	fflush(stdout);
+	ft_printf(format, a);
+	printf("\"\n\n");
 }
 
 void	test_ld(long double a)
 {
-	print_ld_bits(a);
 	printf("expected: %Lf\n", a);
 	ft_printf("actual  : %Lf\n", a);
 }
@@ -89,9 +92,15 @@ int		main(void)
 	test_dbl(-958.125);
 	test_dbl(0.3);
 	test_dbl(DBL_MIN);
-	*/
 	test_dbl(0.000001);
 	test_dbl(DBL_MIN);
+	test_dbl("%f", 1.5, "1.5");
+	test_dbl("%.4f", 1.5, "1.5");
+	test_dbl("%.4f", 1.532673, "1.532673");
+	*/
+	test_dbl("%f", 0.000039, "0.000039");
+	test_dbl("%.0f", 0.000039, "0.000039");
+	test_dbl("%5.1f", 7.3, "7.3");
 	/*
 	long double	b;
 	test_ld(-958.125);
