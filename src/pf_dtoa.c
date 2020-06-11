@@ -79,24 +79,8 @@ static void	put_float(const char *digits, int split_point, char sign_prefix, con
 	}
 	if (fmt->left_justify)
 		repeat(fmt->padchar, pad_len, out);
-	/*
-	if (!fmt->left_justify)
-		repeat(fmt->padchar, pad_len, out);
-	if (sign_prefix != 0)
-		pf_putc(sign_prefix, out);
-	pf_puts(ipart, out);
-	if (prec != 0 || fmt->alternative_form)
-		pf_putc('.', out);
-	pf_puts(fpart, out);
-	if (fmt->left_justify)
-		repeat(fmt->padchar, pad_len, out);
-	return (s);
-	*/
 }
 
-#if 0
-	#include <stdio.h>
-#endif
 void	pf_dtoa(t_buffer *out, double nb, int precision, const t_fmt *fmt)
 {
 	union f64		d;
@@ -110,9 +94,6 @@ void	pf_dtoa(t_buffer *out, double nb, int precision, const t_fmt *fmt)
 	d.d = nb;
 	exponent = d.bits.exponent;
 	mantissa = d.bits.mantissa;
-#if 0
-	printf("extracted: exponent = %ld, mantissa = %lu\n", exponent, mantissa);
-#endif
 	is_subnormal = (exponent == 0);
 	exponent = is_subnormal + exponent - F64_BIAS;
 	mantissa += (!is_subnormal) * (1L << 52);
@@ -129,11 +110,6 @@ void	pf_dtoa(t_buffer *out, double nb, int precision, const t_fmt *fmt)
 	}
 	big = big_mul(big_from_chunk(mantissa), big_raise(5, (unsigned long)-dec_pow));
 	big = big_mul(big, big_raise(2, (unsigned long)exponent));
-#if 0
-	printf("shifted mantissa = %lu, unbiased exponent = %ld, power = %ld\n", mantissa, exponent, dec_pow);
-	printf("digits: %s * 10^%ld\n", big_to_string(big), dec_pow);
-	printf("rounded: %s * 10^%ld\n", big_to_string_round(big, -(dec_pow + precision)), dec_pow);
-#endif
 	digits = big_to_string_round(big, -(dec_pow + precision));
 	put_float(digits, ft_strlen(digits) + dec_pow, sign_prefix(d.d < 0, fmt), fmt, out);
 }
@@ -166,11 +142,6 @@ void	pf_ldtoa(t_buffer *out, long double nb, int precision, const t_fmt *fmt)
 	}
 	big = big_mul(big_from_chunk(mantissa), big_raise(5, (unsigned long)-dec_pow));
 	big = big_mul(big, big_raise(2, (unsigned long)exponent));
-#if 0
-	printf("shifted mantissa = %s, exponent = %ld, power = %ld\n", big_to_string(mantissa), exponent, dec_pow);
-	printf("digits: %s * 10^%ld\n", big_to_string(big), dec_pow);
-	printf("rounded: %s * 10^%ld\n", big_to_string_round(big, -(dec_pow + precision)), dec_pow);
-#endif
 	digits = big_to_string_round(big, -(dec_pow + precision));
 	put_float(digits, ft_strlen(digits) + dec_pow, sign_prefix(d.d < 0, fmt), fmt, out);
 }

@@ -13,6 +13,11 @@
 #include "libft.h"
 #include "libftprintf.h"
 
+/*
+** Number and order of conversion functions must correspond to
+** the value of the string 'types' in choose_conv function.
+*/
+
 static void (*g_conv_funcs[11])(t_buffer *, const t_fmt *, va_list) = {
 	percent_conv,
 	c_conv,
@@ -41,7 +46,7 @@ static void		(*choose_conv(char type))(t_buffer *, const t_fmt *, va_list)
 		return (default_conv);
 }
 
-static char		*parse_flags(char *pos, t_fmt *fmt)
+static const char	*parse_flags(const char *pos, t_fmt *fmt)
 {
 	while (ft_strhas("0-+ #", *pos))
 	{
@@ -60,7 +65,7 @@ static char		*parse_flags(char *pos, t_fmt *fmt)
 	return (pos);
 }
 
-static char		*parse_length_modifier(char *pos, t_fmt *fmt)
+static const char	*parse_length_modifier(const char *pos, t_fmt *fmt)
 {
 	if (*pos == 'h' && *(pos + 1) == 'h')
 	{
@@ -92,7 +97,7 @@ static char		*parse_length_modifier(char *pos, t_fmt *fmt)
 	return (pos);
 }
 
-static char		*parse_a_number(char *pos, int *value)
+static const char	*parse_a_number(const char *pos, int *value)
 {
 	*value = pf_simple_atoi(pos);
 	while (*pos >= '0' && *pos <= '9')
@@ -116,10 +121,10 @@ static char		choose_padchar(const t_fmt *fmt)
 
 t_fmt			pf_parse_specifier(const char *str)
 {
-	t_fmt	fmt;
-	char	*pos;
+	t_fmt		fmt;
+	const char	*pos;
 
-	pos = (char *)str + 1;
+	pos = str + 1;
 	ft_bzero((char *)&fmt, sizeof(t_fmt));
 	fmt.precision = 1;
 	pos = parse_flags(pos, &fmt);

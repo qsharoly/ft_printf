@@ -14,9 +14,9 @@
 #include "libftprintf.h"
 #include "libft.h"
 
-void	default_conv(t_buffer *buf, const t_fmt *f, va_list ap)
+void	default_conv(t_buffer *out, const t_fmt *f, va_list ap)
 {
-	(void)buf;
+	(void)out;
 	(void)f;
 	(void)ap;
 }
@@ -75,4 +75,3 @@ void	s_conv(t_buffer *out, const t_fmt *f, va_list ap)
 	while (f->left_justify && pad_len-- > 0)
 		pf_putc(f->padchar, out);
 }
-

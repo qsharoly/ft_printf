@@ -16,7 +16,8 @@
 #define LOWCASE 0
 #define UPCASE 1
 
-void	pf_putnbr(t_buffer *out, char *value_start, char *prefix, const t_fmt *fmt)
+void	pf_putnbr(t_buffer *out, const char *value_start, const char *prefix,
+			const t_fmt *fmt)
 {
 	int				value_len;
 	int				pre_len;
@@ -45,7 +46,7 @@ void	p_conv(t_buffer *out, const t_fmt *fmt, va_list ap)
 {
 	char			str[MAXBUF_ITOA];
 	unsigned long	adr;
-	char			*value_start;
+	const char		*value_start;
 
 	adr = (unsigned long)va_arg(ap, void *);
 #if __linux__
@@ -77,7 +78,7 @@ void		signed_conv(t_buffer *out, const t_fmt *fmt, va_list ap)
 	char			str[MAXBUF_ITOA];
 	char			prefix[MAXBUF_SIGN_PREFIX];
 	long long int	nb;
-	char			*value_start;
+	const char		*value_start;
 
 	if (fmt->is_char)
 		nb = (char)va_arg(ap, int);
@@ -102,7 +103,7 @@ void		unsigned_conv(t_buffer *out, const t_fmt *fmt, va_list ap)
 {
 	char				str[MAXBUF_ITOA];
 	unsigned long long	nb;
-	char				*value_start;
+	const char			*value_start;
 
 	if (fmt->is_char)
 		nb = (unsigned char)va_arg(ap, unsigned int);
@@ -122,7 +123,7 @@ void		octal_conv(t_buffer *out, const t_fmt *fmt, va_list ap)
 {
 	char				str[MAXBUF_ITOA];
 	unsigned long long	nb;
-	char				*value_start;
+	const char			*value_start;
 
 	if (fmt->is_char)
 		nb = (unsigned char)va_arg(ap, unsigned int);
@@ -145,8 +146,8 @@ void		hex_conv(t_buffer *out, const t_fmt *fmt, va_list ap)
 {
 	char				str[MAXBUF_ITOA];
 	unsigned long long	nb;
-	char				*value_start;
-	char				*prefix;
+	const char			*value_start;
+	const char			*prefix;
 	int					upcase;
 
 	if (fmt->is_char)

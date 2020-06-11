@@ -54,8 +54,8 @@ static char *general_utoa_base(char *pos, unsigned long long value,
 char	*pf_utoa_base(char *buffer, unsigned long long value,
 		unsigned base, int upcase)
 {
-	char	*pos;
-	char	*digits;
+	char		*pos;
+	const char	*digits;
 
 	digits = upcase ? "0123456789ABCDEF" : "0123456789abcdef";
 	pos = &buffer[MAXBUF_ITOA - 1];
