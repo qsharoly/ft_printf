@@ -23,7 +23,6 @@ SRC = ft_printf.c\
 	  pf_simple_atoi.c\
 	  pf_utoa_base.c\
 	  pf_dtoa.c\
-	  pf_ldtoa.c\
 	  bignum/bignum.c
 
 OBJ = $(SRC:%.c=$(OBJDIR)/%.o)
@@ -42,6 +41,8 @@ $(NAME): $(OBJ)
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c includes/libftprintf.h
 	$(CC) $(CCFLAGS) -c -o $@ $< $(INCFLAGS)
+$(OBJDIR)/pf_dtoa.o: includes/bignum.h
+$(OBJDIR)/bignum/bignum.o: includes/bignum.h
 
 .PHONY: all clean fclean re
 

@@ -67,9 +67,9 @@ double	bits2double(char *bit_values)
 	return (*((double *)&(nb)));
 }
 
-void	test_dbl(const char *format, double a, const char *a_literal)
+void	check_dbl(const char *format, double a, const char *literal)
 {
-	printf("checking (\"%s\", %s)\n", format, a_literal);
+	printf("checking (\"%s\", %s)\n", format, literal);
 	printf("expected: \"");
 	printf(format, a);
 	printf("\"\n  actual: \"");
@@ -78,34 +78,42 @@ void	test_dbl(const char *format, double a, const char *a_literal)
 	printf("\"\n\n");
 }
 
-void	test_ld(long double a)
+void	check_ld(const char *format, long double a, const char *literal)
 {
-	printf("expected: %Lf\n", a);
-	ft_printf("actual  : %Lf\n", a);
+	printf("checking (\"%s\", %s)\n", format, literal);
+	printf("expected: \"");
+	printf(format, a);
+	printf("\"\n  actual: \"");
+	fflush(stdout);
+	ft_printf(format, a);
+	printf("\"\n\n");
 }
 
 int		main(void)
 {
-	double	a;
-
 	/*
-	test_dbl(-958.125);
-	test_dbl(0.3);
-	test_dbl(DBL_MIN);
-	test_dbl(0.000001);
-	test_dbl(DBL_MIN);
-	test_dbl("%f", 1.5, "1.5");
-	test_dbl("%.4f", 1.5, "1.5");
-	test_dbl("%.4f", 1.532673, "1.532673");
+	check_dbl("%f", -958.125, "-958.125");
+	check_dbl("%f", DBL_MIN, "DBL_MIN");
+	check_dbl("%f", DBL_MAX, "DBL_MAX");
+	check_dbl("%f", 1.5, "1.5");
+	check_dbl("%.4f", 1.5, "1.5");
+	check_dbl("%.4f", 1.532673, "1.532673");
+	check_dbl("%f", 0.000039, "0.000039");
+	check_dbl("%.0f", 0.000039, "0.000039");
+	check_dbl("%5.1f", 7.3, "7.3");
+	check_dbl("%5.1f", -7.3, "-7.3");
+	check_dbl("%-5.0f", -7.3, "-7.3");
+	check_dbl("%f", -3.85, "-3.85");
+	check_dbl("%f", -0.99999949, "-0.99999949");
 	*/
-	test_dbl("%f", 0.000039, "0.000039");
-	test_dbl("%.0f", 0.000039, "0.000039");
-	test_dbl("%5.1f", 7.3, "7.3");
+	check_ld("%Lf", -958.125, "-958.125");
+	check_ld("%Lf", -0.3, "-0.3");
 	/*
-	long double	b;
-	test_ld(-958.125);
-	test_ld(-0.3);
-	test_ld(LDBL_MAX);
+	check_ld("%Lf", LDBL_MAX, "LDBL_MAX");
+	check_ld("%Lf", LDBL_MIN, "LDBL_MIN");
+	check_ld("%.0Lf", LDBL_MIN, "LDBL_MIN");
 	*/
+	print_ld_bits(LDBL_MAX);
+	print_ld_bits(LDBL_MIN);
 	return (0);
 }

@@ -24,22 +24,19 @@ void		pf_error(const char *msg)
 void		write_args(t_buffer *b, const char *format, va_list ap)
 {
 	t_fmt		fmt;
-	char		*cur;
 
-	cur = (char *)format;
-	while (*cur)
+	while (*format)
 	{
-		if (*cur == '%')
+		if (*format == '%')
 		{
-			fmt = pf_parse_specifier(cur);
+			fmt = pf_parse_specifier(format);
 			fmt.write_arg(b, &fmt, ap);
-			cur += fmt.spec_length;
-			format = cur;
+			format += fmt.spec_length;
 		}
 		else
 		{
-			pf_putc(*cur, b);
-			cur++;
+			pf_putc(*format, b);
+			format++;
 		}
 	}
 }
@@ -89,7 +86,7 @@ void		pf_putc(int c, t_buffer *b)
 	b->space_left--;
 }
 
-void		pf_puts(char *s, t_buffer *b)
+void		pf_puts(const char *s, t_buffer *b)
 {
 	while (*s)
 	{
@@ -98,13 +95,12 @@ void		pf_puts(char *s, t_buffer *b)
 	}
 }
 
-void		pf_nputs(char *s, int len, t_buffer *b)
+void		pf_nputs(const char *s, int len, t_buffer *b)
 {
-	while (*s && len)
+	while (*s && len-- > 0)
 	{
 		pf_putc(*s, b);
 		s++;
-		len--;
 	}
 }
 

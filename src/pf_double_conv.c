@@ -15,26 +15,20 @@
 
 void		double_conv(t_buffer *out, const t_fmt *fmt, va_list ap)
 {
-	/*
-	long double		lnb;
-	*/
-	double			nb;
+	long double		l;
+	double			d;
 	int				precision;
 
-	/*
 	if (fmt->is_quad)
-		lnb = va_arg(ap, long double);
+		l = va_arg(ap, long double);
 	else
-	*/
-		nb = va_arg(ap, double);
+		d = va_arg(ap, double);
 	if (fmt->has_precision)
 		precision = fmt->precision;
 	else
 		precision = DTOA_DEFAULT_PRECISION;
-	/*
 	if (fmt->is_quad)
-		pf_ldtoa(out, lnb, precision, fmt);
+		pf_ldtoa(out, l, precision, fmt);
 	else
-	*/
-		pf_dtoa(out, nb, precision, fmt);
+		pf_dtoa(out, d, precision, fmt);
 }
