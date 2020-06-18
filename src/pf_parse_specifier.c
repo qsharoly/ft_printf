@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/14 13:26:37 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/05/26 02:37:05 by debby            ###   ########.fr       */
+/*   Updated: 2020/06/18 15:58:57 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 ** the value of the string 'types' in choose_conv function.
 */
 
-static void (*g_conv_funcs[11])(t_buffer *, const t_fmt *, va_list) = {
+static void (*g_conv_funcs[11])(t_buffer *, t_fmt *, va_list) = {
 	percent_conv,
 	c_conv,
 	s_conv,
@@ -32,7 +32,7 @@ static void (*g_conv_funcs[11])(t_buffer *, const t_fmt *, va_list) = {
 	double_conv
 };
 
-static void		(*choose_conv(char type))(t_buffer *, const t_fmt *, va_list)
+static void		(*choose_conv(char type))(t_buffer *, t_fmt *, va_list)
 {
 	int		i;
 	char	*types;

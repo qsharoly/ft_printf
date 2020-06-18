@@ -91,29 +91,29 @@ void	check_ld(const char *format, long double a, const char *literal)
 
 int		main(void)
 {
-	/*
 	check_dbl("%f", -958.125, "-958.125");
-	check_dbl("%f", DBL_MIN, "DBL_MIN");
-	check_dbl("%f", DBL_MAX, "DBL_MAX");
-	check_dbl("%f", 1.5, "1.5");
-	check_dbl("%.4f", 1.5, "1.5");
+	check_dbl("%f", __DBL_MIN__, "DBL_MIN");
+	check_dbl("%f", __DBL_MAX__, "DBL_MAX");
+	check_dbl("%f", 1.05, "1.05");
+	check_dbl("%.4f", 1.05, "1.05");
 	check_dbl("%.4f", 1.532673, "1.532673");
 	check_dbl("%f", 0.000039, "0.000039");
 	check_dbl("%.0f", 0.000039, "0.000039");
 	check_dbl("%5.1f", 7.3, "7.3");
 	check_dbl("%5.1f", -7.3, "-7.3");
 	check_dbl("%-5.0f", -7.3, "-7.3");
+	check_dbl("%-5.0f", 7.5, "7.5");
+	check_dbl("%-5.0f", -7.5, "-7.5");
 	check_dbl("%f", -3.85, "-3.85");
 	check_dbl("%f", -0.99999949, "-0.99999949");
-	*/
+	/*
 	check_ld("%Lf", -958.125, "-958.125");
 	check_ld("%Lf", -0.3, "-0.3");
-	/*
 	check_ld("%Lf", LDBL_MAX, "LDBL_MAX");
 	check_ld("%Lf", LDBL_MIN, "LDBL_MIN");
 	check_ld("%.0Lf", LDBL_MIN, "LDBL_MIN");
-	*/
 	print_ld_bits(LDBL_MAX);
 	print_ld_bits(LDBL_MIN);
+	*/
 	return (0);
 }

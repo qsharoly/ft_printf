@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 15:31:58 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/05/26 02:45:49 by debby            ###   ########.fr       */
+/*   Updated: 2020/06/18 16:01:11 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,30 +20,6 @@
 # define MAXBUF_ITOA (sizeof(long long int) * 8) //enough for binary
 # define TYPE_MISSING '\0'
 # define DTOA_DEFAULT_PRECISION 6
-# define F64_BIAS 1023
-# define F80_BIAS 16383
-
-union	f64
-{
-	double	d;
-	struct
-	{
-		unsigned long	mantissa:52;
-		unsigned int	exponent:11;
-		unsigned int	negative:1;
-	}	bits;
-};
-
-union	f80
-{
-	long double	d;
-	struct
-	{
-		unsigned long	mantissa:64;
-		unsigned int	exponent:15;
-		unsigned int	negative:1;
-	} bits;
-};
 
 typedef struct		s_buffer
 {
@@ -74,7 +50,7 @@ typedef			struct s_fmt
 	int			precision;
 	char		type;
 	char		padchar;
-	void		(*write_arg)(t_buffer *b, const struct s_fmt *fmt, va_list ap);
+	void		(*write_arg)(t_buffer *b, struct s_fmt *fmt, va_list ap);
 }				t_fmt;
 
 void		pf_error(const char *msg);
@@ -86,18 +62,18 @@ int			pf_strchr_idx(char needle, const char *hay);
 int			pf_simple_atoi(const char *s);
 char		*pf_utoa_base(char *buffer, unsigned long long value,
 				unsigned base, int upcase);
-void		pf_dtoa(t_buffer *out, double d, int precision, const t_fmt *fmt);
-void		pf_ldtoa(t_buffer *out, long double d, int precision, const t_fmt *fmt);
-void		default_conv(t_buffer *out, const t_fmt *fmt, va_list ap);
-void		percent_conv(t_buffer *out, const t_fmt *fmt, va_list ap);
-void		s_conv(t_buffer *out, const t_fmt *fmt, va_list ap);
-void		c_conv(t_buffer *out, const t_fmt *fmt, va_list ap);
-void		p_conv(t_buffer *out, const t_fmt *fmt, va_list ap);
-void		signed_conv(t_buffer *out, const t_fmt *fmt, va_list ap);
-void		unsigned_conv(t_buffer *out, const t_fmt *fmt, va_list ap);
-void		octal_conv(t_buffer *out, const t_fmt *fmt, va_list ap);
-void		hex_conv(t_buffer *out, const t_fmt *fmt, va_list ap);
-void		double_conv(t_buffer *out, const t_fmt *fmt, va_list ap);
+void		pf_dtoa(t_buffer *out, double d, const t_fmt *fmt);
+void		pf_ldtoa(t_buffer *out, long double d, const t_fmt *fmt);
+void		default_conv(t_buffer *out, t_fmt *fmt, va_list ap);
+void		percent_conv(t_buffer *out, t_fmt *fmt, va_list ap);
+void		s_conv(t_buffer *out, t_fmt *fmt, va_list ap);
+void		c_conv(t_buffer *out, t_fmt *fmt, va_list ap);
+void		p_conv(t_buffer *out, t_fmt *fmt, va_list ap);
+void		signed_conv(t_buffer *out, t_fmt *fmt, va_list ap);
+void		unsigned_conv(t_buffer *out, t_fmt *fmt, va_list ap);
+void		octal_conv(t_buffer *out, t_fmt *fmt, va_list ap);
+void		hex_conv(t_buffer *out,  t_fmt *fmt, va_list ap);
+void		double_conv(t_buffer *out,  t_fmt *fmt, va_list ap);
 int			ft_printf(const char * format, ...);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/14 12:23:11 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/05/25 08:24:56 by debby            ###   ########.fr       */
+/*   Updated: 2020/06/18 15:59:12 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,14 @@
 #include "libftprintf.h"
 #include "libft.h"
 
-void	default_conv(t_buffer *out, const t_fmt *f, va_list ap)
+void	default_conv(t_buffer *out, t_fmt *f, va_list ap)
 {
 	(void)out;
 	(void)f;
 	(void)ap;
 }
 
-void	percent_conv(t_buffer *out, const t_fmt *f, va_list ap)
+void	percent_conv(t_buffer *out, t_fmt *f, va_list ap)
 {
 #if __APPLE__
 	int		pad_len;
@@ -40,7 +40,7 @@ void	percent_conv(t_buffer *out, const t_fmt *f, va_list ap)
 #endif
 }
 
-void	c_conv(t_buffer *out, const t_fmt *f, va_list ap)
+void	c_conv(t_buffer *out, t_fmt *f, va_list ap)
 {
 	int		c;
 	int		pad_len;
@@ -55,7 +55,7 @@ void	c_conv(t_buffer *out, const t_fmt *f, va_list ap)
 		pf_putc(f->padchar, out);
 }
 
-void	s_conv(t_buffer *out, const t_fmt *f, va_list ap)
+void	s_conv(t_buffer *out, t_fmt *f, va_list ap)
 {
 	char	*s;
 	int		value_len;

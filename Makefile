@@ -23,11 +23,16 @@ SRC = ft_printf.c\
 	  pf_simple_atoi.c\
 	  pf_utoa_base.c\
 	  pf_dtoa.c\
-	  bignum/bignum.c
+	  bignum/bignum.c\
+	  math/ft_fabs.c\
+	  math/ft_isinf.c\
+	  math/ft_isnan.c\
+	  math/ft_issub.c\
+	  math/ft_trunc.c
 
 OBJ = $(SRC:%.c=$(OBJDIR)/%.o)
 
-$(shell mkdir -p $(OBJDIR); mkdir -p $(OBJDIR)/bignum)
+$(shell mkdir -p $(OBJDIR) $(OBJDIR)/bignum $(OBJDIR)/math)
 
 
 all: $(NAME)
@@ -41,8 +46,10 @@ $(NAME): $(OBJ)
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c includes/libftprintf.h
 	$(CC) $(CCFLAGS) -c -o $@ $< $(INCFLAGS)
-$(OBJDIR)/pf_dtoa.o: includes/bignum.h
-$(OBJDIR)/bignum/bignum.o: includes/bignum.h
+$(OBJDIR)/pf_double_conv.o: includes/float.h
+$(OBJDIR)/pf_dtoa.o: includes/bignum.h includes/float.h
+$(OBJDIR)/bignum/%.o: includes/bignum.h
+$(OBJDIR)/math/%.o: includes/float.h
 
 .PHONY: all clean fclean re
 

@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/14 12:55:31 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/05/26 00:17:39 by debby            ###   ########.fr       */
+/*   Updated: 2020/06/18 16:00:00 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	pf_putnbr(t_buffer *out, const char *value_start, const char *prefix,
 		pf_putc(fmt->padchar, out);
 }
 
-void	p_conv(t_buffer *out, const t_fmt *fmt, va_list ap)
+void	p_conv(t_buffer *out, t_fmt *fmt, va_list ap)
 {
 	char			str[MAXBUF_ITOA];
 	unsigned long	adr;
@@ -73,7 +73,7 @@ static char	sign_prefix(long long nb, const t_fmt *fmt)
 }
 
 #define MAXBUF_SIGN_PREFIX 2
-void		signed_conv(t_buffer *out, const t_fmt *fmt, va_list ap)
+void		signed_conv(t_buffer *out, t_fmt *fmt, va_list ap)
 {
 	char			str[MAXBUF_ITOA];
 	char			prefix[MAXBUF_SIGN_PREFIX];
@@ -99,7 +99,7 @@ void		signed_conv(t_buffer *out, const t_fmt *fmt, va_list ap)
 	pf_putnbr(out, value_start, prefix, fmt);
 }
 
-void		unsigned_conv(t_buffer *out, const t_fmt *fmt, va_list ap)
+void		unsigned_conv(t_buffer *out, t_fmt *fmt, va_list ap)
 {
 	char				str[MAXBUF_ITOA];
 	unsigned long long	nb;
@@ -119,7 +119,7 @@ void		unsigned_conv(t_buffer *out, const t_fmt *fmt, va_list ap)
 	pf_putnbr(out, value_start, "", fmt);
 }
 
-void		octal_conv(t_buffer *out, const t_fmt *fmt, va_list ap)
+void		octal_conv(t_buffer *out, t_fmt *fmt, va_list ap)
 {
 	char				str[MAXBUF_ITOA];
 	unsigned long long	nb;
@@ -142,7 +142,7 @@ void		octal_conv(t_buffer *out, const t_fmt *fmt, va_list ap)
 		pf_putnbr(out, value_start, "", fmt);
 }
 
-void		hex_conv(t_buffer *out, const t_fmt *fmt, va_list ap)
+void		hex_conv(t_buffer *out, t_fmt *fmt, va_list ap)
 {
 	char				str[MAXBUF_ITOA];
 	unsigned long long	nb;
