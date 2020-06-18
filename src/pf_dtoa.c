@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/12 04:49:33 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/06/18 22:06:45 by debby            ###   ########.fr       */
+/*   Updated: 2020/06/18 22:46:27 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,7 @@ void	pf_putdbl_quick(t_buffer *out, double nb, const t_fmt *fmt)
 {
 	double	ipart;
 	double	fpart;
+	double	frem;
 	char	buf[MAXBUF_ITOA];
 	char	buf2[MAXBUF_ITOA];
 	char	*i_start;
@@ -125,7 +126,8 @@ void	pf_putdbl_quick(t_buffer *out, double nb, const t_fmt *fmt)
 	nb = ft_fabs(nb);
 	ipart = ft_trunc(nb);
 	fpart = ((nb - ipart) * g_pow10[fmt->precision]);
-	if (fpart - ft_trunc(fpart) >= 0.5)
+	frem = fpart - ft_trunc(fpart);
+	if ((nb > 0 && frem >= 0.5) || (nb < 0 && frem > 0.5))
 		fpart++;
 	if (fpart > (double)g_pow10[fmt->precision])
 	{
@@ -178,7 +180,7 @@ void	pf_put_longdbl_quick(t_buffer *out, long double nb, const t_fmt *fmt)
 	ipart = ft_truncl(nb);
 	fpart = ((nb - ipart) * (long double)g_pow10[fmt->precision]);
 	frem = fpart - ft_truncl(fpart);
-	if ((nb > 0 && frem > 0.5) || (nb < 0 && frem >= 0.5))
+	if ((nb > 0 && frem >= 0.5) || (nb < 0 && frem > 0.5))
 		fpart++;
 	if (fpart > (long double)g_pow10[fmt->precision])
 	{
@@ -220,11 +222,6 @@ void	pf_dtoa(t_buffer *out, double nb, const t_fmt *fmt)
 	t_big			big;
 	char			*digits;
 
-	if (ft_fabs(nb) < (double)ULONG_MAX && fmt->precision < 20)
-	{
-		pf_putdbl_quick(out, nb, fmt);
-		return ;
-	}
 	d.d = nb;
 	exponent = d.bits.exponent;
 	mantissa = d.bits.mantissa;
