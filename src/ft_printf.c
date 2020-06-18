@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/27 18:24:37 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/05/17 15:31:19 by qsharoly         ###   ########.fr       */
+/*   Updated: 2020/06/18 19:43:27 by qsharoly         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void		write_args(t_buffer *b, const char *format, va_list ap)
 	{
 		if (*format == '%')
 		{
-			fmt = pf_parse_specifier(format);
+			fmt = pf_parse_specifier(format, ap);
 			fmt.write_arg(b, &fmt, ap);
 			format += fmt.spec_length;
 		}

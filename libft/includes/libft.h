@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/04 16:08:51 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/05/18 01:00:17 by qsharoly         ###   ########.fr       */
+/*   Updated: 2020/06/18 19:40:02 by qsharoly         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,7 @@ void			ft_btree_free_node(t_btree **tree, void (*del)(void *, size_t));
 void			ft_btree_delete(t_btree **tree, void (*del)(void *, size_t));
 void			ft_del_bzero(void *data, size_t size);
 void			ft_simple_del(void *data, size_t size);
+int				ft_iabs(int i);
 int				ft_imax(int a, int b);
 int				ft_imin(int a, int b);
 

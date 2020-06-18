@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 15:31:58 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/06/18 16:01:11 by debby            ###   ########.fr       */
+/*   Updated: 2020/06/18 19:43:08 by qsharoly         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void		pf_error(const char *msg);
 void		pf_putc(int c, t_buffer *buf);
 void		pf_puts(const char *s, t_buffer *b);
 void		pf_nputs(const char *s, int len, t_buffer *b);
-t_fmt		pf_parse_specifier(const char *str);
+t_fmt		pf_parse_specifier(const char *str, va_list ap);
 int			pf_strchr_idx(char needle, const char *hay);
 int			pf_simple_atoi(const char *s);
 char		*pf_utoa_base(char *buffer, unsigned long long value,

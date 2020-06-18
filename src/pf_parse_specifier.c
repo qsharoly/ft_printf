@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/14 13:26:37 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/06/18 15:58:57 by debby            ###   ########.fr       */
+/*   Updated: 2020/06/18 20:08:19 by qsharoly         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ static void		(*choose_conv(char type))(t_buffer *, t_fmt *, va_list)
 	char	*types;
 
 	types = "%cspdiuoxXf";
-	//types = "%cspdiuoxX";
 	i = pf_strchr_idx(type, types);
 	if (i >= 0)
 		return (g_conv_funcs[i]);
@@ -65,7 +64,7 @@ static const char	*parse_flags(const char *pos, t_fmt *fmt)
 	return (pos);
 }
 
-static const char	*parse_length_modifier(const char *pos, t_fmt *fmt)
+static const char	*parse_type_modifier(const char *pos, t_fmt *fmt)
 {
 	if (*pos == 'h' && *(pos + 1) == 'h')
 	{
@@ -119,7 +118,41 @@ static char		choose_padchar(const t_fmt *fmt)
 	return (padchar);
 }
 
-t_fmt			pf_parse_specifier(const char *str)
+const char		*parse_min_width(const char *pos, t_fmt *fmt, va_list ap)
+{
+	int		nb;
+
+	if (*pos == '*')
+	{
+		pos++;
+		nb = va_arg(ap, int);
+		if (nb < 0)
+			fmt->left_justify = 1;
+		fmt->min_width = ft_iabs(nb);
+	}
+	else
+		pos = parse_a_number(pos, &fmt->min_width);
+	return (pos);
+}
+
+const char		*parse_precision(const char *pos, t_fmt *fmt, va_list ap)
+{
+	if (*pos == '.')
+	{
+		pos++;
+		if (*pos == '*')
+		{
+			pos++;
+			fmt->precision = va_arg(ap, int);
+		}
+		else
+			pos = parse_a_number(pos, &fmt->precision);
+		fmt->has_precision = 1;
+	}
+	return (pos);
+}
+
+t_fmt			pf_parse_specifier(const char *str, va_list ap)
 {
 	t_fmt		fmt;
 	const char	*pos;
@@ -128,14 +161,11 @@ t_fmt			pf_parse_specifier(const char *str)
 	ft_bzero((char *)&fmt, sizeof(t_fmt));
 	fmt.precision = 1;
 	pos = parse_flags(pos, &fmt);
-	pos = parse_a_number(pos, &fmt.min_width);
-	if (*pos == '.')
-	{
-		pos++;
-		pos = parse_a_number(pos, &fmt.precision);
-		fmt.has_precision = 1;
-	}
-	pos = parse_length_modifier(pos, &fmt);
+	pos = parse_min_width(pos, &fmt, ap);
+	if (ft_isdigit(*pos) || (*pos == '-' && ft_isdigit(*(pos + 1))))
+		pos = parse_min_width(pos, &fmt, ap);
+	pos = parse_precision(pos, &fmt, ap);
+	pos = parse_type_modifier(pos, &fmt);
 	if (ft_strhas("%cspdiuoxXf", *pos))
 	{
 		fmt.type = *pos;

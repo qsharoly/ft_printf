@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/12 04:49:33 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/06/18 17:53:53 by debby            ###   ########.fr       */
+/*   Updated: 2020/06/18 20:57:44 by qsharoly         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ static void	put_float(const char *digits, int split_point, char sign_prefix, con
 	pf_puts("Leeroy!", out);
 }
 
-static void	pf_putdbl_quick_long(t_buffer *out, long double nb, const t_fmt *fmt)
+static void	pf_put_longdbl_quick(t_buffer *out, long double nb, const t_fmt *fmt)
 {
 	long double	ipart;
 	long double	fpart;
@@ -122,10 +122,10 @@ static void	pf_putdbl_quick_long(t_buffer *out, long double nb, const t_fmt *fmt
 
 	sign = sign_prefix(nb < 0.0, fmt);
 	include_dot = (fmt->precision > 0 || fmt->alternative_form);
-	nb = ft_fabs(nb);
-	ipart = ft_trunc(nb);
+	nb = ft_fabsl(nb);
+	ipart = ft_truncl(nb);
 	fpart = ((nb - ipart) * g_pow10[fmt->precision]);
-	if (fpart - ft_trunc(fpart) >= 0.5)
+	if (fpart - ft_truncl(fpart) >= 0.5)
 		fpart++;
 	if (fpart > (long double)g_pow10[fmt->precision])
 	{
@@ -135,8 +135,8 @@ static void	pf_putdbl_quick_long(t_buffer *out, long double nb, const t_fmt *fmt
 	if (ipart == 0.0)
 		i_start = "0";
 	else
-		i_start = pf_utoa_base(buf, (unsigned long)ft_fabs(ipart), 10, 0);
-	f_start = pf_utoa_base(buf2, (unsigned long)ft_fabs(fpart), 10, 0);
+		i_start = pf_utoa_base(buf, (unsigned long)ft_fabsl(ipart), 10, 0);
+	f_start = pf_utoa_base(buf2, (unsigned long)ft_fabsl(fpart), 10, 0);
 	i = 0;
 	while (fpart * g_pow10[i] < g_pow10[fmt->precision] && i <= fmt->precision)
 		i++;
@@ -258,7 +258,7 @@ void	pf_ldtoa(t_buffer *out, long double nb, const t_fmt *fmt)
 
 	if (ft_fabsl(nb) < (long double)ULONG_MAX && fmt->precision < 20)
 	{
-		pf_putdbl_quick_long(out, nb, fmt);
+		pf_put_longdbl_quick(out, nb, fmt);
 		return ;
 	}
 	d.d = nb;

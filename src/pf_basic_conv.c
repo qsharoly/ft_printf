@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/14 12:23:11 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/06/18 15:59:12 by debby            ###   ########.fr       */
+/*   Updated: 2020/06/18 19:48:08 by qsharoly         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void	s_conv(t_buffer *out, t_fmt *f, va_list ap)
 	s = va_arg(ap, char *);
 	if (!s)
 		s = "(null)";
-	if (f->has_precision)
+	if (f->has_precision && f->precision >= 0)
 		value_len = ft_imin(ft_strlen(s), f->precision);
 	else
 		value_len = ft_strlen(s);
