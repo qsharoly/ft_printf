@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 15:31:58 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/06/18 19:43:08 by qsharoly         ###   ########.fr       */
+/*   Updated: 2020/06/18 21:56:34 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,10 @@ int			pf_simple_atoi(const char *s);
 char		*pf_utoa_base(char *buffer, unsigned long long value,
 				unsigned base, int upcase);
 void		pf_dtoa(t_buffer *out, double d, const t_fmt *fmt);
+void		pf_putdbl_quick(t_buffer *out, double nb, const t_fmt *fmt);
 void		pf_ldtoa(t_buffer *out, long double d, const t_fmt *fmt);
+void		pf_put_longdbl_quick(t_buffer *out, long double nb,
+				const t_fmt *fmt);
 void		default_conv(t_buffer *out, t_fmt *fmt, va_list ap);
 void		percent_conv(t_buffer *out, t_fmt *fmt, va_list ap);
 void		s_conv(t_buffer *out, t_fmt *fmt, va_list ap);

@@ -109,14 +109,12 @@ int		main(void)
 	check_dbl("%f", 1444565444646.6465424242242, "1444565444646.6465424242242");
 	check_dbl("%lf", 1444565444646.6465424242242, "1444565444646.6465424242242");
 	check_ld("%Lf", 1444565444646.6465424242242l, "1444565444646.6465424242242l");
-	/*
 	check_ld("%Lf", -958.125, "-958.125");
 	check_ld("%Lf", -0.3, "-0.3");
-	check_ld("%Lf", LDBL_MAX, "LDBL_MAX");
-	check_ld("%Lf", LDBL_MIN, "LDBL_MIN");
-	check_ld("%.0Lf", LDBL_MIN, "LDBL_MIN");
-	print_ld_bits(LDBL_MAX);
-	print_ld_bits(LDBL_MIN);
-	*/
+	check_ld("%Lf", __LDBL_MAX__, "LDBL_MAX");
+	check_ld("%Lf", __LDBL_MIN__, "LDBL_MIN");
+	check_ld("%.0Lf", __LDBL_MIN__, "LDBL_MIN");
+	print_ld_bits(__LDBL_MAX__);
+	print_ld_bits(__LDBL_MIN__);
 	return (0);
 }

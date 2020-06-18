@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/12 04:49:33 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/06/18 20:57:44 by qsharoly         ###   ########.fr       */
+/*   Updated: 2020/06/18 22:06:45 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,58 +106,7 @@ static void	put_float(const char *digits, int split_point, char sign_prefix, con
 	pf_puts("Leeroy!", out);
 }
 
-static void	pf_put_longdbl_quick(t_buffer *out, long double nb, const t_fmt *fmt)
-{
-	long double	ipart;
-	long double	fpart;
-	char	buf[MAXBUF_ITOA];
-	char	buf2[MAXBUF_ITOA];
-	char	*i_start;
-	char	*f_start;
-	char	sign;
-	int		pad_len;
-	int		i;
-	int		include_dot;
-
-
-	sign = sign_prefix(nb < 0.0, fmt);
-	include_dot = (fmt->precision > 0 || fmt->alternative_form);
-	nb = ft_fabsl(nb);
-	ipart = ft_truncl(nb);
-	fpart = ((nb - ipart) * g_pow10[fmt->precision]);
-	if (fpart - ft_truncl(fpart) >= 0.5)
-		fpart++;
-	if (fpart > (long double)g_pow10[fmt->precision])
-	{
-		ipart++;
-		fpart = 0;
-	}
-	if (ipart == 0.0)
-		i_start = "0";
-	else
-		i_start = pf_utoa_base(buf, (unsigned long)ft_fabsl(ipart), 10, 0);
-	f_start = pf_utoa_base(buf2, (unsigned long)ft_fabsl(fpart), 10, 0);
-	i = 0;
-	while (fpart * g_pow10[i] < g_pow10[fmt->precision] && i <= fmt->precision)
-		i++;
-	i = i - 1;
-	pad_len = fmt->min_width - ((sign != 0) + ft_strlen(i_start) + include_dot
-			+ i + ft_strlen(f_start));
-	if (!fmt->left_justify)
-		repeat(fmt->padchar, pad_len, out);
-	if (sign != 0)
-		pf_putc(sign, out);
-	pf_puts(i_start, out);
-	if (include_dot)
-		pf_putc('.', out);
-	while (i-- > 0)
-		pf_putc('0', out);
-	pf_puts(f_start, out);
-	if (fmt->left_justify)
-		repeat(fmt->padchar, pad_len, out);
-}
-
-static void	pf_putdbl_quick(t_buffer *out, double nb, const t_fmt *fmt)
+void	pf_putdbl_quick(t_buffer *out, double nb, const t_fmt *fmt)
 {
 	double	ipart;
 	double	fpart;
@@ -186,8 +135,61 @@ static void	pf_putdbl_quick(t_buffer *out, double nb, const t_fmt *fmt)
 	if (ipart == 0.0)
 		i_start = "0";
 	else
-		i_start = pf_utoa_base(buf, (unsigned long)ft_fabs(ipart), 10, 0);
-	f_start = pf_utoa_base(buf2, (unsigned long)ft_fabs(fpart), 10, 0);
+		i_start = pf_utoa_base(buf, (unsigned long)ipart, 10, 0);
+	f_start = pf_utoa_base(buf2, (unsigned long)fpart, 10, 0);
+	i = 0;
+	while (fpart * g_pow10[i] < g_pow10[fmt->precision] && i <= fmt->precision)
+		i++;
+	i = i - 1;
+	pad_len = fmt->min_width - ((sign != 0) + ft_strlen(i_start) + include_dot
+			+ i + ft_strlen(f_start));
+	if (!fmt->left_justify)
+		repeat(fmt->padchar, pad_len, out);
+	if (sign != 0)
+		pf_putc(sign, out);
+	pf_puts(i_start, out);
+	if (include_dot)
+		pf_putc('.', out);
+	while (i-- > 0)
+		pf_putc('0', out);
+	pf_puts(f_start, out);
+	if (fmt->left_justify)
+		repeat(fmt->padchar, pad_len, out);
+}
+
+void	pf_put_longdbl_quick(t_buffer *out, long double nb, const t_fmt *fmt)
+{
+	long double	ipart;
+	long double	fpart;
+	long double frem;
+	char	buf[MAXBUF_ITOA];
+	char	buf2[MAXBUF_ITOA];
+	char	*i_start;
+	char	*f_start;
+	char	sign;
+	int		pad_len;
+	int		i;
+	int		include_dot;
+
+
+	sign = sign_prefix(nb < 0.0, fmt);
+	include_dot = (fmt->precision > 0 || fmt->alternative_form);
+	nb = ft_fabsl(nb);
+	ipart = ft_truncl(nb);
+	fpart = ((nb - ipart) * (long double)g_pow10[fmt->precision]);
+	frem = fpart - ft_truncl(fpart);
+	if ((nb > 0 && frem > 0.5) || (nb < 0 && frem >= 0.5))
+		fpart++;
+	if (fpart > (long double)g_pow10[fmt->precision])
+	{
+		ipart++;
+		fpart = 0;
+	}
+	if (ipart == 0.0)
+		i_start = "0";
+	else
+		i_start = pf_utoa_base(buf, (unsigned long)ipart, 10, 0);
+	f_start = pf_utoa_base(buf2, (unsigned long)fpart, 10, 0);
 	i = 0;
 	while (fpart * g_pow10[i] < g_pow10[fmt->precision] && i <= fmt->precision)
 		i++;
@@ -256,16 +258,11 @@ void	pf_ldtoa(t_buffer *out, long double nb, const t_fmt *fmt)
 	t_big	big;
 	char	*digits;
 
-	if (ft_fabsl(nb) < (long double)ULONG_MAX && fmt->precision < 20)
-	{
-		pf_put_longdbl_quick(out, nb, fmt);
-		return ;
-	}
 	d.d = nb;
 	exponent = d.bits.exponent;
 	mantissa = d.bits.mantissa;
 	is_subnormal = (exponent == 0);
-	exponent = is_subnormal + exponent - F80_BIAS;
+	exponent = is_subnormal ? 1 - F80_BIAS : exponent - F80_BIAS;
 	dec_pow = -63;
 	while ((mantissa & 1L) == 0)
 	{

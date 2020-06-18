@@ -17,6 +17,19 @@ void	check_trunc(double d)
 	}
 }
 
+void	check_truncl(long double d)
+{
+	long double	actual = ft_truncl(d);
+	long double	expect = trunc(d);
+
+	if (actual != expect)
+	{
+		printf("failed at %Lf:\n", d);
+		printf("ft_trunc -> %Lf\n   trunc -> %Lf\n",
+				actual, expect);
+	}
+}
+
 int		main(int ac, char **av)
 {
 	if (ac > 1)
@@ -35,9 +48,12 @@ int		main(int ac, char **av)
 		}
 		return (42);
 	}
-	double	d = (double)ULONG_MAX;
+	double	d = (double)ULONG_MAX * 100;
 	while (fabs(d *= -0.71) > 0.0001)
 		check_trunc(d);
+	long double	ld = (double)ULONG_MAX * 100;
+	while (fabs(ld *= -0.71) > 0.0001)
+		check_trunc(ld);
 	return (21);
 }
 

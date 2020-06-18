@@ -6,7 +6,7 @@
 /*   By: debby <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/13 12:07:19 by debby             #+#    #+#             */
-/*   Updated: 2020/06/18 17:57:19 by debby            ###   ########.fr       */
+/*   Updated: 2020/06/18 22:22:33 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,11 @@ double	ft_trunc(double d)
 	return (tmp.d);
 }
 
+/*
+** TODO: needs thorough testing (mantissa has 64 bits, but somehow
+** the function works correctly only when we shift by (63 - e), not (64 - e))...
+*/
+
 long double	ft_truncl(long double d)
 {
 	union u_f80		tmp;
@@ -52,9 +57,9 @@ long double	ft_truncl(long double d)
 	e = tmp.bits.exponent - F80_BIAS;
 	if (e < 0)
 		return (d > 0.0 ? 0.0 : -0.0);
-	if (e > 64)
+	if (e > 63)
 		return (d);
 	m = tmp.bits.mantissa;
-	tmp.bits.mantissa = (m >> (64 - e)) << (64 - e);
+	tmp.bits.mantissa = (m >> (63 - e)) << (63 - e);
 	return (tmp.d);
 }
