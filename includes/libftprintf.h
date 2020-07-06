@@ -85,7 +85,9 @@ typedef			struct s_fmt
 }				t_fmt;
 
 void			pf_error(const char *msg);
-void			pf_putc(int c, t_stream *buf);
+void			pf_stream_init(t_stream *b, int target_fd);
+void			pf_stream_flush(t_stream *b);
+void			pf_putc(int c, t_stream *b);
 void			pf_puts(const char *s, t_stream *b);
 void			pf_nputs(const char *s, int len, t_stream *b);
 t_fmt			pf_parse_specifier(const char *str, va_list ap);

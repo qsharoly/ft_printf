@@ -15,6 +15,7 @@ ifeq ($(debug), yes)
 endif
 
 SRC = ft_printf.c\
+	  pf_stream.c\
 	  pf_parse_specifier.c\
 	  pf_get_arg.c\
 	  pf_basic_conv.c\
