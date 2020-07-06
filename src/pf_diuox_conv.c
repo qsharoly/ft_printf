@@ -57,41 +57,36 @@ void	conv_p(t_stream *out, t_fmt *fmt, union u_pfarg arg)
 	pf_putnbr(out, value_start, "0x", fmt);
 }
 
-static char	sign_prefix(long long nb, const t_fmt *fmt)
-{
-	if (nb < 0)
-		return ('-');
-	else if (fmt->prepend_plus)
-		return ('+');
-	else if (fmt->prepend_space)
-		return (' ');
-	else
-		return (0);
-}
-
-#define MAXBUF_SIGN_PREFIX 2
 void		conv_signed(t_stream *out, t_fmt *fmt, union u_pfarg arg)
 {
 	char			str[MAXBUF_ITOA];
-	char			prefix[MAXBUF_SIGN_PREFIX];
 	const char		*value_start;
+	const char		*prefix;
 
 	if (arg.as_i < 0)
 		value_start = pf_utoa_base(str, -arg.as_i, 10, 0);
 	else
 		value_start = pf_utoa_base(str, arg.as_i, 10, 0);
-	ft_bzero(prefix, MAXBUF_SIGN_PREFIX);
-	prefix[0] = sign_prefix(arg.as_i, fmt);
+	if (arg.as_i < 0)
+		prefix = "-";
+	else if (fmt->prepend_plus)
+		prefix = "+";
+	else if (fmt->prepend_space)
+		prefix = " ";
+	else
+		prefix = "";
 	pf_putnbr(out, value_start, prefix, fmt);
 }
 
 void		conv_unsigned(t_stream *out, t_fmt *fmt, union u_pfarg arg)
 {
-	char				str[MAXBUF_ITOA];
-	const char			*value_start;
+	char			str[MAXBUF_ITOA];
+	const char		*value_start;
+	const char		*prefix;
 
 	value_start = pf_utoa_base(str, arg.as_u, 10, 0);
-	pf_putnbr(out, value_start, "", fmt);
+	prefix = "";
+	pf_putnbr(out, value_start, prefix, fmt);
 }
 
 void		conv_oct(t_stream *out, t_fmt *fmt, union u_pfarg arg)
