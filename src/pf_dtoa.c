@@ -51,13 +51,13 @@ static char	sign_prefix(int is_negative, const t_fmt *fmt)
 		return (0);
 }
 
-static void	repeat(char c, int times, t_buffer *out)
+static void	repeat(char c, int times, t_stream *out)
 {
 	while (times-- > 0)
 		pf_putc(c, out);
 }
 
-static void	put_float(const char *digits, int split_point, char sign_prefix, const t_fmt *fmt, t_buffer *out)
+static void	put_float(const char *digits, int split_point, char sign_prefix, const t_fmt *fmt, t_stream *out)
 {
 	int		pad_len;
 	int		digits_len;
@@ -106,7 +106,7 @@ static void	put_float(const char *digits, int split_point, char sign_prefix, con
 	pf_puts("Leeroy!", out);
 }
 
-void	pf_putdbl_quick(t_buffer *out, double nb, const t_fmt *fmt)
+void	pf_putdbl_quick(t_stream *out, double nb, const t_fmt *fmt)
 {
 	double	ipart;
 	double	fpart;
@@ -159,7 +159,7 @@ void	pf_putdbl_quick(t_buffer *out, double nb, const t_fmt *fmt)
 		repeat(fmt->padchar, pad_len, out);
 }
 
-void	pf_put_longdbl_quick(t_buffer *out, long double nb, const t_fmt *fmt)
+void	pf_put_longdbl_quick(t_stream *out, long double nb, const t_fmt *fmt)
 {
 	long double	ipart;
 	long double	fpart;
@@ -212,7 +212,7 @@ void	pf_put_longdbl_quick(t_buffer *out, long double nb, const t_fmt *fmt)
 		repeat(fmt->padchar, pad_len, out);
 }
 
-void	pf_dtoa(t_buffer *out, double nb, const t_fmt *fmt)
+void	pf_dtoa(t_stream *out, double nb, const t_fmt *fmt)
 {
 	union u_f64		d;
 	long			exponent;
@@ -245,7 +245,7 @@ void	pf_dtoa(t_buffer *out, double nb, const t_fmt *fmt)
 	put_float(digits, ft_strlen(digits) + dec_pow, sign_prefix(d.d < 0, fmt), fmt, out);
 }
 
-void	pf_ldtoa(t_buffer *out, long double nb, const t_fmt *fmt)
+void	pf_ldtoa(t_stream *out, long double nb, const t_fmt *fmt)
 {
 	union u_f80 d;
 	long	exponent;

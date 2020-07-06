@@ -15,27 +15,22 @@
 #include "float.h"
 #include <limits.h>
 
-void		double_conv(t_buffer *out, t_fmt *fmt, va_list ap)
+void		conv_floating(t_stream *out, t_fmt *fmt, union u_pfarg arg)
 {
-	long double		l;
-	double			d;
-
 	if (fmt->has_precision == 0)
 		fmt->precision = DTOA_DEFAULT_PRECISION;
-	if (fmt->is_quad)
+	if (fmt->size == Size_longdouble)
 	{
-		l = va_arg(ap, long double);
-		if (ft_fabsl(l) < (long double)ULONG_MAX && fmt->precision < 20)
-			pf_put_longdbl_quick(out, l, fmt);
+		if (ft_fabsl(arg.as_ld) < (long double)ULONG_MAX && fmt->precision < 20)
+			pf_put_longdbl_quick(out, arg.as_ld, fmt);
 		else
-			pf_ldtoa(out, l, fmt);
+			pf_ldtoa(out, arg.as_ld, fmt);
 	}
 	else
 	{
-		d = va_arg(ap, double);
-		if (ft_fabs(d) < (double)ULONG_MAX && fmt->precision < 20)
-			pf_putdbl_quick(out, d, fmt);
+		if (ft_fabs(arg.as_d) < (double)ULONG_MAX && fmt->precision < 20)
+			pf_putdbl_quick(out, arg.as_d, fmt);
 		else
-			pf_dtoa(out, d, fmt);
+			pf_dtoa(out, arg.as_d, fmt);
 	}
 }

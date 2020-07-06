@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-int		pf_strchr_idx(char needle, const char *hay)
+int		pf_strget_index(const char *hay, char needle)
 {
 	int		i;
 

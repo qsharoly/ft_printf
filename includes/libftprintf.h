@@ -18,17 +18,53 @@
 # define STDOUT_FD 1
 # define BUFFER_SIZE 4096
 # define MAXBUF_ITOA (sizeof(long long int) * 8) //enough for binary
-# define TYPE_MISSING '\0'
 # define DTOA_DEFAULT_PRECISION 6
 
-typedef struct		s_buffer
+typedef struct		s_stream
 {
 	char	data[BUFFER_SIZE];
-	int		target_fd;
+	int		fd;
 	int		total_written;
 	int		pos;
 	int		space_left;
-}					t_buffer;
+}					t_stream;
+
+union				u_pfarg
+{
+	long long int		as_i;
+	long long unsigned	as_u;
+	long double			as_ld;
+	double				as_d;
+	void				*as_ptr;
+	char				*as_s;
+	char				as_c;
+};
+
+enum				e_size
+{
+	Size_hh,
+	Size_h,
+	Size_normal,
+	Size_l,
+	Size_ll,
+	Size_longdouble,
+};
+
+enum				e_type
+{
+	Type_percent = 0,
+	Type_caracter,
+	Type_string,
+	Type_pointer,
+	Type_signed_d,
+	Type_signed_i,
+	Type_unsigned,
+	Type_octal,
+	Type_hex,
+	Type_hex_uppercase,
+	Type_floating,
+	Type_none,
+};
 
 typedef			struct s_fmt
 {
@@ -37,46 +73,48 @@ typedef			struct s_fmt
 	unsigned	prepend_space:1;
 	unsigned	prepend_plus:1;
 	unsigned	alternative_form:1;
-	unsigned	is_char:1;
-	unsigned	is_short:1;
-	unsigned	is_int:1;
-	unsigned	is_long:1;
-	unsigned	is_longlong:1;
-	unsigned	is_quad:1;
 	unsigned	has_precision:1;
 	int			spec_length;
 	int			min_width;
 	int			value_width;
 	int			precision;
-	char		type;
+	enum e_size size;
+	enum e_type	type;
 	char		padchar;
-	void		(*write_arg)(t_buffer *b, struct s_fmt *fmt, va_list ap);
+	void		(*write_arg)(t_stream *b, struct s_fmt *fmt, va_list ap);
 }				t_fmt;
 
-void		pf_error(const char *msg);
-void		pf_putc(int c, t_buffer *buf);
-void		pf_puts(const char *s, t_buffer *b);
-void		pf_nputs(const char *s, int len, t_buffer *b);
-t_fmt		pf_parse_specifier(const char *str, va_list ap);
-int			pf_strchr_idx(char needle, const char *hay);
-int			pf_simple_atoi(const char *s);
-char		*pf_utoa_base(char *buffer, unsigned long long value,
-				unsigned base, int upcase);
-void		pf_dtoa(t_buffer *out, double d, const t_fmt *fmt);
-void		pf_putdbl_quick(t_buffer *out, double nb, const t_fmt *fmt);
-void		pf_ldtoa(t_buffer *out, long double d, const t_fmt *fmt);
-void		pf_put_longdbl_quick(t_buffer *out, long double nb,
-				const t_fmt *fmt);
-void		default_conv(t_buffer *out, t_fmt *fmt, va_list ap);
-void		percent_conv(t_buffer *out, t_fmt *fmt, va_list ap);
-void		s_conv(t_buffer *out, t_fmt *fmt, va_list ap);
-void		c_conv(t_buffer *out, t_fmt *fmt, va_list ap);
-void		p_conv(t_buffer *out, t_fmt *fmt, va_list ap);
-void		signed_conv(t_buffer *out, t_fmt *fmt, va_list ap);
-void		unsigned_conv(t_buffer *out, t_fmt *fmt, va_list ap);
-void		octal_conv(t_buffer *out, t_fmt *fmt, va_list ap);
-void		hex_conv(t_buffer *out,  t_fmt *fmt, va_list ap);
-void		double_conv(t_buffer *out,  t_fmt *fmt, va_list ap);
-int			ft_printf(const char * format, ...);
+void			pf_error(const char *msg);
+void			pf_putc(int c, t_stream *buf);
+void			pf_puts(const char *s, t_stream *b);
+void			pf_nputs(const char *s, int len, t_stream *b);
+t_fmt			pf_parse_specifier(const char *str, va_list ap);
+int				pf_strget_index(const char *hay, char needle);
+int				pf_simple_atoi(const char *s);
+char			*pf_utoa_base(char *buffer, unsigned long long value,
+					unsigned base, int upcase);
+void			pf_dtoa(t_stream *out, double d, const t_fmt *fmt);
+void			pf_putdbl_quick(t_stream *out, double nb, const t_fmt *fmt);
+void			pf_ldtoa(t_stream *out, long double d, const t_fmt *fmt);
+void			pf_put_longdbl_quick(t_stream *out, long double nb,
+					const t_fmt *fmt);
+void			conv_percent(t_stream *out, t_fmt *fmt, union u_pfarg arg);
+void			conv_s(t_stream *out, t_fmt *fmt, union u_pfarg arg);
+void			conv_c(t_stream *out, t_fmt *fmt, union u_pfarg arg);
+void			conv_p(t_stream *out, t_fmt *fmt, union u_pfarg arg);
+void			conv_signed(t_stream *out, t_fmt *fmt, union u_pfarg arg);
+void			conv_unsigned(t_stream *out, t_fmt *fmt, union u_pfarg arg);
+void			conv_oct(t_stream *out, t_fmt *fmt, union u_pfarg arg);
+void			conv_hex(t_stream *out,  t_fmt *fmt, union u_pfarg arg);
+void			conv_floating(t_stream *out,  t_fmt *fmt, union u_pfarg arg);
+void			conv_default(t_stream *out, t_fmt *fmt, union u_pfarg arg);
+union u_pfarg	get_none(va_list ap, enum e_size size);
+union u_pfarg	get_char(va_list ap, enum e_size size);
+union u_pfarg	get_string(va_list ap, enum e_size size);
+union u_pfarg	get_pointer(va_list ap, enum e_size size);
+union u_pfarg	get_signed(va_list ap, enum e_size size);
+union u_pfarg	get_unsigned(va_list ap, enum e_size size);
+union u_pfarg	get_floating(va_list ap, enum e_size size);
+int				ft_printf(const char * format, ...);
 
 #endif

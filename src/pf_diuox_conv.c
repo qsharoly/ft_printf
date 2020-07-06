@@ -13,10 +13,7 @@
 #include "libft.h"
 #include "libftprintf.h"
 
-#define LOWCASE 0
-#define UPCASE 1
-
-void	pf_putnbr(t_buffer *out, const char *value_start, const char *prefix,
+void	pf_putnbr(t_stream *out, const char *value_start, const char *prefix,
 			const t_fmt *fmt)
 {
 	int				value_len;
@@ -42,13 +39,13 @@ void	pf_putnbr(t_buffer *out, const char *value_start, const char *prefix,
 		pf_putc(fmt->padchar, out);
 }
 
-void	p_conv(t_buffer *out, t_fmt *fmt, va_list ap)
+void	conv_p(t_stream *out, t_fmt *fmt, union u_pfarg arg)
 {
 	char			str[MAXBUF_ITOA];
 	unsigned long	adr;
 	const char		*value_start;
 
-	adr = (unsigned long)va_arg(ap, void *);
+	adr = (unsigned long)arg.as_ptr;
 #if __linux__
 	if (adr == 0)
 	{
@@ -56,7 +53,7 @@ void	p_conv(t_buffer *out, t_fmt *fmt, va_list ap)
 		return ;
 	}
 #endif
-	value_start = pf_utoa_base(str, adr, 16, LOWCASE);
+	value_start = pf_utoa_base(str, adr, 16, 0);
 	pf_putnbr(out, value_start, "0x", fmt);
 }
 
@@ -73,96 +70,54 @@ static char	sign_prefix(long long nb, const t_fmt *fmt)
 }
 
 #define MAXBUF_SIGN_PREFIX 2
-void		signed_conv(t_buffer *out, t_fmt *fmt, va_list ap)
+void		conv_signed(t_stream *out, t_fmt *fmt, union u_pfarg arg)
 {
 	char			str[MAXBUF_ITOA];
 	char			prefix[MAXBUF_SIGN_PREFIX];
-	long long int	nb;
 	const char		*value_start;
 
-	if (fmt->is_char)
-		nb = (char)va_arg(ap, int);
-	else if (fmt->is_short)
-		nb = (short)va_arg(ap, int);
-	else if (fmt->is_long)
-		nb = va_arg(ap, long);
-	else if (fmt->is_longlong)
-		nb = va_arg(ap, long long);
+	if (arg.as_i < 0)
+		value_start = pf_utoa_base(str, -arg.as_i, 10, 0);
 	else
-		nb = va_arg(ap, int);
-	if (nb < 0)
-		value_start = pf_utoa_base(str, (unsigned long long)-nb, 10, LOWCASE);
-	else
-		value_start = pf_utoa_base(str, (unsigned long long)nb, 10, LOWCASE);
+		value_start = pf_utoa_base(str, arg.as_i, 10, 0);
 	ft_bzero(prefix, MAXBUF_SIGN_PREFIX);
-	prefix[0] = sign_prefix(nb, fmt);
+	prefix[0] = sign_prefix(arg.as_i, fmt);
 	pf_putnbr(out, value_start, prefix, fmt);
 }
 
-void		unsigned_conv(t_buffer *out, t_fmt *fmt, va_list ap)
+void		conv_unsigned(t_stream *out, t_fmt *fmt, union u_pfarg arg)
 {
 	char				str[MAXBUF_ITOA];
-	unsigned long long	nb;
 	const char			*value_start;
 
-	if (fmt->is_char)
-		nb = (unsigned char)va_arg(ap, unsigned int);
-	else if (fmt->is_short)
-		nb = (unsigned short)va_arg(ap, unsigned int);
-	else if (fmt->is_long)
-		nb = va_arg(ap, unsigned long);
-	else if (fmt->is_longlong)
-		nb = va_arg(ap, unsigned long long);
-	else
-		nb = va_arg(ap, unsigned int);
-	value_start = pf_utoa_base(str, nb, 10, 0);
+	value_start = pf_utoa_base(str, arg.as_u, 10, 0);
 	pf_putnbr(out, value_start, "", fmt);
 }
 
-void		octal_conv(t_buffer *out, t_fmt *fmt, va_list ap)
+void		conv_oct(t_stream *out, t_fmt *fmt, union u_pfarg arg)
 {
 	char				str[MAXBUF_ITOA];
-	unsigned long long	nb;
 	const char			*value_start;
+	const char			*prefix;
 
-	if (fmt->is_char)
-		nb = (unsigned char)va_arg(ap, unsigned int);
-	else if (fmt->is_short)
-		nb = (unsigned short)va_arg(ap, unsigned int);
-	else if (fmt->is_long)
-		nb = va_arg(ap, unsigned long);
-	else if (fmt->is_longlong)
-		nb = va_arg(ap, unsigned long long);
-	else
-		nb = va_arg(ap, unsigned int);
-	value_start = pf_utoa_base(str, nb, 8, 0);
+	value_start = pf_utoa_base(str, arg.as_u, 8, 0);
 	if (fmt->alternative_form && ((int)ft_strlen(value_start) >= fmt->precision))
-		pf_putnbr(out, value_start, "0", fmt);
+		prefix = "0";
 	else
-		pf_putnbr(out, value_start, "", fmt);
+		prefix = "";
+	pf_putnbr(out, value_start, prefix, fmt);
 }
 
-void		hex_conv(t_buffer *out, t_fmt *fmt, va_list ap)
+void		conv_hex(t_stream *out, t_fmt *fmt, union u_pfarg arg)
 {
 	char				str[MAXBUF_ITOA];
-	unsigned long long	nb;
 	const char			*value_start;
 	const char			*prefix;
 	int					upcase;
 
-	if (fmt->is_char)
-		nb = (unsigned char)va_arg(ap, unsigned int);
-	else if (fmt->is_short)
-		nb = (unsigned short)va_arg(ap, unsigned int);
-	else if (fmt->is_long)
-		nb = va_arg(ap, unsigned long);
-	else if (fmt->is_longlong)
-		nb = va_arg(ap, unsigned long long);
-	else
-		nb = va_arg(ap, unsigned int);
-	upcase = (fmt->type == 'X');
-	value_start = pf_utoa_base(str, nb, 16, upcase);
-	if (fmt->alternative_form && nb > 0)
+	upcase = (fmt->type == Type_hex_uppercase);
+	value_start = pf_utoa_base(str, arg.as_u, 16, upcase);
+	if (fmt->alternative_form && arg.as_u > 0)
 		prefix = upcase ? "0X" : "0x";
 	else
 		prefix = "";

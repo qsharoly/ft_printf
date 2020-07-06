@@ -13,38 +13,6 @@
 #include "libft.h"
 #include "libftprintf.h"
 
-/*
-** Number and order of conversion functions must correspond to
-** the value of the string 'types' in choose_conv function.
-*/
-
-static void (*g_conv_funcs[11])(t_buffer *, t_fmt *, va_list) = {
-	percent_conv,
-	c_conv,
-	s_conv,
-	p_conv,
-	signed_conv,
-	signed_conv,
-	unsigned_conv,
-	octal_conv,
-	hex_conv,
-	hex_conv,
-	double_conv
-};
-
-static void		(*choose_conv(char type))(t_buffer *, t_fmt *, va_list)
-{
-	int		i;
-	char	*types;
-
-	types = "%cspdiuoxXf";
-	i = pf_strchr_idx(type, types);
-	if (i >= 0)
-		return (g_conv_funcs[i]);
-	else
-		return (default_conv);
-}
-
 static const char	*parse_flags(const char *pos, t_fmt *fmt)
 {
 	while (ft_strhas("0-+ #", *pos))
@@ -64,35 +32,35 @@ static const char	*parse_flags(const char *pos, t_fmt *fmt)
 	return (pos);
 }
 
-static const char	*parse_type_modifier(const char *pos, t_fmt *fmt)
+static const char	*parse_size_modifier(const char *pos, t_fmt *fmt)
 {
 	if (*pos == 'h' && *(pos + 1) == 'h')
 	{
 		pos += 2;
-		fmt->is_char = 1;
+		fmt->size = Size_hh;
 	}
 	else if (*pos == 'h')
 	{
 		pos++;
-		fmt->is_short = 1;
+		fmt->size = Size_h;
 	}
 	else if (*pos == 'l' && *(pos + 1) == 'l')
 	{
 		pos += 2;
-		fmt->is_longlong = 1;
+		fmt->size = Size_ll;
 	}
 	else if (*pos == 'l')
 	{
 		pos++;
-		fmt->is_long = 1;
+		fmt->size = Size_l;
 	}
 	else if (*pos == 'L')
 	{
 		pos++;
-		fmt->is_quad = 1;
+		fmt->size = Size_longdouble;
 	}
 	else
-		fmt->is_int = 1;
+		fmt->size = Size_normal;
 	return (pos);
 }
 
@@ -104,7 +72,7 @@ static const char	*parse_a_number(const char *pos, int *value)
 	return (pos);
 }
 
-static char		choose_padchar(const t_fmt *fmt)
+static char			choose_padchar(const t_fmt *fmt)
 {
 	char	padchar;
 
@@ -112,13 +80,19 @@ static char		choose_padchar(const t_fmt *fmt)
 		padchar = '0';
 	else
 		padchar = ' ';
-	if (fmt->pad_with_zero && (ft_strhas("diuoxX", fmt->type))
-			&& fmt->precision != 1)
+	if (fmt->pad_with_zero && fmt->precision != 1
+		&& (fmt->type == Type_signed_d
+			|| fmt->type == Type_signed_i
+			|| fmt->type == Type_unsigned
+			|| fmt->type == Type_octal
+			|| fmt->type == Type_hex
+			|| fmt->type == Type_hex_uppercase)
+		)
 		padchar = ' ';
 	return (padchar);
 }
 
-const char		*parse_min_width(const char *pos, t_fmt *fmt, va_list ap)
+static const char	*parse_min_width(const char *pos, t_fmt *fmt, va_list ap)
 {
 	int		nb;
 
@@ -135,7 +109,7 @@ const char		*parse_min_width(const char *pos, t_fmt *fmt, va_list ap)
 	return (pos);
 }
 
-const char		*parse_precision(const char *pos, t_fmt *fmt, va_list ap)
+static const char	*parse_precision(const char *pos, t_fmt *fmt, va_list ap)
 {
 	if (*pos == '.')
 	{
@@ -152,7 +126,26 @@ const char		*parse_precision(const char *pos, t_fmt *fmt, va_list ap)
 	return (pos);
 }
 
-t_fmt			pf_parse_specifier(const char *str, va_list ap)
+/*
+** the characters in the type_symbols string must correspond to
+** all of the conversion types in the enum e_type
+** up to (but excluding) Type_none
+*/
+
+static const char	*parse_type(const char *pos, t_fmt *fmt)
+{
+	const char	*type_symbols;
+	int			type_index;
+
+	type_symbols = "%cspdiuoxXf";
+	type_index = pf_strget_index(type_symbols, *pos);
+	fmt->type = type_index >= 0 ? type_index : Type_none;
+	if (fmt->type != Type_none)
+		pos++;
+	return (pos);
+}
+
+t_fmt				pf_parse_specifier(const char *str, va_list ap)
 {
 	t_fmt		fmt;
 	const char	*pos;
@@ -165,15 +158,8 @@ t_fmt			pf_parse_specifier(const char *str, va_list ap)
 	if (ft_isdigit(*pos) || (*pos == '-' && ft_isdigit(*(pos + 1))))
 		pos = parse_min_width(pos, &fmt, ap);
 	pos = parse_precision(pos, &fmt, ap);
-	pos = parse_type_modifier(pos, &fmt);
-	if (ft_strhas("%cspdiuoxXf", *pos))
-	{
-		fmt.type = *pos;
-		pos++;
-	}
-	else
-		fmt.type = TYPE_MISSING;
-	fmt.write_arg = choose_conv(fmt.type);
+	pos = parse_size_modifier(pos, &fmt);
+	pos = parse_type(pos, &fmt);
 	fmt.padchar = choose_padchar(&fmt);
 	fmt.spec_length = pos - str;
 	return (fmt);

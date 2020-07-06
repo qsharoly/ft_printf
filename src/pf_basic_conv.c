@@ -14,19 +14,19 @@
 #include "libftprintf.h"
 #include "libft.h"
 
-void	default_conv(t_buffer *out, t_fmt *f, va_list ap)
+void	conv_default(t_stream *out, t_fmt *f, union u_pfarg arg)
 {
 	(void)out;
 	(void)f;
-	(void)ap;
+	(void)arg;
 }
 
-void	percent_conv(t_buffer *out, t_fmt *f, va_list ap)
+void	conv_percent(t_stream *out, t_fmt *f, union u_pfarg arg)
 {
 #if __APPLE__
 	int		pad_len;
 
-	(void)ap;
+	(void)arg;
 	pad_len = ft_imax(0, f->min_width - 1);
 	while (!f->left_justify && pad_len-- > 0)
 		pf_putc(f->padchar, out);
@@ -34,44 +34,39 @@ void	percent_conv(t_buffer *out, t_fmt *f, va_list ap)
 	while (f->left_justify && pad_len-- > 0)
 		pf_putc(f->padchar, out);
 #elif __linux__
-	(void)ap;
+	(void)arg;
 	(void)f;
 	pf_putc('%', out);
 #endif
 }
 
-void	c_conv(t_buffer *out, t_fmt *f, va_list ap)
+void	conv_c(t_stream *out, t_fmt *f, union u_pfarg arg)
 {
-	int		c;
 	int		pad_len;
 
-	(void)f;
-	c = va_arg(ap, int);
 	pad_len = ft_imax(0, f->min_width - 1);
 	while (!f->left_justify && pad_len-- > 0)
 		pf_putc(f->padchar, out);
-	pf_putc(c, out);
+	pf_putc(arg.as_c, out);
 	while (f->left_justify && pad_len-- > 0)
 		pf_putc(f->padchar, out);
 }
 
-void	s_conv(t_buffer *out, t_fmt *f, va_list ap)
+void	conv_s(t_stream *out, t_fmt *f, union u_pfarg arg)
 {
-	char	*s;
 	int		value_len;
 	int		pad_len;
 
-	s = va_arg(ap, char *);
-	if (!s)
-		s = "(null)";
+	if (!arg.as_s)
+		arg.as_s = "(null)";
 	if (f->has_precision && f->precision >= 0)
-		value_len = ft_imin(ft_strlen(s), f->precision);
+		value_len = ft_imin(ft_strlen(arg.as_s), f->precision);
 	else
-		value_len = ft_strlen(s);
+		value_len = ft_strlen(arg.as_s);
 	pad_len = ft_imax(0, f->min_width - value_len);
 	while (!f->left_justify && pad_len-- > 0)
 		pf_putc(f->padchar, out);
-	pf_nputs(s, value_len, out);
+	pf_nputs(arg.as_s, value_len, out);
 	while (f->left_justify && pad_len-- > 0)
 		pf_putc(f->padchar, out);
 }
