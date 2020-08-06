@@ -1,9 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pf_get_arg.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: debby <marvin@42.fr>                       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/07/15 07:06:23 by debby             #+#    #+#             */
+/*   Updated: 2020/08/06 18:30:04 by debby            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <libftprintf.h>
 
 /*
 ** get_none:
 ** dont get anything from the va_list.
-** we have to return something just to conform to the type signature.
+** we have to return something just to conform to the function type signature.
 */
 
 union u_pfarg	get_none(va_list ap, enum e_size size)

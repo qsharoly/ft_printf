@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/27 18:24:37 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/06/18 19:43:27 by qsharoly         ###   ########.fr       */
+/*   Updated: 2020/08/06 18:46:03 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,11 @@
 #include "libftprintf.h"
 
 /*
-** Number and order of g_write_arg and g_get_arg functions
+** Number and order of g_print_arg and g_get_arg functions
 ** must correspond to conversion types in enum e_types
 */
 
-static void (*g_write_arg[12])(t_stream *, t_fmt *, union u_pfarg) = {
+static void (*g_print_arg[12])(t_stream *, t_fmt *, union u_pfarg) = {
 	conv_percent,
 	conv_c,
 	conv_s,
@@ -55,7 +55,7 @@ void		pf_error(const char *msg)
 	exit(1);
 }
 
-void		write_args(t_stream *b, const char *format, va_list ap)
+void		print_args(t_stream *out, const char *format, va_list ap)
 {
 	t_fmt			fmt;
 	union u_pfarg	arg;
@@ -65,13 +65,13 @@ void		write_args(t_stream *b, const char *format, va_list ap)
 		if (*format == '%')
 		{
 			fmt = pf_parse_specifier(format, ap);
-			arg = g_get_arg[fmt.type](ap, fmt.size);
-			g_write_arg[fmt.type](b, &fmt, arg);
+			arg = g_get_arg[fmt.conv](ap, fmt.size);
+			g_print_arg[fmt.conv](out, &fmt, arg);
 			format += fmt.spec_length;
 		}
 		else
 		{
-			pf_putc(*format, b);
+			pf_putc(*format, out);
 			format++;
 		}
 	}
@@ -84,7 +84,7 @@ int			ft_printf(const char *format, ...)
 
 	pf_stream_init(&b, STDOUT_FD);
 	va_start(ap, format);
-	write_args(&b, format, ap);
+	print_args(&b, format, ap);
 	va_end(ap);
 	pf_stream_flush(&b);
 	return (b.total_written);

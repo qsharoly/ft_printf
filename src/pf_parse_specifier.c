@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/14 13:26:37 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/06/18 20:08:19 by qsharoly         ###   ########.fr       */
+/*   Updated: 2020/08/06 18:17:31 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,12 +81,12 @@ static char			choose_padchar(const t_fmt *fmt)
 	else
 		padchar = ' ';
 	if (fmt->pad_with_zero && fmt->precision != 1
-		&& (fmt->type == Type_signed_d
-			|| fmt->type == Type_signed_i
-			|| fmt->type == Type_unsigned
-			|| fmt->type == Type_octal
-			|| fmt->type == Type_hex
-			|| fmt->type == Type_hex_uppercase)
+		&& (fmt->conv == Conv_signed_d
+			|| fmt->conv == Conv_signed_i
+			|| fmt->conv == Conv_unsigned
+			|| fmt->conv == Conv_octal
+			|| fmt->conv == Conv_hex
+			|| fmt->conv == Conv_hex_uppercase)
 		)
 		padchar = ' ';
 	return (padchar);
@@ -127,20 +127,20 @@ static const char	*parse_precision(const char *pos, t_fmt *fmt, va_list ap)
 }
 
 /*
-** the characters in the type_symbols string must correspond to
-** all of the conversion types in the enum e_type
-** up to (but excluding) Type_none
+** the characters in the conv_symbols string must correspond to
+** all of the conversion types in the enum e_conv
+** up to (but excluding) Conv_none
 */
 
-static const char	*parse_type(const char *pos, t_fmt *fmt)
+static const char	*parse_conv(const char *pos, t_fmt *fmt)
 {
-	const char	*type_symbols;
-	int			type_index;
+	const char	*conv_symbols;
+	int			conv_index;
 
-	type_symbols = "%cspdiuoxXf";
-	type_index = pf_strget_index(type_symbols, *pos);
-	fmt->type = type_index >= 0 ? type_index : Type_none;
-	if (fmt->type != Type_none)
+	conv_symbols = "%cspdiuoxXf";
+	conv_index = pf_strget_index(conv_symbols, *pos);
+	fmt->conv = conv_index >= 0 ? conv_index : Conv_none;
+	if (fmt->conv != Conv_none)
 		pos++;
 	return (pos);
 }
@@ -159,7 +159,7 @@ t_fmt				pf_parse_specifier(const char *str, va_list ap)
 		pos = parse_min_width(pos, &fmt, ap);
 	pos = parse_precision(pos, &fmt, ap);
 	pos = parse_size_modifier(pos, &fmt);
-	pos = parse_type(pos, &fmt);
+	pos = parse_conv(pos, &fmt);
 	fmt.padchar = choose_padchar(&fmt);
 	fmt.spec_length = pos - str;
 	return (fmt);

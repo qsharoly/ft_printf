@@ -8,8 +8,13 @@ CC = gcc
 CCFLAGS = -Wall -Wextra -Werror
 INCFLAGS = -I$(INCDIR) -I$(LFT_INCDIR)
 
-debug = yes
+#Disable union ABI warning on linux gcc
+UNAME_S = $(shell uname -s)
+ifeq ($(UNAME_S), Linux)
+	CCFLAGS += -Wno-psabi
+endif
 
+debug = yes
 ifeq ($(debug), yes)
 	CCFLAGS += -g
 endif

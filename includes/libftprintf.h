@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 15:31:58 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/06/18 21:56:34 by debby            ###   ########.fr       */
+/*   Updated: 2020/08/06 18:15:05 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,20 +50,20 @@ enum				e_size
 	Size_longdouble,
 };
 
-enum				e_type
+enum				e_conv
 {
-	Type_percent = 0,
-	Type_caracter,
-	Type_string,
-	Type_pointer,
-	Type_signed_d,
-	Type_signed_i,
-	Type_unsigned,
-	Type_octal,
-	Type_hex,
-	Type_hex_uppercase,
-	Type_floating,
-	Type_none,
+	Conv_percent = 0,
+	Conv_caracter,
+	Conv_string,
+	Conv_pointer,
+	Conv_signed_d,
+	Conv_signed_i,
+	Conv_unsigned,
+	Conv_octal,
+	Conv_hex,
+	Conv_hex_uppercase,
+	Conv_floating,
+	Conv_none,
 };
 
 typedef			struct s_fmt
@@ -79,7 +79,7 @@ typedef			struct s_fmt
 	int			value_width;
 	int			precision;
 	enum e_size size;
-	enum e_type	type;
+	enum e_conv	conv;
 	char		padchar;
 	void		(*write_arg)(t_stream *b, struct s_fmt *fmt, va_list ap);
 }				t_fmt;
