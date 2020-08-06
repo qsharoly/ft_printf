@@ -6,14 +6,14 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/17 08:37:39 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/05/17 10:19:17 by qsharoly         ###   ########.fr       */
+/*   Updated: 2020/08/06 19:28:01 by qsharoly         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libftprintf.h"
 
 static char	*fast_utoa_hex(char *pos, unsigned long long value,
-		const char *digits)
+				const char *digits)
 {
 	while (value)
 	{
@@ -26,7 +26,7 @@ static char	*fast_utoa_hex(char *pos, unsigned long long value,
 }
 
 static char	*fast_utoa_oct(char *pos, unsigned long long value,
-		const char *digits)
+				const char *digits)
 {
 	while (value)
 	{
@@ -38,8 +38,8 @@ static char	*fast_utoa_oct(char *pos, unsigned long long value,
 	return (pos);
 }
 
-static char *general_utoa_base(char *pos, unsigned long long value,
-		unsigned base, const char *digits)
+static char	*general_utoa_base(char *pos, unsigned long long value,
+				unsigned base, const char *digits)
 {
 	while (value)
 	{
@@ -51,8 +51,8 @@ static char *general_utoa_base(char *pos, unsigned long long value,
 	return (pos);
 }
 
-char	*pf_utoa_base(char *buffer, unsigned long long value,
-		unsigned base, int upcase)
+char		*pf_utoa_base(char *buffer, unsigned long long value,
+				unsigned base, int upcase)
 {
 	char		*pos;
 	const char	*digits;

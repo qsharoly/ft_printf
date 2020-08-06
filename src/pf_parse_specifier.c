@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/14 13:26:37 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/08/06 18:17:31 by debby            ###   ########.fr       */
+/*   Updated: 2020/08/06 19:23:05 by qsharoly         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,32 +35,22 @@ static const char	*parse_flags(const char *pos, t_fmt *fmt)
 static const char	*parse_size_modifier(const char *pos, t_fmt *fmt)
 {
 	if (*pos == 'h' && *(pos + 1) == 'h')
-	{
-		pos += 2;
 		fmt->size = Size_hh;
-	}
 	else if (*pos == 'h')
-	{
-		pos++;
 		fmt->size = Size_h;
-	}
 	else if (*pos == 'l' && *(pos + 1) == 'l')
-	{
-		pos += 2;
 		fmt->size = Size_ll;
-	}
 	else if (*pos == 'l')
-	{
-		pos++;
 		fmt->size = Size_l;
-	}
 	else if (*pos == 'L')
-	{
-		pos++;
 		fmt->size = Size_longdouble;
-	}
 	else
 		fmt->size = Size_normal;
+	if (fmt->size == Size_hh || fmt->size == Size_ll)
+		pos += 2;
+	else if (fmt->size == Size_h || fmt->size == Size_l
+			|| fmt->size == Size_longdouble)
+		pos += 1;
 	return (pos);
 }
 
@@ -86,8 +76,7 @@ static char			choose_padchar(const t_fmt *fmt)
 			|| fmt->conv == Conv_unsigned
 			|| fmt->conv == Conv_octal
 			|| fmt->conv == Conv_hex
-			|| fmt->conv == Conv_hex_uppercase)
-		)
+			|| fmt->conv == Conv_hex_uppercase))
 		padchar = ' ';
 	return (padchar);
 }

@@ -6,7 +6,7 @@
 /*   By: debby <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/15 07:06:23 by debby             #+#    #+#             */
-/*   Updated: 2020/08/06 18:30:04 by debby            ###   ########.fr       */
+/*   Updated: 2020/08/06 19:03:12 by qsharoly         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ union u_pfarg	get_none(va_list ap, enum e_size size)
 	(void)ap;
 	(void)size;
 	arg.as_i = 0;
-	return arg;
+	return (arg);
 }
 
 /*
@@ -38,7 +38,7 @@ union u_pfarg	get_char(va_list ap, enum e_size size)
 
 	(void)size;
 	arg.as_c = (char)va_arg(ap, int);
-	return arg;
+	return (arg);
 }
 
 union u_pfarg	get_string(va_list ap, enum e_size size)
@@ -47,7 +47,7 @@ union u_pfarg	get_string(va_list ap, enum e_size size)
 
 	(void)size;
 	arg.as_s = va_arg(ap, char *);
-	return arg;
+	return (arg);
 }
 
 union u_pfarg	get_pointer(va_list ap, enum e_size size)
@@ -56,7 +56,7 @@ union u_pfarg	get_pointer(va_list ap, enum e_size size)
 
 	(void)size;
 	arg.as_ptr = va_arg(ap, void *);
-	return arg;
+	return (arg);
 }
 
 union u_pfarg	get_signed(va_list ap, enum e_size size)
@@ -73,7 +73,7 @@ union u_pfarg	get_signed(va_list ap, enum e_size size)
 		arg.as_i = va_arg(ap, long long);
 	else
 		arg.as_i = va_arg(ap, int);
-	return arg;
+	return (arg);
 }
 
 union u_pfarg	get_unsigned(va_list ap, enum e_size size)
@@ -90,7 +90,7 @@ union u_pfarg	get_unsigned(va_list ap, enum e_size size)
 		arg.as_u = va_arg(ap, unsigned long long);
 	else
 		arg.as_u = va_arg(ap, unsigned int);
-	return arg;
+	return (arg);
 }
 
 union u_pfarg	get_floating(va_list ap, enum e_size size)
@@ -101,5 +101,5 @@ union u_pfarg	get_floating(va_list ap, enum e_size size)
 		arg.as_ld = va_arg(ap, long double);
 	else
 		arg.as_d = va_arg(ap, double);
-	return arg;
+	return (arg);
 }

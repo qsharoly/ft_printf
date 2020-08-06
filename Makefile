@@ -24,13 +24,25 @@ SRC = ft_printf.c\
 	  pf_parse_specifier.c\
 	  pf_get_arg.c\
 	  pf_basic_conv.c\
+	  pf_putnbr.c\
 	  pf_diuox_conv.c\
 	  pf_double_conv.c\
 	  pf_strget_index.c\
 	  pf_simple_atoi.c\
 	  pf_utoa_base.c\
 	  pf_dtoa.c\
-	  bignum/bignum.c\
+	  bignum/big_add.c\
+	  bignum/big_carry.c\
+	  bignum/big_cmp.c\
+	  bignum/big_divmod.c\
+	  bignum/big_from_chunk.c\
+	  bignum/big_inc.c\
+	  bignum/big_mul.c\
+	  bignum/big_pow.c\
+	  bignum/big_shl_shr.c\
+	  bignum/big_sub.c\
+	  bignum/big_to_str.c\
+	  bignum/big_zero.c\
 	  math/ft_fabs.c\
 	  math/ft_isinf.c\
 	  math/ft_isnan.c\

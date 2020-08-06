@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/14 12:23:11 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/06/18 19:48:08 by qsharoly         ###   ########.fr       */
+/*   Updated: 2020/08/06 19:07:31 by qsharoly         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,10 @@ void	conv_default(t_stream *out, t_fmt *f, union u_pfarg arg)
 	(void)arg;
 }
 
+#if __APPLE__
+
 void	conv_percent(t_stream *out, t_fmt *f, union u_pfarg arg)
 {
-#if __APPLE__
 	int		pad_len;
 
 	(void)arg;
@@ -33,12 +34,18 @@ void	conv_percent(t_stream *out, t_fmt *f, union u_pfarg arg)
 	pf_putc('%', out);
 	while (f->left_justify && pad_len-- > 0)
 		pf_putc(f->padchar, out);
+}
+
 #elif __linux__
+
+void	conv_percent(t_stream *out, t_fmt *f, union u_pfarg arg)
+{
 	(void)arg;
 	(void)f;
 	pf_putc('%', out);
-#endif
 }
+
+#endif
 
 void	conv_c(t_stream *out, t_fmt *f, union u_pfarg arg)
 {

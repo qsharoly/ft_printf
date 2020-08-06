@@ -6,7 +6,7 @@
 /*   By: debby <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/13 12:07:19 by debby             #+#    #+#             */
-/*   Updated: 2020/06/18 22:22:33 by debby            ###   ########.fr       */
+/*   Updated: 2020/08/06 19:28:50 by qsharoly         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 ** +0.0, -0.0, +Inf, -Inf and NaN will be returned unchanged
 */
 
-double	ft_trunc(double d)
+double		ft_trunc(double d)
 {
 	union u_f64		tmp;
 	long			e;
