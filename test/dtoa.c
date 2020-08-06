@@ -91,6 +91,7 @@ void	check_ld(const char *format, long double a, const char *literal)
 
 int		main(void)
 {
+	/*
 	check_dbl("%f", -958.125, "-958.125");
 	//rounding
 	check_dbl("%f", 1.5326735, "1.5326735");
@@ -110,6 +111,7 @@ int		main(void)
 	check_dbl("%f", -0.99999949, "-0.99999949");
 	check_dbl("%f", 1444565444646.6465424242242, "1444565444646.6465424242242");
 	check_dbl("%lf", 1444565444646.6465424242242, "1444565444646.6465424242242");
+	*/
 	check_ld("%Lf", 1444565444646.6465424242242l, "1444565444646.6465424242242l");
 	check_ld("%Lf", -958.125, "-958.125");
 	check_ld("%Lf", -0.3, "-0.3");
@@ -119,7 +121,9 @@ int		main(void)
 	//check_ld("%Lf", __LDBL_MAX__, "LDBL_MAX");
 	check_ld("%Lf", __LDBL_MIN__, "LDBL_MIN");
 	check_ld("%.0Lf", __LDBL_MIN__, "LDBL_MIN");
+	/*
 	print_ld_bits(__LDBL_MAX__);
 	print_ld_bits(__LDBL_MIN__);
+	*/
 	return (0);
 }

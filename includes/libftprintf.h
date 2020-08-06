@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 15:31:58 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/08/06 20:21:08 by qsharoly         ###   ########.fr       */
+/*   Updated: 2020/08/06 22:29:22 by qsharoly         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,11 +89,22 @@ typedef struct	s_fmt
 	void		(*write_arg)(t_stream *b, struct s_fmt *fmt, va_list ap);
 }				t_fmt;
 
+typedef struct	s_parts
+{
+	double	ipart;
+	double	fpart;
+	char	*sign;
+	char	*i_str;
+	char	*dot;
+	char	*f_str;
+}				t_parts;
+
 void			pf_error(const char *msg);
 void			pf_stream_init(t_stream *b, int target_fd);
 void			pf_stream_flush(t_stream *b);
 void			pf_putc(int c, t_stream *b);
 void			pf_puts(const char *s, t_stream *b);
+void			pf_puts_if(const char *s, t_stream *b);
 void			pf_nputs(const char *s, int len, t_stream *b);
 t_fmt			pf_parse_specifier(const char *str, va_list ap);
 int				pf_strget_index(const char *hay, char needle);
@@ -103,10 +114,9 @@ char			*pf_utoa_base(char *buffer, unsigned long long value,
 void			pf_putnbr(t_stream *out, const char *value_start,
 					const char *prefix, const t_fmt *fmt);
 void			pf_dtoa(t_stream *out, double d, const t_fmt *fmt);
-void			pf_putdbl_quick(t_stream *out, double nb, const t_fmt *fmt);
+void			pf_dtoa_quick(t_stream *out, double nb, const t_fmt *fmt);
 void			pf_ldtoa(t_stream *out, long double d, const t_fmt *fmt);
-void			pf_put_longdbl_quick(t_stream *out, long double nb,
-					const t_fmt *fmt);
+void			pf_ldtoa_quick(t_stream *out, long double nb, const t_fmt *fmt);
 void			conv_percent(t_stream *out, t_fmt *fmt, union u_pfarg arg);
 void			conv_s(t_stream *out, t_fmt *fmt, union u_pfarg arg);
 void			conv_c(t_stream *out, t_fmt *fmt, union u_pfarg arg);
