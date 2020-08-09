@@ -6,7 +6,7 @@
 /*   By: debby <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/13 11:52:21 by debby             #+#    #+#             */
-/*   Updated: 2020/08/06 20:16:46 by qsharoly         ###   ########.fr       */
+/*   Updated: 2020/08/09 12:11:15 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,15 +36,15 @@ union					u_f80
 	}					bits;
 };
 
-int						ft_isinf(double d);
-int						ft_isinfl(long double d);
-int						ft_isnan(double d);
-int						ft_isnanl(long double d);
-int						ft_issub(double d);
-int						ft_issubl(long double d);
-double					ft_fabs(double d);
-long double				ft_fabsl(long double d);
-double					ft_trunc(double d);
-long double				ft_truncl(long double d);
+int						ft_isinf64(double d);
+int						ft_isinf(long double d);
+int						ft_isnan64(double d);
+int						ft_isnan(long double d);
+int						ft_issub64(double d);
+int						ft_issub(long double d);
+double					ft_fabs64(double d);
+long double				ft_fabs(long double d);
+double					ft_trunc64(double d);
+long double				ft_trunc(long double d);
 
 #endif

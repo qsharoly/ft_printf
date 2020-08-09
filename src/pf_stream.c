@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/06 19:26:20 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/08/06 20:40:57 by qsharoly         ###   ########.fr       */
+/*   Updated: 2020/08/09 12:54:24 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,22 +56,4 @@ void		pf_putc(int c, t_stream *b)
 	b->data[b->pos] = c;
 	b->pos++;
 	b->space_left--;
-}
-
-void		pf_puts(const char *s, t_stream *b)
-{
-	while (*s)
-	{
-		pf_putc(*s, b);
-		s++;
-	}
-}
-
-void		pf_nputs(const char *s, int len, t_stream *b)
-{
-	while (*s && len-- > 0)
-	{
-		pf_putc(*s, b);
-		s++;
-	}
 }

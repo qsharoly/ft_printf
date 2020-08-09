@@ -94,7 +94,10 @@ int		main(void)
 	/*
 	check_dbl("%f", -958.125, "-958.125");
 	//rounding
-	check_dbl("%f", 1.5326735, "1.5326735");
+	check_dbl("%f", -56.2012685, "-56.2012685");
+	check_dbl("%f", 56.2012685, "56.2012685");
+	check_dbl("%f", -56.2012675, "-56.2012675");
+	check_dbl("%f", 56.2012675, "56.2012675");
 	check_dbl("%f", __DBL_MIN__, "DBL_MIN");
 	check_dbl("%f", __DBL_MAX__, "DBL_MAX");
 	check_dbl("%f", 1.05, "1.05");
@@ -118,6 +121,8 @@ int		main(void)
 	//rounding
 	check_ld("%Lf", -56.2012685l, "-56.2012685l");
 	check_ld("%Lf", 56.2012685l, "56.2012685l");
+	check_ld("%Lf", -56.2012675l, "-56.2012675l");
+	check_ld("%Lf", 56.2012675l, "56.2012675l");
 	//check_ld("%Lf", __LDBL_MAX__, "LDBL_MAX");
 	check_ld("%Lf", __LDBL_MIN__, "LDBL_MIN");
 	check_ld("%.0Lf", __LDBL_MIN__, "LDBL_MIN");

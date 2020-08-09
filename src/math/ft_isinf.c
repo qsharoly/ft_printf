@@ -6,13 +6,13 @@
 /*   By: debby <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/18 15:09:44 by debby             #+#    #+#             */
-/*   Updated: 2020/06/18 17:59:25 by debby            ###   ########.fr       */
+/*   Updated: 2020/08/09 12:12:57 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "float.h"
 
-int		ft_isinf(double d)
+int		ft_isinf64(double d)
 {
 	union u_f64	tmp;
 
@@ -23,7 +23,7 @@ int		ft_isinf(double d)
 		return (0);
 }
 
-int		ft_isinfl(long double d)
+int		ft_isinf(long double d)
 {
 	union u_f80	tmp;
 

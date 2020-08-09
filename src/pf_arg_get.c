@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pf_get_arg.c                                       :+:      :+:    :+:   */
+/*   pf_arg_get.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: debby <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/15 07:06:23 by debby             #+#    #+#             */
-/*   Updated: 2020/08/06 19:03:12 by qsharoly         ###   ########.fr       */
+/*   Updated: 2020/08/09 11:59:41 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,13 +93,17 @@ union u_pfarg	get_unsigned(va_list ap, enum e_size size)
 	return (arg);
 }
 
+/*
+** doubles are cast up to long double
+*/
+
 union u_pfarg	get_floating(va_list ap, enum e_size size)
 {
 	union u_pfarg	arg;
 
 	if (size == Size_longdouble)
-		arg.as_ld = va_arg(ap, long double);
+		arg.as_f = va_arg(ap, long double);
 	else
-		arg.as_d = va_arg(ap, double);
+		arg.as_f = (long double)va_arg(ap, double);
 	return (arg);
 }

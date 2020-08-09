@@ -6,13 +6,13 @@
 /*   By: debby <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/13 09:38:53 by debby             #+#    #+#             */
-/*   Updated: 2020/06/13 12:06:43 by debby            ###   ########.fr       */
+/*   Updated: 2020/08/09 12:11:52 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "float.h"
 
-double		ft_fabs(double d)
+double		ft_fabs64(double d)
 {
 	union u_f64	tmp;
 
@@ -21,7 +21,7 @@ double		ft_fabs(double d)
 	return (tmp.d);
 }
 
-long double	ft_fabsl(long double d)
+long double	ft_fabs(long double d)
 {
 	union u_f80	tmp;
 

@@ -6,7 +6,7 @@
 /*   By: debby <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/13 12:07:19 by debby             #+#    #+#             */
-/*   Updated: 2020/08/06 19:28:50 by qsharoly         ###   ########.fr       */
+/*   Updated: 2020/08/09 13:40:45 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,15 +17,15 @@
 ** +0.0, -0.0, +Inf, -Inf and NaN will be returned unchanged
 */
 
-double		ft_trunc(double d)
+double		ft_trunc64(double d)
 {
 	union u_f64		tmp;
 	long			e;
 	unsigned long	m;
 
-	if (d == 0.0 || ft_isinf(d) || ft_isnan(d))
+	if (d == 0.0 || ft_isinf64(d) || ft_isnan64(d))
 		return (d);
-	if (ft_issub(d))
+	if (ft_issub64(d))
 		return (d > 0.0 ? 0.0 : -0.0);
 	tmp.d = d;
 	e = tmp.bits.exponent - F64_BIAS;
@@ -43,15 +43,15 @@ double		ft_trunc(double d)
 ** the function works correctly only when we shift by (63 - e), not (64 - e))...
 */
 
-long double	ft_truncl(long double d)
+long double	ft_trunc(long double d)
 {
 	union u_f80		tmp;
 	long			e;
 	unsigned long	m;
 
-	if (d == 0.0 || ft_isinfl(d) || ft_isnanl(d))
+	if (d == 0.0 || ft_isinf(d) || ft_isnan(d))
 		return (d);
-	if (ft_issubl(d))
+	if (ft_issub(d))
 		return (d > 0.0 ? 0.0 : -0.0);
 	tmp.d = d;
 	e = tmp.bits.exponent - F80_BIAS;

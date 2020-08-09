@@ -21,19 +21,18 @@ endif
 
 SRC = ft_printf.c\
 	  pf_stream.c\
-	  pf_puts_if.c\
-	  pf_parse_specifier.c\
-	  pf_get_arg.c\
-	  pf_basic_conv.c\
-	  pf_putnbr.c\
-	  pf_diuox_conv.c\
+	  pf_stream_helpers.c\
+	  pf_specifier_parse.c\
+	  pf_arg_get.c\
+	  pf_conv_basic.c\
+	  pf_conv_putnbr.c\
+	  pf_conv_diuox.c\
 	  pf_conv_floating.c\
 	  pf_strget_index.c\
 	  pf_simple_atoi.c\
 	  pf_utoa_base.c\
 	  pf_dtoa.c\
 	  pf_dtoa_quick.c\
-	  pf_ldtoa_quick.c\
 	  bignum/big_add.c\
 	  bignum/big_carry.c\
 	  bignum/big_cmp.c\

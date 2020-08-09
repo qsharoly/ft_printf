@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/12 04:49:33 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/08/06 21:57:17 by qsharoly         ###   ########.fr       */
+/*   Updated: 2020/08/09 13:31:05 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ static void	put_float(const char *digits, int split_point, char sign_prefix, con
 	pf_puts("Leeroy!", out);
 }
 
-void	pf_dtoa(t_stream *out, double nb, const t_fmt *fmt)
+void	pf_dtoa64(t_stream *out, double nb, const t_fmt *fmt)
 {
 	union u_f64		d;
 	long			exponent;
@@ -129,7 +129,7 @@ void	pf_dtoa(t_stream *out, double nb, const t_fmt *fmt)
 	put_float(digits, ft_strlen(digits) + dec_pow, sign_prefix(d.d < 0, fmt), fmt, out);
 }
 
-void	pf_ldtoa(t_stream *out, long double nb, const t_fmt *fmt)
+void	pf_dtoa(t_stream *out, long double nb, const t_fmt *fmt)
 {
 	union u_f80 d;
 	long	exponent;

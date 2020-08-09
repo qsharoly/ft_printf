@@ -6,13 +6,13 @@
 /*   By: debby <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/18 15:10:55 by debby             #+#    #+#             */
-/*   Updated: 2020/06/18 18:01:10 by debby            ###   ########.fr       */
+/*   Updated: 2020/08/09 12:10:42 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "float.h"
 
-int		ft_isnan(double d)
+int		ft_isnan64(double d)
 {
 	union u_f64	tmp;
 
@@ -23,7 +23,7 @@ int		ft_isnan(double d)
 		return (0);
 }
 
-int		ft_isnanl(long double d)
+int		ft_isnan(long double d)
 {
 	union u_f80	tmp;
 
