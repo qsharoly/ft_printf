@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/17 08:37:39 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/08/06 19:28:01 by qsharoly         ###   ########.fr       */
+/*   Updated: 2020/08/09 15:33:56 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ char		*pf_utoa_base(char *buffer, unsigned long long value,
 	const char	*digits;
 
 	digits = upcase ? "0123456789ABCDEF" : "0123456789abcdef";
-	pos = &buffer[MAXBUF_ITOA - 1];
+	pos = &buffer[MAXBUF_UTOA - 1];
 	*pos = '\0';
 	pos--;
 	if (base == 16)

@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/12 04:49:33 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/08/09 14:17:37 by debby            ###   ########.fr       */
+/*   Updated: 2020/08/09 15:34:05 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,8 +82,8 @@ void					pf_dtoa_quick(t_stream *out, long double nb,
 		const t_fmt *fmt)
 {
 	t_parts	p;
-	char	buf[MAXBUF_ITOA];
-	char	buf2[MAXBUF_ITOA];
+	char	buf[MAXBUF_UTOA];
+	char	buf2[MAXBUF_UTOA];
 	int		pad_len;
 
 	ft_bzero(&p, sizeof(p));

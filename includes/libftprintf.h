@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 15:31:58 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/08/09 14:20:25 by debby            ###   ########.fr       */
+/*   Updated: 2020/08/09 15:33:03 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 ** enough for binary + terminating '\0'
 */
 
-# define MAXBUF_ITOA (sizeof(long long int) * 8 + 1)
+# define MAXBUF_UTOA (sizeof(long long int) * 8 + 1)
 # define DTOA_DEFAULT_PRECISION 6
 
 typedef struct	s_stream

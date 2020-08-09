@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pf_diuox_conv.c                                    :+:      :+:    :+:   */
+/*   pf_conv_diuox.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/14 12:55:31 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/08/06 19:19:18 by qsharoly         ###   ########.fr       */
+/*   Updated: 2020/08/09 15:33:48 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 void	conv_p(t_stream *out, t_fmt *fmt, union u_pfarg arg)
 {
-	char			str[MAXBUF_ITOA];
+	char			str[MAXBUF_UTOA];
 	unsigned long	adr;
 	const char		*value_start;
 
@@ -35,7 +35,7 @@ void	conv_p(t_stream *out, t_fmt *fmt, union u_pfarg arg)
 
 void	conv_p(t_stream *out, t_fmt *fmt, union u_pfarg arg)
 {
-	char			str[MAXBUF_ITOA];
+	char			str[MAXBUF_UTOA];
 	unsigned long	adr;
 	const char		*value_start;
 
@@ -48,7 +48,7 @@ void	conv_p(t_stream *out, t_fmt *fmt, union u_pfarg arg)
 
 void	conv_signed(t_stream *out, t_fmt *fmt, union u_pfarg arg)
 {
-	char			str[MAXBUF_ITOA];
+	char			str[MAXBUF_UTOA];
 	const char		*value_start;
 	const char		*prefix;
 
@@ -69,7 +69,7 @@ void	conv_signed(t_stream *out, t_fmt *fmt, union u_pfarg arg)
 
 void	conv_unsigned(t_stream *out, t_fmt *fmt, union u_pfarg arg)
 {
-	char			str[MAXBUF_ITOA];
+	char			str[MAXBUF_UTOA];
 	const char		*value_start;
 	const char		*prefix;
 
@@ -80,7 +80,7 @@ void	conv_unsigned(t_stream *out, t_fmt *fmt, union u_pfarg arg)
 
 void	conv_oct(t_stream *out, t_fmt *fmt, union u_pfarg arg)
 {
-	char			str[MAXBUF_ITOA];
+	char			str[MAXBUF_UTOA];
 	const char		*value_start;
 	const char		*prefix;
 
@@ -95,7 +95,7 @@ void	conv_oct(t_stream *out, t_fmt *fmt, union u_pfarg arg)
 
 void	conv_hex(t_stream *out, t_fmt *fmt, union u_pfarg arg)
 {
-	char			str[MAXBUF_ITOA];
+	char			str[MAXBUF_UTOA];
 	const char		*value_start;
 	const char		*prefix;
 	int				upcase;
