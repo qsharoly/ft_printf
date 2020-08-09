@@ -6,26 +6,26 @@
 /*   By: debby <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/13 09:38:53 by debby             #+#    #+#             */
-/*   Updated: 2020/08/09 12:11:52 by debby            ###   ########.fr       */
+/*   Updated: 2020/08/09 15:02:24 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "float.h"
 
-double		ft_fabs64(double d)
+double		ft_fabs64(double nb)
 {
 	union u_f64	tmp;
 
-	tmp.d = d;
+	tmp.f = nb;
 	tmp.bits.sign = 0;
-	return (tmp.d);
+	return (tmp.f);
 }
 
-long double	ft_fabs(long double d)
+long double	ft_fabs(long double nb)
 {
 	union u_f80	tmp;
 
-	tmp.d = d;
+	tmp.f = nb;
 	tmp.bits.sign = 0;
-	return (tmp.d);
+	return (tmp.f);
 }

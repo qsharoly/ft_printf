@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 15:31:58 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/08/09 13:37:10 by debby            ###   ########.fr       */
+/*   Updated: 2020/08/09 14:20:25 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,7 @@ typedef struct	s_parts
 	char	sign;
 	char	*i_str;
 	char	dot;
+	int		extra_zeros;
 	char	*f_str;
 }				t_parts;
 
@@ -106,7 +107,7 @@ void			pf_repeat(char c, int times, t_stream *b);
 void			pf_puts(const char *s, t_stream *b);
 void			pf_puts_if(const char *s, t_stream *b);
 void			pf_nputs(const char *s, int len, t_stream *b);
-t_fmt			pf_parse_specifier(const char *str, va_list ap);
+t_fmt			pf_specifier_parse(const char *str, va_list ap);
 int				pf_strget_index(const char *hay, char needle);
 int				pf_simple_atoi(const char *s);
 char			*pf_utoa_base(char *buffer, unsigned long long value,

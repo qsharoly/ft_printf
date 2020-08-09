@@ -6,7 +6,7 @@
 /*   By: debby <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/18 15:11:29 by debby             #+#    #+#             */
-/*   Updated: 2020/08/09 12:12:47 by debby            ###   ########.fr       */
+/*   Updated: 2020/08/09 15:03:36 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int		ft_issub64(double d)
 {
 	union u_f64	tmp;
 
-	tmp.d = d;
+	tmp.f = d;
 	if (tmp.bits.exponent == 0)
 		return (1);
 	else
@@ -27,7 +27,7 @@ int		ft_issub(long double d)
 {
 	union u_f80	tmp;
 
-	tmp.d = d;
+	tmp.f = d;
 	if (tmp.bits.exponent == 0)
 		return (1);
 	else

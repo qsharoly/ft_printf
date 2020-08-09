@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pf_parse_specifier.c                               :+:      :+:    :+:   */
+/*   pf_specifier_parse.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/14 13:26:37 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/08/06 19:23:05 by qsharoly         ###   ########.fr       */
+/*   Updated: 2020/08/09 14:21:43 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,7 @@ static const char	*parse_conv(const char *pos, t_fmt *fmt)
 	return (pos);
 }
 
-t_fmt				pf_parse_specifier(const char *str, va_list ap)
+t_fmt				pf_specifier_parse(const char *str, va_list ap)
 {
 	t_fmt		fmt;
 	const char	*pos;

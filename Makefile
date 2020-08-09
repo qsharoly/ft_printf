@@ -67,10 +67,11 @@ $(NAME): $(OBJ)
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c includes/libftprintf.h
 	$(CC) $(CCFLAGS) -c -o $@ $< $(INCFLAGS)
-$(OBJDIR)/pf_double_conv.o: includes/float.h
+$(OBJDIR)/pf_conv_floating.o: includes/float.h
+$(OBJDIR)/pf_dtoa_quick.o: includes/float.h
 $(OBJDIR)/pf_dtoa.o: includes/bignum.h includes/float.h
-$(OBJDIR)/bignum/%.o: includes/bignum.h
-$(OBJDIR)/math/%.o: includes/float.h
+$(OBJDIR)/bignum/*.o: includes/bignum.h
+$(OBJDIR)/math/*.o: includes/float.h
 
 .PHONY: all clean fclean re
 

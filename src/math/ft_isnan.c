@@ -6,29 +6,29 @@
 /*   By: debby <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/18 15:10:55 by debby             #+#    #+#             */
-/*   Updated: 2020/08/09 12:10:42 by debby            ###   ########.fr       */
+/*   Updated: 2020/08/09 14:58:49 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "float.h"
 
-int		ft_isnan64(double d)
+int		ft_isnan64(double nb)
 {
 	union u_f64	tmp;
 
-	tmp.d = d;
+	tmp.f = nb;
 	if (tmp.bits.exponent == 0x7ff && tmp.bits.mantissa != 0)
 		return (tmp.bits.sign ? -1 : 1);
 	else
 		return (0);
 }
 
-int		ft_isnan(long double d)
+int		ft_isnan(long double nb)
 {
 	union u_f80	tmp;
 
-	tmp.d = d;
-	if (tmp.bits.exponent == 0x7fff && tmp.bits.mantissa != 0)
+	tmp.f = nb;
+	if (tmp.bits.exponent == 0x7fff && (tmp.bits.mantissa << 1) != 0)
 		return (tmp.bits.sign ? -1 : 1);
 	else
 		return (0);

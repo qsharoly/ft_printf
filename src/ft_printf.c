@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/27 18:24:37 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/08/06 18:46:03 by debby            ###   ########.fr       */
+/*   Updated: 2020/08/09 14:20:36 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void		print_args(t_stream *out, const char *format, va_list ap)
 	{
 		if (*format == '%')
 		{
-			fmt = pf_parse_specifier(format, ap);
+			fmt = pf_specifier_parse(format, ap);
 			arg = g_get_arg[fmt.conv](ap, fmt.size);
 			g_print_arg[fmt.conv](out, &fmt, arg);
 			format += fmt.spec_length;

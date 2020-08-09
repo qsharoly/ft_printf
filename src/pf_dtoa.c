@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/12 04:49:33 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/08/09 13:31:05 by debby            ###   ########.fr       */
+/*   Updated: 2020/08/09 15:28:52 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ typedef struct		s_parts
 }					t_parts;
 */
 
-static char	sign_prefix(int is_negative, const t_fmt *fmt)
+static char	sign_char(int is_negative, const t_fmt *fmt)
 {
 	if (is_negative)
 		return ('-');
@@ -106,7 +106,7 @@ void	pf_dtoa64(t_stream *out, double nb, const t_fmt *fmt)
 	t_big			big;
 	char			*digits;
 
-	d.d = nb;
+	d.f = nb;
 	exponent = d.bits.exponent;
 	mantissa = d.bits.mantissa;
 	is_subnormal = (exponent == 0);
@@ -126,12 +126,12 @@ void	pf_dtoa64(t_stream *out, double nb, const t_fmt *fmt)
 	big = big_mul(big_from_chunk(mantissa), big_raise(5, (unsigned long)-dec_pow));
 	big = big_mul(big, big_raise(2, (unsigned long)exponent));
 	digits = big_to_string_round(big, -(dec_pow + fmt->precision));
-	put_float(digits, ft_strlen(digits) + dec_pow, sign_prefix(d.d < 0, fmt), fmt, out);
+	put_float(digits, ft_strlen(digits) + dec_pow, sign_char(d.f < 0, fmt), fmt, out);
 }
 
 void	pf_dtoa(t_stream *out, long double nb, const t_fmt *fmt)
 {
-	union u_f80 d;
+	union u_f80 f;
 	long	exponent;
 	unsigned long	mantissa;
 	int		is_subnormal;
@@ -139,9 +139,9 @@ void	pf_dtoa(t_stream *out, long double nb, const t_fmt *fmt)
 	t_big	big;
 	char	*digits;
 
-	d.d = nb;
-	exponent = d.bits.exponent;
-	mantissa = d.bits.mantissa;
+	f.f = nb;
+	exponent = f.bits.exponent;
+	mantissa = f.bits.mantissa;
 	is_subnormal = (exponent == 0);
 	exponent = is_subnormal ? 1 - F80_BIAS : exponent - F80_BIAS;
 	dec_pow = -63;
@@ -158,5 +158,5 @@ void	pf_dtoa(t_stream *out, long double nb, const t_fmt *fmt)
 	big = big_mul(big_from_chunk(mantissa), big_raise(5, (unsigned long)-dec_pow));
 	big = big_mul(big, big_raise(2, (unsigned long)exponent));
 	digits = big_to_string_round(big, -(dec_pow + fmt->precision));
-	put_float(digits, ft_strlen(digits) + dec_pow, sign_prefix(d.d < 0, fmt), fmt, out);
+	put_float(digits, ft_strlen(digits) + dec_pow, sign_char(f.f < 0, fmt), fmt, out);
 }

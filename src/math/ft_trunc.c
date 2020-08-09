@@ -6,7 +6,7 @@
 /*   By: debby <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/13 12:07:19 by debby             #+#    #+#             */
-/*   Updated: 2020/08/09 13:40:45 by debby            ###   ########.fr       */
+/*   Updated: 2020/08/09 15:04:02 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ double		ft_trunc64(double d)
 		return (d);
 	if (ft_issub64(d))
 		return (d > 0.0 ? 0.0 : -0.0);
-	tmp.d = d;
+	tmp.f = d;
 	e = tmp.bits.exponent - F64_BIAS;
 	if (e < 0)
 		return (d > 0.0 ? 0.0 : -0.0);
@@ -35,7 +35,7 @@ double		ft_trunc64(double d)
 		return (d);
 	m = tmp.bits.mantissa + (1L << 52);
 	tmp.bits.mantissa = (m >> (52 - e)) << (52 - e);
-	return (tmp.d);
+	return (tmp.f);
 }
 
 /*
@@ -53,7 +53,7 @@ long double	ft_trunc(long double d)
 		return (d);
 	if (ft_issub(d))
 		return (d > 0.0 ? 0.0 : -0.0);
-	tmp.d = d;
+	tmp.f = d;
 	e = tmp.bits.exponent - F80_BIAS;
 	if (e < 0)
 		return (d > 0.0 ? 0.0 : -0.0);
@@ -61,5 +61,5 @@ long double	ft_trunc(long double d)
 		return (d);
 	m = tmp.bits.mantissa;
 	tmp.bits.mantissa = (m >> (63 - e)) << (63 - e);
-	return (tmp.d);
+	return (tmp.f);
 }

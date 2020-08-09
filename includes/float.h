@@ -6,7 +6,7 @@
 /*   By: debby <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/13 11:52:21 by debby             #+#    #+#             */
-/*   Updated: 2020/08/09 12:11:15 by debby            ###   ########.fr       */
+/*   Updated: 2020/08/09 14:32:16 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 
 union					u_f64
 {
-	double				d;
+	double				f;
 	struct {
 		unsigned long	mantissa:52;
 		unsigned int	exponent:11;
@@ -28,7 +28,7 @@ union					u_f64
 
 union					u_f80
 {
-	long double			d;
+	long double			f;
 	struct {
 		unsigned long	mantissa:64;
 		unsigned int	exponent:15;
