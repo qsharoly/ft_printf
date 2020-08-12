@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/12 04:19:11 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/08/06 20:12:03 by qsharoly         ###   ########.fr       */
+/*   Updated: 2020/08/12 22:15:10 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # define CHUNK_N_BITS 64
 # define HIGHEST_BIT_MASK (1L << CHUNK_TOP_BIT)
 # define CHUNK_MAX_VALUE ULONG_MAX
-# define BIG_TO_STR_BUFSIZE (20 * BIG_N_CHUNKS)
+# define BIG_TO_STR_BUFSIZE (20 * BIG_N_CHUNKS + 1)
 
 typedef unsigned long	t_chunk;
 
@@ -52,7 +52,6 @@ t_big					big_shl(t_big a, int shift);
 t_big					big_shr_one(t_big a);
 t_big_quorem			big_divmod(t_big top, t_big bot);
 t_big					big_raise(t_chunk small_base, t_chunk power);
-char					*big_to_string(t_big a);
-char					*big_to_string_round(t_big a, int rounding_position);
+char					*big_str(char buf[BIG_TO_STR_BUFSIZE], t_big a);
 
 #endif
