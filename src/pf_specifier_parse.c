@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/14 13:26:37 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/08/09 14:21:43 by debby            ###   ########.fr       */
+/*   Updated: 2020/08/21 22:30:05 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,16 +100,21 @@ static const char	*parse_min_width(const char *pos, t_fmt *fmt, va_list ap)
 
 static const char	*parse_precision(const char *pos, t_fmt *fmt, va_list ap)
 {
+	int		prec;
+
 	if (*pos == '.')
 	{
 		pos++;
 		if (*pos == '*')
 		{
 			pos++;
-			fmt->precision = va_arg(ap, int);
+			prec = va_arg(ap, int);
+			if (prec < 0)
+				return (pos);
 		}
 		else
-			pos = parse_a_number(pos, &fmt->precision);
+			pos = parse_a_number(pos, &prec);
+		fmt->precision = prec;
 		fmt->has_precision = 1;
 	}
 	return (pos);
