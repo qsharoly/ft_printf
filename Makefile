@@ -46,6 +46,7 @@ SRC = ft_printf.c\
 	  bignum/big_to_str.c\
 	  bignum/big_zero.c\
 	  math/ft_fabs.c\
+	  math/ft_isneg.c\
 	  math/ft_isinf.c\
 	  math/ft_isnan.c\
 	  math/ft_issub.c\

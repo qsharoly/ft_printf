@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/12 04:49:33 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/08/09 15:34:05 by debby            ###   ########.fr       */
+/*   Updated: 2020/08/21 21:12:26 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ void					pf_dtoa_quick(t_stream *out, long double nb,
 	int		pad_len;
 
 	ft_bzero(&p, sizeof(p));
-	p.sign = sign_char(nb < 0, fmt);
+	p.sign = sign_char(ft_isneg(nb), fmt);
 	p.dot = (fmt->precision > 0 || fmt->alternative_form) ? '.' : 0;
 	part_and_round(&p, nb, fmt->precision, fmt->size);
 	p.extra_zeros = calc_extra_zeros(p.fpart, fmt->precision);
@@ -96,9 +96,11 @@ void					pf_dtoa_quick(t_stream *out, long double nb,
 	p.f_str = pf_utoa_base(buf2, (unsigned long)p.fpart, 10, 0);
 	pad_len = fmt->min_width - ((p.sign != 0) + ft_strlen(p.i_str)
 			+ (p.dot != 0) + p.extra_zeros + ft_strlen(p.f_str));
+	if (p.sign && fmt->pad_with_zero)
+		pf_putc(p.sign, out);
 	if (!fmt->left_justify)
 		pf_repeat(fmt->padchar, pad_len, out);
-	if (p.sign)
+	if (p.sign && !fmt->pad_with_zero)
 		pf_putc(p.sign, out);
 	pf_puts(p.i_str,out);
 	if (p.dot)

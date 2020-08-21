@@ -6,7 +6,7 @@
 /*   By: debby <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/13 11:52:21 by debby             #+#    #+#             */
-/*   Updated: 2020/08/09 14:32:16 by debby            ###   ########.fr       */
+/*   Updated: 2020/08/21 20:59:55 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ union					u_f80
 	}					bits;
 };
 
+int						ft_isneg(long double d);
 int						ft_isinf64(double d);
 int						ft_isinf(long double d);
 int						ft_isnan64(double d);

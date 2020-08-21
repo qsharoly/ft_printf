@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/12 04:49:33 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/08/12 22:41:42 by debby            ###   ########.fr       */
+/*   Updated: 2020/08/21 21:24:00 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,41 +89,6 @@ static void	digits_put(const char *digits, int split_point, char sign, const t_f
 		pf_repeat(fmt->padchar, pad_len, out);
 }
 
-/*
-void	pf_dtoa64(t_stream *out, double nb, const t_fmt *fmt)
-{
-	union u_f64		d;
-	long			exponent;
-	unsigned long	mantissa;
-	int				is_subnormal;
-	long			dec_pow;
-	t_big			big;
-	char			*digits;
-
-	d.f = nb;
-	exponent = d.bits.exponent;
-	mantissa = d.bits.mantissa;
-	is_subnormal = (exponent == 0);
-	exponent = is_subnormal + exponent - F64_BIAS;
-	mantissa += (!is_subnormal) * (1L << 52);
-	dec_pow = -52;
-	while ((mantissa & 1L) == 0)
-	{
-		mantissa >>= 1;
-		dec_pow++;
-	}
-	if (exponent < 0)
-	{
-		dec_pow += exponent;
-		exponent = 0;
-	}
-	big = big_mul(big_from_chunk(mantissa), big_raise(5, (unsigned long)-dec_pow));
-	big = big_mul(big, big_raise(2, (unsigned long)exponent));
-	digits = big_to_string_round(big, -(dec_pow + fmt->precision));
-	digits_put(digits, ft_strlen(digits) + dec_pow, sign_char(d.f < 0, fmt), fmt, out);
-}
-*/
-
 char	*digits_round(char *digits, int rounding_position)
 {
 	int	i;
@@ -183,12 +148,17 @@ void	pf_dtoa(t_stream *out, long double nb, const t_fmt *fmt)
 	}
 	big = big_mul(big_from_chunk(mantissa), big_raise(5, (unsigned long)-dec_pow));
 	big = big_mul(big, big_raise(2, (unsigned long)exponent));
+	/*
 	char *unround = big_str(buf, big);
 	ft_putstr("\n");
 	ft_putnbr_endl(-(dec_pow + fmt->precision));
 	ft_putendl(unround);
+	*/
 	digits = digits_round(big_str(buf, big), -(dec_pow + fmt->precision));
+	/*
 	ft_putendl(digits);
+	*/
 	if (digits)
-		digits_put(digits, ft_strlen(digits) + dec_pow, sign_char(nb < 0, fmt), fmt, out);
+		digits_put(digits, ft_strlen(digits) + dec_pow,
+				sign_char(ft_isneg(nb), fmt), fmt, out);
 }

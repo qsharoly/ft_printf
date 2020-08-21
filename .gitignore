@@ -3,3 +3,4 @@
 *.dSYM
 *.swp
 obj/**/*.o
+pft/
