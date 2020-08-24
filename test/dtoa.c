@@ -141,14 +141,24 @@ int		main(void)
 	check_ld("%Lf", 56.2012685l, "56.2012685l");
 	check_ld("%Lf", -56.2012675l, "-56.2012675l");
 	check_ld("%Lf", 56.2012675l, "56.2012675l");
+	check_dbl("%f", 0.0894255, "0.0894255");
+	check_dbl("%f", 43.4399999, "43.4399999");
+	check_dbl("%f", -5.0299999, "-5.0299999");
+	*/
+	//leak into whole part
+	check_dbl("%f", 3.9999999, "3.9999999"); 
+	/*
+	check_dbl("%f", -5.9999999, "-5.9999999"); 
 	*/
 	//round half to even
+	/*
 	check_dbl("%.0f", -5.5, "-5.5");
 	check_dbl("%.0f", 1.5, "1.5");
 	check_dbl("%.0f", -2.5, "-2.5");
 	check_dbl("%.0f", 2.5, "2.5");
-	//big numbers and limits
+	*/
 	/*
+	//big numbers and limits
 	check_dbl("%f", __DBL_MIN__, "DBL_MIN");
 	check_dbl("%f", __DBL_MAX__, "DBL_MAX");
 	check_ld("%Lf", __LDBL_MAX__, "LDBL_MAX");

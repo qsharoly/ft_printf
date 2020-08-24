@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/12 05:31:25 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/08/21 21:44:23 by debby            ###   ########.fr       */
+/*   Updated: 2020/08/24 15:45:29 by qsharoly         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,11 @@ void		conv_floating(t_stream *out, t_fmt *fmt, union u_pfarg arg)
 		fmt->precision = DTOA_DEFAULT_PRECISION;
 	if (put_if_special(out, fmt, arg.as_f))
 		return ;
+	/*
 	if (ft_fabs(arg.as_f) < (long double)ULONG_MAX && fmt->precision < 20)
 		pf_dtoa_quick(out, arg.as_f, fmt);
 	else
 		pf_dtoa(out, arg.as_f, fmt);
+		*/
+	pf_dtoa(out, arg.as_f, fmt);
 }

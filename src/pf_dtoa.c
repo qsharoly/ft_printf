@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/12 04:49:33 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/08/21 21:24:00 by debby            ###   ########.fr       */
+/*   Updated: 2020/08/24 16:52:43 by qsharoly         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,8 @@ char	*digits_round(char *digits, int rounding_position)
 	int	dig_len;
 
 	dig_len = ft_strlen(digits);
+	if (rounding_position < 0)
+		rounding_position += dig_len;
 	if (digits[rounding_position] > '4')
 	{
 		i = rounding_position - 1;
@@ -151,10 +153,10 @@ void	pf_dtoa(t_stream *out, long double nb, const t_fmt *fmt)
 	/*
 	char *unround = big_str(buf, big);
 	ft_putstr("\n");
-	ft_putnbr_endl(-(dec_pow + fmt->precision));
+	ft_putnbr_endl(dec_pow + fmt->precision);
 	ft_putendl(unround);
 	*/
-	digits = digits_round(big_str(buf, big), -(dec_pow + fmt->precision));
+	digits = digits_round(big_str(buf, big), dec_pow + fmt->precision);
 	/*
 	ft_putendl(digits);
 	*/
