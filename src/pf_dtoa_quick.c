@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/12 04:49:33 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/08/21 21:12:26 by debby            ###   ########.fr       */
+/*   Updated: 2020/08/24 15:37:37 by qsharoly         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,15 +50,22 @@ static char				sign_char(int is_negative, const t_fmt *fmt)
 		return ('\0');
 }
 
-static void				part_and_round(t_parts *p, long double nb, int prec,
-										enum e_size size)
+/*
+** (rem == 0.5) tiebreak strategy: round odds to closest even
+*/
+
+static void				part_and_round(t_parts *p, long double nb, int prec)
 {
 	long double	rem;
 
 	p->ipart = ft_trunc(ft_fabs(nb));
 	p->fpart = ((ft_fabs(nb) - p->ipart) * g_pow10[prec]);
 	rem = p->fpart - ft_trunc(p->fpart);
-	if (rem > 0.5 || (rem == 0.5 && size != Size_longdouble))
+	if (rem > 0.5)
+		p->fpart++;
+	else if (rem == 0.5 &&
+		(((unsigned long)ft_trunc(p->fpart) % 2) == 1
+		|| (ft_trunc(p->fpart) == .0 && ((unsigned long)p->ipart % 2) == 1)))
 		p->fpart++;
 	if (p->fpart > g_pow10[prec])
 	{
@@ -89,7 +96,7 @@ void					pf_dtoa_quick(t_stream *out, long double nb,
 	ft_bzero(&p, sizeof(p));
 	p.sign = sign_char(ft_isneg(nb), fmt);
 	p.dot = (fmt->precision > 0 || fmt->alternative_form) ? '.' : 0;
-	part_and_round(&p, nb, fmt->precision, fmt->size);
+	part_and_round(&p, nb, fmt->precision);
 	p.extra_zeros = calc_extra_zeros(p.fpart, fmt->precision);
 	p.i_str = (p.ipart == 0.0) ? "0" : pf_utoa_base(buf, (unsigned long)p.ipart,
 													10, 0);

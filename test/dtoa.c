@@ -91,6 +91,7 @@ void	check_ld(const char *format, long double a, const char *literal)
 
 int		main(void)
 {
+	/*
 	//specials
 	check_dbl("%f", 0.0 / 0.0, "0.0 / 0.0");
 	check_dbl("%f", -0.0 / 0.0, "-0.0 / 0.0");
@@ -106,15 +107,10 @@ int		main(void)
 	print_double_bits(-1.0 / 0.0);
 	print_ld_bits(1.0 / 0.0);
 	print_ld_bits(-1.0 / 0.0);
+	*/
 	/*
+	//basic
 	check_dbl("%f", -958.125, "-958.125");
-	//rounding
-	check_dbl("%f", -56.2012685, "-56.2012685");
-	check_dbl("%f", 56.2012685, "56.2012685");
-	check_dbl("%f", -56.2012675, "-56.2012675");
-	check_dbl("%f", 56.2012675, "56.2012675");
-	check_dbl("%f", __DBL_MIN__, "DBL_MIN");
-	check_dbl("%f", __DBL_MAX__, "DBL_MAX");
 	check_dbl("%f", 1.05, "1.05");
 	check_dbl("%.4f", 1.05, "1.05");
 	check_dbl("%.4f", 1.532673, "1.532673");
@@ -134,18 +130,32 @@ int		main(void)
 	check_ld("%Lf", 1444565444646.6465424242242l, "1444565444646.6465424242242l");
 	check_ld("%Lf", -958.125, "-958.125");
 	check_ld("%Lf", -0.3, "-0.3");
+	*/
+	/*
 	//rounding
+	check_dbl("%f", -56.2012685, "-56.2012685");
+	check_dbl("%f", 56.2012685, "56.2012685");
+	check_dbl("%f", -56.2012675, "-56.2012675");
+	check_dbl("%f", 56.2012675, "56.2012675");
 	check_ld("%Lf", -56.2012685l, "-56.2012685l");
 	check_ld("%Lf", 56.2012685l, "56.2012685l");
 	check_ld("%Lf", -56.2012675l, "-56.2012675l");
 	check_ld("%Lf", 56.2012675l, "56.2012675l");
+	*/
+	//round half to even
+	check_dbl("%.0f", -5.5, "-5.5");
+	check_dbl("%.0f", 1.5, "1.5");
+	check_dbl("%.0f", -2.5, "-2.5");
+	check_dbl("%.0f", 2.5, "2.5");
+	//big numbers and limits
+	/*
+	check_dbl("%f", __DBL_MIN__, "DBL_MIN");
+	check_dbl("%f", __DBL_MAX__, "DBL_MAX");
 	check_ld("%Lf", __LDBL_MAX__, "LDBL_MAX");
 	check_ld("%Lf", __LDBL_MIN__, "LDBL_MIN");
 	check_ld("%.0Lf", __LDBL_MIN__, "LDBL_MIN");
-	*/
 	check_ld("%Lf", 12345678901234567890123456789012345678901.125, "12345678901234567890123456789012345678901.125");
 	print_ld_bits(12345678901234567890123456789012345678901.125);
-	/*
 	print_ld_bits(__LDBL_MAX__);
 	print_ld_bits(__LDBL_MIN__);
 	*/
