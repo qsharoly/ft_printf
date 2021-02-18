@@ -63,12 +63,12 @@ int		main(void)
 	/*
 	//basic
 	*/
-	/*
 	check_dbl("%f", 8000, "8000");
 	check_dbl("%.2f", 7.5, "7.5");
 	check_dbl("%.3f", 7.5, "7.5");
 	check_dbl("%.4f", 7.5, "7.5");
 	check_dbl("%.5f", 7.5, "7.5");
+	/*
 	check_dbl("%f", 0.0, "0.0");
 	check_dbl("%f", -958.125, "-958.125");
 	check_dbl("%f", 1.05, "1.05");
