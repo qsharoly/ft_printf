@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/12 04:49:33 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/02/18 04:27:09 by debby            ###   ########.fr       */
+/*   Updated: 2021/02/18 07:41:43 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static char	sign_char(int is_negative, const t_fmt *fmt)
 		return (0);
 }
 
-static void	digits_put(const char *digits, int split_point, char sign, const t_fmt *fmt, t_stream *out)
+static void	digits_put(const char *digits, int split_offset, char sign, const t_fmt *fmt, t_stream *out)
 {
 	int		pad_len;
 	int		digits_len;
@@ -52,41 +52,41 @@ static void	digits_put(const char *digits, int split_point, char sign, const t_f
 	dot = (fmt->precision > 0 || fmt->alternative_form) ? '.' : 0;
 	prec = fmt->precision;
 	digits_len = ft_strlen(digits);
-	i = ft_imax(1, ft_imin(digits_len, split_point));
-	pad_len = fmt->min_width - ((sign != 0) + i + (dot != 0) + ft_imin(digits_len - split_point, prec));
-	if (!fmt->left_justify)
-		pf_repeat(fmt->padchar, pad_len, out);
-	if (sign)
+	i = ft_imax(1, ft_imin(digits_len, split_offset));
+	pad_len = fmt->min_width - ((sign != 0) + i + (dot != 0) + ft_imin(digits_len - split_offset, prec));
+	if (sign && fmt->pad_with_zero)
 		pf_putc(sign, out);
-	if (split_point < 0)
+	if (!fmt->left_justify)
+		pf_repeat(/*'p'*/fmt->padchar, pad_len, out);
+	if (sign && !fmt->pad_with_zero)
+		pf_putc(sign, out);
+	if (split_offset <= 0)
 	{
 		pf_putc('0', out);
 		if (dot)
 			pf_putc(dot, out);
-		while (split_point++ < 0 && prec-- > 0)
-			pf_putc('0', out);
+		while (split_offset++ < 0 && prec-- > 0)
+			pf_putc(/*'a'*/'0', out);
 		pf_nputs(digits, ft_imin(digits_len, prec), out);
 	}
 	else
 	{
-		i = ft_imin(digits_len, split_point);
+		i = ft_imin(digits_len, split_offset);
 		pf_nputs(digits, i, out);
-		while (i < split_point)
+		while (i < split_offset) //impossible?
 		{
-			pf_putc('0', out);
+			pf_putc(/*'b'*/'0', out);
 			i++;
 		}
-		if (i == 0)
-			pf_putc('0', out);
 		if (dot)
 			pf_putc(dot, out);
 		while (i < digits_len && prec-- > 0)
 			pf_putc(digits[i++], out);
 		while (prec-- > 0)
-			pf_putc('0', out);
+			pf_putc(/*'c'*/'0', out);
 	}
 	if (fmt->left_justify)
-		pf_repeat(fmt->padchar, pad_len, out);
+		pf_repeat(/*'p'*/fmt->padchar, pad_len, out);
 }
 
 char	*digits_round(char *digits, int rounding_position)
@@ -99,8 +99,21 @@ char	*digits_round(char *digits, int rounding_position)
 		rounding_position += dig_len;
 	if (digits[rounding_position] > '4')
 	{
+		if (digits[rounding_position] == '5')
+		{
+			i = rounding_position + 1;
+			while(i < dig_len && digits[i] == '0')
+			{
+				i++;
+			}
+			if (i == dig_len && (rounding_position == 0
+					|| (digits[rounding_position - 1] - '0') % 2 == 0))
+			{
+				return (digits);
+			}
+		}
 		i = rounding_position - 1;
-		while (digits[i] == '9' && i >= 0)
+		while (i >= 0 && digits[i] == '9')
 		{
 			digits[i] = '0';
 			i--;
