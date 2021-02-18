@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/12 04:49:33 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/02/18 07:41:43 by debby            ###   ########.fr       */
+/*   Updated: 2021/02/18 15:05:02 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,22 +134,33 @@ char	*digits_round(char *digits, int rounding_position)
 	return (digits);
 }
 
+static long	get_exponent(long double nb)
+{
+	union u_f80	f;
+
+	f.f = nb;
+	return (f.bits.exponent);
+}
+
+static long	get_mantissa(long double nb)
+{
+	union u_f80	f;
+
+	f.f = nb;
+	return (f.bits.mantissa);
+}
 void	pf_dtoa(t_stream *out, long double nb, const t_fmt *fmt)
 {
-	union u_f80		f;
 	long			exponent;
-	unsigned long	mantissa;
-	int				is_subnormal;
+	long			mantissa;
 	long			dec_pow;
 	t_big			big;
 	char			*digits;
 	char			buf[BIG_TO_STR_BUFSIZE];
 
-	f.f = nb;
-	exponent = f.bits.exponent;
-	mantissa = f.bits.mantissa;
-	is_subnormal = (exponent == 0);
-	exponent = is_subnormal ? 1 - F80_BIAS : exponent - F80_BIAS;
+	exponent = get_exponent(nb);
+	mantissa = get_mantissa(nb);
+	exponent = exponent == 0 ? 1 - F80_BIAS : exponent - F80_BIAS;
 	dec_pow = -63;
 	while ((mantissa & 1L) == 0 && mantissa > 0)
 	{
@@ -165,11 +176,12 @@ void	pf_dtoa(t_stream *out, long double nb, const t_fmt *fmt)
 	{
 		digits = "0";
 	}
-	else 
+	else
 	{
-		big = big_mul(big_from_chunk(mantissa), big_raise(5, (unsigned long)-dec_pow));
-		big = big_mul(big, big_raise(2, (unsigned long)exponent));
-		digits = digits_round(big_str(buf, big), dec_pow + fmt->precision);
+		big = big_mul(big_from_chunk(mantissa), big_raise(5, (long)-dec_pow));
+		big = big_mul(big, big_raise(2, (long)exponent));
+		digits = big_str(buf, big);
+		digits = digits_round(digits, dec_pow + fmt->precision);
 	}
 	if (digits)
 		digits_put(digits, ft_strlen(digits) + dec_pow,
