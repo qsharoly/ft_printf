@@ -110,6 +110,9 @@ int		main(void)
 	*/
 	/*
 	//basic
+	*/
+	check_dbl("%f", 0.0, "0.0");
+	/*
 	check_dbl("%f", -958.125, "-958.125");
 	check_dbl("%f", 1.05, "1.05");
 	check_dbl("%.4f", 1.05, "1.05");
@@ -152,13 +155,11 @@ int		main(void)
 	*/
 	//round half to even
 	/*
-	check_dbl("%.0f", -5.5, "-5.5");
 	check_dbl("%.0f", 1.5, "1.5");
-	check_dbl("%.0f", -2.5, "-2.5");
 	check_dbl("%.0f", 2.5, "2.5");
-	*/
+	check_dbl("%.0f", -5.5, "-5.5");
+	check_dbl("%.0f", -2.5, "-2.5");
 	check_dbl("%.0f", -0.5, "-0.5");
-	/*
 	//big numbers and limits
 	check_dbl("%f", __DBL_MIN__, "DBL_MIN");
 	check_dbl("%f", __DBL_MAX__, "DBL_MAX");

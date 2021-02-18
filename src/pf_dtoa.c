@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/12 04:49:33 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/08/24 16:52:43 by qsharoly         ###   ########.fr       */
+/*   Updated: 2021/02/18 04:27:09 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,7 @@ void	pf_dtoa(t_stream *out, long double nb, const t_fmt *fmt)
 	is_subnormal = (exponent == 0);
 	exponent = is_subnormal ? 1 - F80_BIAS : exponent - F80_BIAS;
 	dec_pow = -63;
-	while ((mantissa & 1L) == 0)
+	while ((mantissa & 1L) == 0 && mantissa > 0)
 	{
 		mantissa >>= 1;
 		dec_pow++;
@@ -148,18 +148,16 @@ void	pf_dtoa(t_stream *out, long double nb, const t_fmt *fmt)
 		dec_pow += exponent;
 		exponent = 0;
 	}
-	big = big_mul(big_from_chunk(mantissa), big_raise(5, (unsigned long)-dec_pow));
-	big = big_mul(big, big_raise(2, (unsigned long)exponent));
-	/*
-	char *unround = big_str(buf, big);
-	ft_putstr("\n");
-	ft_putnbr_endl(dec_pow + fmt->precision);
-	ft_putendl(unround);
-	*/
-	digits = digits_round(big_str(buf, big), dec_pow + fmt->precision);
-	/*
-	ft_putendl(digits);
-	*/
+	if (mantissa == 0)
+	{
+		digits = "0";
+	}
+	else 
+	{
+		big = big_mul(big_from_chunk(mantissa), big_raise(5, (unsigned long)-dec_pow));
+		big = big_mul(big, big_raise(2, (unsigned long)exponent));
+		digits = digits_round(big_str(buf, big), dec_pow + fmt->precision);
+	}
 	if (digits)
 		digits_put(digits, ft_strlen(digits) + dec_pow,
 				sign_char(ft_isneg(nb), fmt), fmt, out);

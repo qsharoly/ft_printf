@@ -4,3 +4,4 @@
 *.swp
 obj/**/*.o
 pft/
+.vscode/
