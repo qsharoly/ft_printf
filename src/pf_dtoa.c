@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/12 04:49:33 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/02/18 15:05:02 by debby            ###   ########.fr       */
+/*   Updated: 2021/02/18 19:35:34 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,17 +142,18 @@ static long	get_exponent(long double nb)
 	return (f.bits.exponent);
 }
 
-static long	get_mantissa(long double nb)
+static unsigned long	get_mantissa(long double nb)
 {
 	union u_f80	f;
 
 	f.f = nb;
 	return (f.bits.mantissa);
 }
+
 void	pf_dtoa(t_stream *out, long double nb, const t_fmt *fmt)
 {
 	long			exponent;
-	long			mantissa;
+	unsigned long	mantissa;
 	long			dec_pow;
 	t_big			big;
 	char			*digits;
@@ -178,8 +179,8 @@ void	pf_dtoa(t_stream *out, long double nb, const t_fmt *fmt)
 	}
 	else
 	{
-		big = big_mul(big_from_chunk(mantissa), big_raise(5, (long)-dec_pow));
-		big = big_mul(big, big_raise(2, (long)exponent));
+		big = big_mul(big_from_number(mantissa), big_raise(5, (unsigned long)-dec_pow));
+		big = big_mul(big, big_raise(2, (unsigned long)exponent));
 		digits = big_str(buf, big);
 		digits = digits_round(digits, dec_pow + fmt->precision);
 	}

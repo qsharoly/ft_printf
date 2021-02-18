@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/06 19:35:29 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/08/06 19:53:05 by qsharoly         ###   ########.fr       */
+/*   Updated: 2021/02/18 16:16:18 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,20 @@
 
 t_big	big_add(t_big a, t_big b)
 {
-	t_big	sum;
-	int		chunk_idx;
+	t_big		res;
+	t_digit		carry;
+	t_digit_tmp	sum;
+	int			i;
 
-	sum = big_zero();
-	chunk_idx = 0;
-	while (chunk_idx < BIG_N_CHUNKS)
+	res = big_zero();
+	i = 0;
+	carry = 0;
+	while (i < BIG_N_DIGITS)
 	{
-		sum.val[chunk_idx] = a.val[chunk_idx] + b.val[chunk_idx];
-		if (a.val[chunk_idx] > CHUNK_MAX_VALUE - b.val[chunk_idx])
-			a = big_carry(a, chunk_idx + 1);
-		chunk_idx++;
+		sum = a.val[i] + b.val[i] + carry;
+		res.val[i] = sum % BIG_BASE;
+		carry = sum / BIG_BASE;
+		i++;
 	}
-	return (sum);
+	return (res);
 }

@@ -1,29 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   big_cmp.c                                          :+:      :+:    :+:   */
+/*   big_from_digit.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/08/06 19:37:42 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/08/06 19:37:58 by qsharoly         ###   ########.fr       */
+/*   Created: 2020/08/06 19:50:10 by qsharoly          #+#    #+#             */
+/*   Updated: 2021/02/18 18:36:48 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "bignum.h"
 
-int		big_cmp(t_big a, t_big b)
+t_big	big_from_number(unsigned long nb)
 {
-	int		chunk_idx;
+	t_big	big;
+	int		i;
 
-	chunk_idx = BIG_N_CHUNKS - 1;
-	while (chunk_idx >= 0)
-	{
-		if (a.val[chunk_idx] < b.val[chunk_idx])
-			return (-1);
-		if (a.val[chunk_idx] > b.val[chunk_idx])
-			return (1);
-		chunk_idx--;
+	big = big_zero();
+	i = 0;
+	while (nb) {
+		big.val[i] = nb % BIG_BASE;
+		nb /= BIG_BASE;
+		i++;
 	}
-	return (0);
+	return (big);
 }

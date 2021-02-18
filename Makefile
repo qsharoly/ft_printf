@@ -33,18 +33,12 @@ SRC = ft_printf.c\
 	  pf_utoa_base.c\
 	  pf_dtoa.c\
 	  pf_dtoa_quick.c\
-	  bignum/big_add.c\
-	  bignum/big_carry.c\
-	  bignum/big_cmp.c\
-	  bignum/big_divmod.c\
-	  bignum/big_from_chunk.c\
-	  bignum/big_inc.c\
-	  bignum/big_mul.c\
-	  bignum/big_pow.c\
-	  bignum/big_shl_shr.c\
-	  bignum/big_sub.c\
-	  bignum/big_to_str.c\
 	  bignum/big_zero.c\
+	  bignum/big_from_digit.c\
+	  bignum/big_add.c\
+	  bignum/big_mul.c\
+	  bignum/big_raise.c\
+	  bignum/big_to_str.c\
 	  math/ft_fabs.c\
 	  math/ft_isneg.c\
 	  math/ft_isinf.c\

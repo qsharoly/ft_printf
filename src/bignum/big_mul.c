@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   big_mul_div_pow.c                                  :+:      :+:    :+:   */
+/*   big_mul.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/06 19:40:23 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/08/06 19:44:56 by qsharoly         ###   ########.fr       */
+/*   Updated: 2021/02/18 19:55:35 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,23 +14,30 @@
 
 t_big	big_mul(t_big a, t_big b)
 {
-	t_big	res;
-	int		chunk_idx;
-	int		j;
+	t_big		res;
+	t_digit		carry;
+	t_digit_tmp	prod;
+	t_digit_tmp	sum;
+	int			i;
+	int			j;
 
 	res = big_zero();
-	chunk_idx = 0;
-	while (chunk_idx < BIG_N_CHUNKS)
-	{
-		j = 0;
-		while (j < CHUNK_N_BITS)
+	j = 0;
+	carry = 0;
+	while (j < BIG_N_DIGITS) {
+		i = 0;
+		while (i < BIG_N_DIGITS)
 		{
-			if (b.val[chunk_idx] & (1L << j))
-				res = big_add(res, a);
-			a = big_shl_one(a);
-			j++;
+			prod = a.val[i] * b.val[j];
+			if (i + j >= BIG_N_DIGITS) {
+				break;
+			}
+			sum = res.val[i + j] + prod % BIG_BASE + carry;
+			res.val[i + j] = sum % BIG_BASE;
+			carry = prod / BIG_BASE + sum / BIG_BASE;
+			i++;
 		}
-		chunk_idx++;
+		j++;
 	}
 	return (res);
 }
