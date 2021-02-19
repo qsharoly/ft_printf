@@ -27,7 +27,7 @@ $(NAME): $(OBJ)
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
 $(OBJDIR)/%.o: $(SRCDIR)/%.c $(DEPDIR)/%.d
-	$(CC) $(DEPFLAGS) $(CCFLAGS) -c -o $@ $< -I $(INCDIR)
+	$(CC) -c $< -o $@ -I $(INCDIR) $(CCFLAGS) $(DEPFLAGS)
 
 $(DEPDIR)/%d: ;
 

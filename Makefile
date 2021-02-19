@@ -61,7 +61,7 @@ $(NAME): $(OBJ)
 	ar rcs $(NAME) $(OBJ)
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c includes/libftprintf.h
-	$(CC) $(CCFLAGS) -c -o $@ $< $(INCFLAGS)
+	$(CC) -c $< -o $@ $(INCFLAGS) $(CCFLAGS)
 $(OBJDIR)/pf_conv_floating.o: includes/float.h
 $(OBJDIR)/pf_dtoa_quick.o: includes/float.h
 $(OBJDIR)/pf_dtoa.o: includes/bignum.h includes/float.h

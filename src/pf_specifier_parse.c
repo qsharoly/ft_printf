@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/14 13:26:37 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/08/21 22:30:05 by debby            ###   ########.fr       */
+/*   Updated: 2021/02/19 06:51:23 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ static const char	*parse_min_width(const char *pos, t_fmt *fmt, va_list ap)
 		nb = va_arg(ap, int);
 		if (nb < 0)
 			fmt->left_justify = 1;
-		fmt->min_width = ft_iabs(nb);
+		fmt->min_width = ft_abs(nb);
 	}
 	else
 		pos = parse_a_number(pos, &fmt->min_width);

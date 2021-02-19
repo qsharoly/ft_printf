@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/12 04:49:33 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/02/18 19:35:34 by debby            ###   ########.fr       */
+/*   Updated: 2021/02/19 06:53:32 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,20 @@
 #include <limits.h>
 
 /*
-typedef struct		s_parts
+typedef struct	s_parts
 {
-	char	*sign;
-	char	*zeropad;
-	char	*ipart;
-	char	*point;
-	char	*fzeros;
-	char	*fpart;
-	char	*extra_zeros;
-}					t_parts;
+	double	ipart;
+	double	fpart;
+	char	sign;
+	char	*i_str;
+	int		i_len;
+	int		i_after_zeros;
+	char	dot;
+	int		f_pre_zeros;
+	char	*f_str;
+	int		f_len;
+	int		f_after_zeros;
+}				t_parts;
 */
 
 static char	sign_char(int is_negative, const t_fmt *fmt)
@@ -43,17 +47,27 @@ static char	sign_char(int is_negative, const t_fmt *fmt)
 
 static void	digits_put(const char *digits, int split_offset, char sign, const t_fmt *fmt, t_stream *out)
 {
+/*	t_parts	p;*/
 	int		pad_len;
 	int		digits_len;
 	char	dot;
 	int		i;
 	int		prec;
 
+	/*
+	p.dot = (fmt->precision > 0 || fmt->alternative_form) ? '.' : 0;
+	if (split_offset < 0) {
+		p.i_str = "0";
+		p.i_after_zeros = 0;
+		p.f_pre_zeros = ft_abs(split_offset);
+		p.f_str = 
+		*/
+
 	dot = (fmt->precision > 0 || fmt->alternative_form) ? '.' : 0;
 	prec = fmt->precision;
 	digits_len = ft_strlen(digits);
-	i = ft_imax(1, ft_imin(digits_len, split_offset));
-	pad_len = fmt->min_width - ((sign != 0) + i + (dot != 0) + ft_imin(digits_len - split_offset, prec));
+	i = ft_max(1, ft_min(digits_len, split_offset));
+	pad_len = fmt->min_width - ((sign != 0) + i + (dot != 0) + ft_min(digits_len - split_offset, prec));
 	if (sign && fmt->pad_with_zero)
 		pf_putc(sign, out);
 	if (!fmt->left_justify)
@@ -67,11 +81,11 @@ static void	digits_put(const char *digits, int split_offset, char sign, const t_
 			pf_putc(dot, out);
 		while (split_offset++ < 0 && prec-- > 0)
 			pf_putc(/*'a'*/'0', out);
-		pf_nputs(digits, ft_imin(digits_len, prec), out);
+		pf_nputs(digits, ft_min(digits_len, prec), out);
 	}
 	else
 	{
-		i = ft_imin(digits_len, split_offset);
+		i = ft_min(digits_len, split_offset);
 		pf_nputs(digits, i, out);
 		while (i < split_offset) //impossible?
 		{
