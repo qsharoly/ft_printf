@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/12 04:49:33 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/08/24 19:43:22 by debby            ###   ########.fr       */
+/*   Updated: 2021/02/20 21:16:21 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ static char				sign_char(int is_negative, const t_fmt *fmt)
 }
 
 /*
-** (rem == 0.5) tiebreak strategy: round odds to closest even
+** (rem == 0.5) tiebreak strategy: round half to even
 */
 
 static void				part_and_round(t_parts *p, long double nb, int prec)
@@ -61,7 +61,7 @@ static void				part_and_round(t_parts *p, long double nb, int prec)
 	p->ipart = ft_trunc(ft_fabs(nb));
 	p->fpart = ((ft_fabs(nb) - p->ipart) * g_pow10[prec]);
 	rem = p->fpart - ft_trunc(p->fpart);
-	if (rem >= 0.5)
+	if (rem > 0.5)
 		p->fpart++;
 	else if (rem == 0.5 &&
 		(((unsigned long)ft_trunc(p->fpart) % 2) == 1

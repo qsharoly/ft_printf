@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 15:31:58 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/08/09 15:36:18 by debby            ###   ########.fr       */
+/*   Updated: 2021/02/20 21:09:21 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,13 +90,13 @@ typedef struct	s_fmt
 
 typedef struct	s_parts
 {
-	double	ipart;
-	double	fpart;
-	char	sign;
-	char	*i_str;
-	char	dot;
-	int		extra_zeros;
-	char	*f_str;
+	long double	ipart;
+	long double	fpart;
+	char		sign;
+	char		*i_str;
+	char		dot;
+	int			extra_zeros;
+	char		*f_str;
 }				t_parts;
 
 void			pf_error(const char *msg);
