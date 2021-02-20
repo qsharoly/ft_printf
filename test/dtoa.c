@@ -4,42 +4,9 @@
 #include <strings.h>
 #include "print_bits.c"
 
-double	bits2double(char *bit_values)
-{
-	int		i;
-	long	nb;
-
-	nb = 0;
-	i = 0;
-	while (i < 64)
-	{
-		nb += (1 << i) * (bit_values[64 - i] == '1');
-		i++;
-	}
-	return (*((double *)&(nb)));
-}
-
-void	check_dbl(const char *format, double a, const char *literal)
-{
-	printf("checking (\"%s\", %s)\n", format, literal);
-	printf("expected: \"");
-	printf(format, a);
-	printf("\"\n  actual: \"");
-	fflush(stdout);
-	ft_printf(format, a);
-	printf("\"\n\n");
-}
-
-void	check_ld(const char *format, long double a, const char *literal)
-{
-	printf("checking (\"%s\", %s)\n", format, literal);
-	printf("expected: \"");
-	printf(format, a);
-	printf("\"\n  actual: \"");
-	fflush(stdout);
-	ft_printf(format, a);
-	printf("\"\n\n");
-}
+double	bits2double(char *bit_values);
+void	check_dbl(const char *format, double a, const char *literal);
+void	check_ld(const char *format, long double a, const char *literal);
 
 int		main(void)
 {
@@ -60,15 +27,13 @@ int		main(void)
 	print_ld_bits(1.0 / 0.0);
 	print_ld_bits(-1.0 / 0.0);
 	*/
-	/*
 	//basic
-	*/
 	check_dbl("%f", 8000, "8000");
+	check_dbl("%.1f", 7.5, "7.5");
 	check_dbl("%.2f", 7.5, "7.5");
 	check_dbl("%.3f", 7.5, "7.5");
 	check_dbl("%.4f", 7.5, "7.5");
 	check_dbl("%.5f", 7.5, "7.5");
-	/*
 	check_dbl("%f", 0.0, "0.0");
 	check_dbl("%f", -958.125, "-958.125");
 	check_dbl("%f", 1.05, "1.05");
@@ -81,18 +46,14 @@ int		main(void)
 	check_dbl("%-5.0f", -7.3, "-7.3");
 	check_dbl("%-5.0f", 7.5, "7.5");
 	check_dbl("%-5.0f", -7.5, "-7.5");
-	*/
+	check_dbl("%-5.3f", 0.0, "0.0");
 	check_dbl("%f", -3.85, "-3.85");
-	/*
 	check_dbl("%f", -0.99999949, "-0.99999949");
 	check_dbl("%f", 1444565444646.6465424242242, "1444565444646.6465424242242");
 	check_dbl("%lf", 1444565444646.6465424242242, "1444565444646.6465424242242");
-	*/
-	/*
 	check_ld("%Lf", 1444565444646.6465424242242l, "1444565444646.6465424242242l");
 	check_ld("%Lf", -958.125, "-958.125");
 	check_ld("%Lf", -0.3, "-0.3");
-	*/
 	/*
 	//rounding
 	check_dbl("%f", -56.2012685, "-56.2012685");
@@ -131,4 +92,41 @@ int		main(void)
 	print_ld_bits(__LDBL_MIN__);
 	*/
 	return (0);
+}
+
+double	bits2double(char *bit_values)
+{
+	int		i;
+	long	nb;
+
+	nb = 0;
+	i = 0;
+	while (i < 64)
+	{
+		nb += (1 << i) * (bit_values[64 - i] == '1');
+		i++;
+	}
+	return (*((double *)&(nb)));
+}
+
+void	check_dbl(const char *format, double a, const char *literal)
+{
+	printf("checking (\"%s\", %s)\n", format, literal);
+	printf("expected: \"");
+	printf(format, a);
+	printf("\"\n  actual: \"");
+	fflush(stdout);
+	ft_printf(format, a);
+	printf("\"\n\n");
+}
+
+void	check_ld(const char *format, long double a, const char *literal)
+{
+	printf("checking (\"%s\", %s)\n", format, literal);
+	printf("expected: \"");
+	printf(format, a);
+	printf("\"\n  actual: \"");
+	fflush(stdout);
+	ft_printf(format, a);
+	printf("\"\n\n");
 }
