@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/12 04:49:33 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/02/20 17:46:27 by debby            ###   ########.fr       */
+/*   Updated: 2021/02/20 18:14:51 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,16 +55,21 @@ static void	digits_put(const char *digits, int split_offset, char sign, const t_
 		while (split_offset++ < 0 && prec-- > 0)
 			pf_putc('0', out);
 		pf_nputs(digits, ft_min(digits_len, prec), out);
+		prec -= digits_len;
+		while (prec-- > 0)
+			pf_putc('0', out);
 	}
 	else
 	{
 		i = ft_min(digits_len, split_offset);
 		pf_nputs(digits, i, out);
+		/*
 		while (i < split_offset) //impossible?
 		{
 			pf_putc('0', out);
 			i++;
 		}
+		*/
 		if (dot)
 			pf_putc(dot, out);
 		while (i < digits_len && prec-- > 0)
