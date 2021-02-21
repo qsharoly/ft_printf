@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/14 12:55:31 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/02/21 19:20:41 by debby            ###   ########.fr       */
+/*   Updated: 2021/02/21 20:11:15 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ void	conv_hex(t_stream *out, t_fmt *fmt, union u_pfarg arg)
 	const char		*prefix;
 	int				upcase;
 
-	upcase = (fmt->conv == Conv_hex_uppercase);
+	upcase = fmt->upcase;
 	value_start = pf_utoa_base(str, arg.as_u, 16, upcase);
 	if (fmt->alternative_form && arg.as_u > 0)
 		prefix = upcase ? "0X" : "0x";

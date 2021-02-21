@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 15:31:58 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/02/21 19:21:25 by debby            ###   ########.fr       */
+/*   Updated: 2021/02/21 20:11:28 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,22 +56,6 @@ enum			e_size
 	Size_longdouble,
 };
 
-enum			e_conv
-{
-	Conv_percent = 0,
-	Conv_caracter,
-	Conv_string,
-	Conv_pointer,
-	Conv_signed_d,
-	Conv_signed_i,
-	Conv_unsigned,
-	Conv_octal,
-	Conv_hex,
-	Conv_hex_uppercase,
-	Conv_floating,
-	Conv_none,
-};
-
 typedef struct	s_fmt
 {
 	unsigned	pad_with_zero:1;
@@ -80,12 +64,12 @@ typedef struct	s_fmt
 	unsigned	prepend_plus:1;
 	unsigned	alternative_form:1;
 	unsigned	has_precision:1;
+	unsigned	upcase:1;
 	int			spec_length;
 	int			min_width;
 	int			value_width;
 	int			precision;
 	enum e_size size;
-	enum e_conv	conv;
 	char		padchar;
 	void		(*write_arg)(t_stream *b, struct s_fmt *fmt, union u_pfarg);
 }				t_fmt;

@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/14 13:26:37 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/02/21 19:21:06 by debby            ###   ########.fr       */
+/*   Updated: 2021/02/21 20:13:03 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,12 +71,11 @@ static char			choose_padchar(const t_fmt *fmt)
 	else
 		padchar = ' ';
 	if (fmt->pad_with_zero && fmt->precision != 1
-		&& (fmt->conv == Conv_signed_d
-			|| fmt->conv == Conv_signed_i
-			|| fmt->conv == Conv_unsigned
-			|| fmt->conv == Conv_octal
-			|| fmt->conv == Conv_hex
-			|| fmt->conv == Conv_hex_uppercase))
+		&& (fmt->write_arg == conv_signed
+			|| fmt->write_arg == conv_unsigned
+			|| fmt->write_arg == conv_oct
+			|| fmt->write_arg == conv_hex
+		   ))
 		padchar = ' ';
 	return (padchar);
 }
@@ -136,8 +135,13 @@ static const char	*parse_conv(const char *pos, t_fmt *fmt)
 		fmt->write_arg = conv_unsigned;
 	else if (*pos == 'o')
 		fmt->write_arg = conv_oct;
-	else if (*pos == 'x' || *pos == 'X')
+	else if (*pos == 'x')
 		fmt->write_arg = conv_hex;
+	else if (*pos == 'X')
+	{
+		fmt->write_arg = conv_hex;
+		fmt->upcase = 1;
+	}
 	else if (*pos == 'f')
 		fmt->write_arg = conv_floating;
 	else
