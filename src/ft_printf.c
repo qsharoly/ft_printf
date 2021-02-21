@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/27 18:24:37 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/08/09 14:20:36 by debby            ###   ########.fr       */
+/*   Updated: 2021/02/21 16:55:07 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,8 +81,9 @@ int			ft_printf(const char *format, ...)
 {
 	va_list		ap;
 	t_stream	b;
+	char		buffer[BUFFER_SIZE];
 
-	pf_stream_init(&b, STDOUT_FD);
+	pf_stream_init(&b, STDOUT_FD, buffer, BUFFER_SIZE, pf_putc_printf_internal);
 	va_start(ap, format);
 	print_args(&b, format, ap);
 	va_end(ap);

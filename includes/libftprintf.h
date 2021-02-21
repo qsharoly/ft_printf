@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 15:31:58 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/02/20 21:09:21 by debby            ###   ########.fr       */
+/*   Updated: 2021/02/21 17:00:26 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,9 @@
 
 typedef struct	s_stream
 {
-	char	data[BUFFER_SIZE];
+	void	(*putc)(int c, struct s_stream *out);
+	char	*data;
+	int		size;
 	int		fd;
 	int		total_written;
 	int		pos;
@@ -100,9 +102,11 @@ typedef struct	s_parts
 }				t_parts;
 
 void			pf_error(const char *msg);
-void			pf_stream_init(t_stream *b, int target_fd);
+void			pf_stream_init(t_stream *b, int target_fd, char *data, int size,
+					void (*putc)(int, t_stream*));
 void			pf_stream_flush(t_stream *b);
 void			pf_putc(int c, t_stream *b);
+void			pf_putc_printf_internal(int c, t_stream *b);
 void			pf_repeat(char c, int times, t_stream *b);
 void			pf_puts(const char *s, t_stream *b);
 void			pf_puts_if(const char *s, t_stream *b);
