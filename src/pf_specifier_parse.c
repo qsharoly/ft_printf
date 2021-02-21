@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/14 13:26:37 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/02/19 06:51:23 by debby            ###   ########.fr       */
+/*   Updated: 2021/02/21 19:21:06 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,22 +120,32 @@ static const char	*parse_precision(const char *pos, t_fmt *fmt, va_list ap)
 	return (pos);
 }
 
-/*
-** the characters in the conv_symbols string must correspond to
-** all of the conversion types in the enum e_conv
-** up to (but excluding) Conv_none
-*/
-
 static const char	*parse_conv(const char *pos, t_fmt *fmt)
 {
-	const char	*conv_symbols;
-	int			conv_index;
-
-	conv_symbols = "%cspdiuoxXf";
-	conv_index = pf_strget_index(conv_symbols, *pos);
-	fmt->conv = conv_index >= 0 ? conv_index : Conv_none;
-	if (fmt->conv != Conv_none)
-		pos++;
+	if (*pos == '%')
+		fmt->write_arg = conv_percent;
+	else if (*pos == 'c')
+		fmt->write_arg = conv_char;
+	else if (*pos == 's')
+		fmt->write_arg = conv_str;
+	else if (*pos == 'p')
+		fmt->write_arg = conv_ptr;
+	else if (*pos == 'i' || *pos == 'd')
+		fmt->write_arg = conv_signed;
+	else if (*pos == 'u')
+		fmt->write_arg = conv_unsigned;
+	else if (*pos == 'o')
+		fmt->write_arg = conv_oct;
+	else if (*pos == 'x' || *pos == 'X')
+		fmt->write_arg = conv_hex;
+	else if (*pos == 'f')
+		fmt->write_arg = conv_floating;
+	else
+	{
+		fmt->write_arg = conv_default_noop;
+		return (pos);
+	}
+	pos++;
 	return (pos);
 }
 

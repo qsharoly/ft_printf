@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/06 19:26:20 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/02/21 16:59:37 by debby            ###   ########.fr       */
+/*   Updated: 2021/02/21 17:59:29 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void		pf_putc(int c, t_stream *out)
 	out->putc(c, out);
 }
 
-void		pf_putc_printf_internal(int c, t_stream *b)
+void		putc_printf_internal(int c, t_stream *b)
 {
 	int		written;
 
@@ -65,4 +65,26 @@ void		pf_putc_printf_internal(int c, t_stream *b)
 	b->data[b->pos] = c;
 	b->pos++;
 	b->space_left--;
+}
+
+/*
+** if no more space left, but we are in the middle of a variable,
+** `putc_snprintf_internal` will do a no-op until the variable finishes.
+** after that, printing will terminate in `print_args` function.
+**
+** `total_written` is always incremented to count how many characters
+** would be written when `max_size` is set to 0.
+*/
+
+void		putc_snprintf_internal(int c, t_stream *b)
+{
+	b->total_written++;
+	if (b->space_left == 0)
+		return;
+	if (b->data)
+	{
+		b->data[b->pos] = c;
+		b->pos++;
+		b->space_left--;
+	}
 }

@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 15:31:58 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/02/21 17:00:26 by debby            ###   ########.fr       */
+/*   Updated: 2021/02/21 19:21:25 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ typedef struct	s_fmt
 	enum e_size size;
 	enum e_conv	conv;
 	char		padchar;
-	void		(*write_arg)(t_stream *b, struct s_fmt *fmt, va_list ap);
+	void		(*write_arg)(t_stream *b, struct s_fmt *fmt, union u_pfarg);
 }				t_fmt;
 
 typedef struct	s_parts
@@ -106,12 +106,14 @@ void			pf_stream_init(t_stream *b, int target_fd, char *data, int size,
 					void (*putc)(int, t_stream*));
 void			pf_stream_flush(t_stream *b);
 void			pf_putc(int c, t_stream *b);
-void			pf_putc_printf_internal(int c, t_stream *b);
+void			putc_printf_internal(int c, t_stream *b);
+void			putc_snprintf_internal(int c, t_stream *b);
 void			pf_repeat(char c, int times, t_stream *b);
 void			pf_puts(const char *s, t_stream *b);
 void			pf_puts_if(const char *s, t_stream *b);
 void			pf_nputs(const char *s, int len, t_stream *b);
 t_fmt			pf_specifier_parse(const char *str, va_list ap);
+union u_pfarg	get_arg(va_list ap, const t_fmt *fmt);
 int				pf_strget_index(const char *hay, char needle);
 int				pf_simple_atoi(const char *s);
 char			*pf_utoa_base(char *buffer, unsigned long long value,
@@ -121,15 +123,15 @@ void			pf_putnbr(t_stream *out, const char *value_start,
 void			pf_dtoa(t_stream *out, long double d, const t_fmt *fmt);
 void			pf_dtoa_quick(t_stream *out, long double nb, const t_fmt *fmt);
 void			conv_percent(t_stream *out, t_fmt *fmt, union u_pfarg arg);
-void			conv_s(t_stream *out, t_fmt *fmt, union u_pfarg arg);
-void			conv_c(t_stream *out, t_fmt *fmt, union u_pfarg arg);
-void			conv_p(t_stream *out, t_fmt *fmt, union u_pfarg arg);
+void			conv_char(t_stream *out, t_fmt *fmt, union u_pfarg arg);
+void			conv_str(t_stream *out, t_fmt *fmt, union u_pfarg arg);
+void			conv_ptr(t_stream *out, t_fmt *fmt, union u_pfarg arg);
 void			conv_signed(t_stream *out, t_fmt *fmt, union u_pfarg arg);
 void			conv_unsigned(t_stream *out, t_fmt *fmt, union u_pfarg arg);
 void			conv_oct(t_stream *out, t_fmt *fmt, union u_pfarg arg);
 void			conv_hex(t_stream *out, t_fmt *fmt, union u_pfarg arg);
 void			conv_floating(t_stream *out, t_fmt *fmt, union u_pfarg arg);
-void			conv_default(t_stream *out, t_fmt *fmt, union u_pfarg arg);
+void			conv_default_noop(t_stream *out, t_fmt *fmt, union u_pfarg arg);
 union u_pfarg	get_none(va_list ap, enum e_size size);
 union u_pfarg	get_char(va_list ap, enum e_size size);
 union u_pfarg	get_string(va_list ap, enum e_size size);

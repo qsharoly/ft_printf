@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf.c                                        :+:      :+:    :+:   */
+/*   ft_snprintf.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/27 18:24:37 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/02/21 19:21:35 by debby            ###   ########.fr       */
+/*   Updated: 2021/02/21 19:16:04 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,39 +14,18 @@
 #include "libft.h"
 #include "libftprintf.h"
 
-void		pf_error(const char *msg)
-{
-	write(2, msg, ft_strlen(msg));
-	exit(1);
-}
-
-union u_pfarg	get_arg(va_list ap, const t_fmt *fmt)
-{
-	if (fmt->write_arg == conv_percent)
-		return get_none(ap, fmt->size);
-	else if (fmt->write_arg == conv_char)
-		return get_char(ap, fmt->size);
-	else if (fmt->write_arg == conv_str)
-		return get_string(ap, fmt->size);
-	else if (fmt->write_arg == conv_ptr)
-		return get_pointer(ap, fmt->size);
-	else if (fmt->write_arg == conv_signed)
-		return get_signed(ap, fmt->size);
-	else if (fmt->write_arg == conv_unsigned || fmt->write_arg == conv_oct
-			|| fmt->write_arg == conv_hex)
-		return get_unsigned(ap, fmt->size);
-	else if (fmt->write_arg == conv_floating)
-		return get_floating(ap, fmt->size);
-	else
-		return get_none(ap, fmt->size);
-}
+/*
+** `out->space_left == 0 && out->pos == 0` means we are just counting
+** how many chars would be written (`max_size` was specified as `0`)
+*/
 
 static void	print_args(t_stream *out, const char *format, va_list ap)
 {
 	t_fmt			fmt;
 	union u_pfarg	arg;
 
-	while (*format)
+	while ((out->space_left > 0 || (out->space_left == 0 && out->pos == 0))
+			&& *format)
 	{
 		if (*format == '%')
 		{
@@ -63,16 +42,18 @@ static void	print_args(t_stream *out, const char *format, va_list ap)
 	}
 }
 
-int			ft_printf(const char *format, ...)
+int			ft_snprintf(char *buffer, int max_size, const char *format, ...)
 {
 	va_list		ap;
 	t_stream	b;
-	char		buffer[BUFFER_SIZE];
 
-	pf_stream_init(&b, STDOUT_FD, buffer, BUFFER_SIZE, putc_printf_internal);
+	pf_stream_init(&b, STDOUT_FD, buffer, max_size, putc_snprintf_internal);
 	va_start(ap, format);
 	print_args(&b, format, ap);
 	va_end(ap);
-	pf_stream_flush(&b);
+	if (buffer && max_size > 0)
+	{
+		buffer[b.total_written - 1] = '\0';
+	}
 	return (b.total_written);
 }

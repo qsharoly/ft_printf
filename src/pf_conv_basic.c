@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/14 12:23:11 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/02/19 06:51:44 by debby            ###   ########.fr       */
+/*   Updated: 2021/02/21 19:17:59 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "libftprintf.h"
 #include "libft.h"
 
-void	conv_default(t_stream *out, t_fmt *f, union u_pfarg arg)
+void	conv_default_noop(t_stream *out, t_fmt *f, union u_pfarg arg)
 {
 	(void)out;
 	(void)f;
@@ -47,7 +47,7 @@ void	conv_percent(t_stream *out, t_fmt *f, union u_pfarg arg)
 
 #endif
 
-void	conv_c(t_stream *out, t_fmt *f, union u_pfarg arg)
+void	conv_char(t_stream *out, t_fmt *f, union u_pfarg arg)
 {
 	int		pad_len;
 
@@ -59,7 +59,7 @@ void	conv_c(t_stream *out, t_fmt *f, union u_pfarg arg)
 		pf_putc(f->padchar, out);
 }
 
-void	conv_s(t_stream *out, t_fmt *f, union u_pfarg arg)
+void	conv_str(t_stream *out, t_fmt *f, union u_pfarg arg)
 {
 	int		value_len;
 	int		pad_len;

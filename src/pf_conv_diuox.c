@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/14 12:55:31 by qsharoly          #+#    #+#             */
-/*   Updated: 2020/08/09 15:33:48 by debby            ###   ########.fr       */
+/*   Updated: 2021/02/21 19:20:41 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 #if __linux__
 
-void	conv_p(t_stream *out, t_fmt *fmt, union u_pfarg arg)
+void	conv_ptr(t_stream *out, t_fmt *fmt, union u_pfarg arg)
 {
 	char			str[MAXBUF_UTOA];
 	unsigned long	adr;
@@ -33,7 +33,7 @@ void	conv_p(t_stream *out, t_fmt *fmt, union u_pfarg arg)
 
 #else
 
-void	conv_p(t_stream *out, t_fmt *fmt, union u_pfarg arg)
+void	conv_ptr(t_stream *out, t_fmt *fmt, union u_pfarg arg)
 {
 	char			str[MAXBUF_UTOA];
 	unsigned long	adr;
