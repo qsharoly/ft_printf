@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/14 13:26:37 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/02/21 20:13:03 by debby            ###   ########.fr       */
+/*   Updated: 2021/02/21 20:57:29 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,9 +56,12 @@ static const char	*parse_size_modifier(const char *pos, t_fmt *fmt)
 
 static const char	*parse_a_number(const char *pos, int *value)
 {
-	*value = pf_simple_atoi(pos);
+	*value = 0;
 	while (*pos >= '0' && *pos <= '9')
+	{
+		*value = *value * 10 + (*pos - '0');
 		pos++;
+	}
 	return (pos);
 }
 
