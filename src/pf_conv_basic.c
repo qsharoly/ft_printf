@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/14 12:23:11 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/02/21 19:17:59 by debby            ###   ########.fr       */
+/*   Updated: 2021/02/21 20:42:43 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,12 @@ void	conv_str(t_stream *out, t_fmt *f, union u_pfarg arg)
 	int		pad_len;
 
 	if (!arg.as_s)
-		arg.as_s = "(null)";
+	{
+		if (f->has_precision && f->precision < 6)
+			arg.as_s = "";
+		else
+			arg.as_s = "(null)";
+	}
 	if (f->has_precision && f->precision >= 0)
 		value_len = ft_min(ft_strlen(arg.as_s), f->precision);
 	else
