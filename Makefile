@@ -29,7 +29,6 @@ SRC = ft_printf.c\
 	  pf_conv_putnbr.c\
 	  pf_conv_diuox.c\
 	  pf_conv_floating.c\
-	  pf_strget_index.c\
 	  pf_utoa_base.c\
 	  pf_dtoa.c\
 	  pf_dtoa_quick.c\

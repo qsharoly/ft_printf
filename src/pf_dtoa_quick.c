@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/12 04:49:33 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/02/20 21:16:21 by debby            ###   ########.fr       */
+/*   Updated: 2021/02/21 21:06:47 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ void					pf_dtoa_quick(t_stream *out, long double nb,
 		pf_repeat(fmt->padchar, pad_len, out);
 	if (p.sign && !fmt->pad_with_zero)
 		pf_putc(p.sign, out);
-	pf_puts(p.i_str,out);
+	pf_puts(p.i_str, out);
 	if (p.dot)
 		pf_putc(p.dot, out);
 	pf_repeat('0', p.extra_zeros, out);

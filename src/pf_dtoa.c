@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/12 04:49:33 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/02/20 18:14:51 by debby            ###   ########.fr       */
+/*   Updated: 2021/02/21 22:03:30 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,13 +63,6 @@ static void	digits_put(const char *digits, int split_offset, char sign, const t_
 	{
 		i = ft_min(digits_len, split_offset);
 		pf_nputs(digits, i, out);
-		/*
-		while (i < split_offset) //impossible?
-		{
-			pf_putc('0', out);
-			i++;
-		}
-		*/
 		if (dot)
 			pf_putc(dot, out);
 		while (i < digits_len && prec-- > 0)
@@ -96,7 +89,7 @@ char	*digits_round(char *digits, int split_offset, int precision)
 		if (digits[rounding_position] == '5')
 		{
 			i = rounding_position + 1;
-			while(i < dig_len && digits[i] == '0')
+			while (i < dig_len && digits[i] == '0')
 			{
 				i++;
 			}

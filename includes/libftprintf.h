@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 15:31:58 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/02/21 20:11:28 by debby            ###   ########.fr       */
+/*   Updated: 2021/02/21 21:44:23 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,8 +98,7 @@ void			pf_puts_if(const char *s, t_stream *b);
 void			pf_nputs(const char *s, int len, t_stream *b);
 t_fmt			pf_specifier_parse(const char *str, va_list ap);
 union u_pfarg	get_arg(va_list ap, const t_fmt *fmt);
-int				pf_strget_index(const char *hay, char needle);
-int				pf_simple_atoi(const char *s);
+int				pf_strindex(const char *hay, char needle);
 char			*pf_utoa_base(char *buffer, unsigned long long value,
 					unsigned base, int upcase);
 void			pf_putnbr(t_stream *out, const char *value_start,

@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/06 19:26:20 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/02/21 17:59:29 by debby            ###   ########.fr       */
+/*   Updated: 2021/02/21 22:05:11 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ void		putc_snprintf_internal(int c, t_stream *b)
 {
 	b->total_written++;
 	if (b->space_left == 0)
-		return;
+		return ;
 	if (b->data)
 	{
 		b->data[b->pos] = c;

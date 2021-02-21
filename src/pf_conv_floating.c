@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/12 05:31:25 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/02/20 21:10:52 by debby            ###   ########.fr       */
+/*   Updated: 2021/02/21 21:06:02 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,4 @@ void		conv_floating(t_stream *out, t_fmt *fmt, union u_pfarg arg)
 		pf_dtoa_quick(out, arg.as_f, fmt);
 	else
 		pf_dtoa(out, arg.as_f, fmt);
-	/*
-	pf_dtoa(out, arg.as_f, fmt);
-		*/
 }

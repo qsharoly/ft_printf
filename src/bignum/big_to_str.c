@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/12 04:10:05 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/02/18 19:10:41 by debby            ###   ########.fr       */
+/*   Updated: 2021/02/21 22:00:20 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,8 @@ char	*big_str(char buf[BIG_TO_STR_BUFSIZE], t_big a)
 	*s = '\0';
 	s--;
 	used_digits = BIG_N_DIGITS - 1;
-	while (a.val[used_digits] == 0) {
+	while (a.val[used_digits] == 0)
+	{
 		used_digits--;
 	}
 	used_digits += 1;
@@ -50,7 +51,7 @@ char	*big_str(char buf[BIG_TO_STR_BUFSIZE], t_big a)
 		}
 		if (i == used_digits - 1)
 		{
-			break;
+			break ;
 		}
 		while (chars < BIG_BASE_CHARS)
 		{

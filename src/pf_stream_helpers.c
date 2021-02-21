@@ -6,7 +6,7 @@
 /*   By: debby <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/09 12:54:10 by debby             #+#    #+#             */
-/*   Updated: 2020/08/09 13:08:32 by debby            ###   ########.fr       */
+/*   Updated: 2021/02/21 22:03:44 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,4 +41,3 @@ void	pf_repeat(char c, int times, t_stream *out)
 	while (times-- > 0)
 		pf_putc(c, out);
 }
-

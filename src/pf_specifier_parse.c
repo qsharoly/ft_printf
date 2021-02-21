@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/14 13:26:37 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/02/21 20:57:29 by debby            ###   ########.fr       */
+/*   Updated: 2021/02/21 21:49:03 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,8 +77,7 @@ static char			choose_padchar(const t_fmt *fmt)
 		&& (fmt->write_arg == conv_signed
 			|| fmt->write_arg == conv_unsigned
 			|| fmt->write_arg == conv_oct
-			|| fmt->write_arg == conv_hex
-		   ))
+			|| fmt->write_arg == conv_hex))
 		padchar = ' ';
 	return (padchar);
 }
@@ -122,37 +121,38 @@ static const char	*parse_precision(const char *pos, t_fmt *fmt, va_list ap)
 	return (pos);
 }
 
+void			(*g_conv[11])(t_stream *, t_fmt *, union u_pfarg) = {
+	conv_percent,
+	conv_char,
+	conv_str,
+	conv_ptr,
+	conv_signed,
+	conv_signed,
+	conv_unsigned,
+	conv_oct,
+	conv_hex,
+	conv_hex,
+	conv_floating
+};
+
 static const char	*parse_conv(const char *pos, t_fmt *fmt)
 {
-	if (*pos == '%')
-		fmt->write_arg = conv_percent;
-	else if (*pos == 'c')
-		fmt->write_arg = conv_char;
-	else if (*pos == 's')
-		fmt->write_arg = conv_str;
-	else if (*pos == 'p')
-		fmt->write_arg = conv_ptr;
-	else if (*pos == 'i' || *pos == 'd')
-		fmt->write_arg = conv_signed;
-	else if (*pos == 'u')
-		fmt->write_arg = conv_unsigned;
-	else if (*pos == 'o')
-		fmt->write_arg = conv_oct;
-	else if (*pos == 'x')
-		fmt->write_arg = conv_hex;
-	else if (*pos == 'X')
-	{
-		fmt->write_arg = conv_hex;
+	char	*type;
+	char	*conversions;
+	int		index;
+
+	if (*pos == 'X')
 		fmt->upcase = 1;
-	}
-	else if (*pos == 'f')
-		fmt->write_arg = conv_floating;
-	else
+	conversions = "%cspdiuoxXf";
+	type = ft_strchr(conversions, *pos);
+	if (type)
 	{
-		fmt->write_arg = conv_default_noop;
-		return (pos);
+		index = type - conversions;
+		fmt->write_arg = g_conv[index];
+		pos++;
 	}
-	pos++;
+	else
+		fmt->write_arg = conv_default_noop;
 	return (pos);
 }
 

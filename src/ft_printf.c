@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/27 18:24:37 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/02/21 19:21:35 by debby            ###   ########.fr       */
+/*   Updated: 2021/02/21 21:58:00 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,23 +22,26 @@ void		pf_error(const char *msg)
 
 union u_pfarg	get_arg(va_list ap, const t_fmt *fmt)
 {
+	union u_pfarg	arg;
+
 	if (fmt->write_arg == conv_percent)
-		return get_none(ap, fmt->size);
+		arg = get_none(ap, fmt->size);
 	else if (fmt->write_arg == conv_char)
-		return get_char(ap, fmt->size);
+		arg = get_char(ap, fmt->size);
 	else if (fmt->write_arg == conv_str)
-		return get_string(ap, fmt->size);
+		arg = get_string(ap, fmt->size);
 	else if (fmt->write_arg == conv_ptr)
-		return get_pointer(ap, fmt->size);
+		arg = get_pointer(ap, fmt->size);
 	else if (fmt->write_arg == conv_signed)
-		return get_signed(ap, fmt->size);
+		arg = get_signed(ap, fmt->size);
 	else if (fmt->write_arg == conv_unsigned || fmt->write_arg == conv_oct
 			|| fmt->write_arg == conv_hex)
-		return get_unsigned(ap, fmt->size);
+		arg = get_unsigned(ap, fmt->size);
 	else if (fmt->write_arg == conv_floating)
-		return get_floating(ap, fmt->size);
+		arg = get_floating(ap, fmt->size);
 	else
-		return get_none(ap, fmt->size);
+		arg = get_none(ap, fmt->size);
+	return (arg);
 }
 
 static void	print_args(t_stream *out, const char *format, va_list ap)

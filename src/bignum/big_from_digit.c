@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/06 19:50:10 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/02/18 18:36:48 by debby            ###   ########.fr       */
+/*   Updated: 2021/02/21 22:00:42 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ t_big	big_from_number(unsigned long nb)
 
 	big = big_zero();
 	i = 0;
-	while (nb) {
+	while (nb)
+	{
 		big.val[i] = nb % BIG_BASE;
 		nb /= BIG_BASE;
 		i++;
