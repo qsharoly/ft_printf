@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 15:31:58 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/02/21 21:44:23 by debby            ###   ########.fr       */
+/*   Updated: 2021/02/23 02:33:05 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ typedef struct	s_parts
 }				t_parts;
 
 void			pf_error(const char *msg);
-void			pf_stream_init(t_stream *b, int target_fd, char *data, int size,
+t_stream		pf_stream_init(int target_fd, char *data, int size,
 					void (*putc)(int, t_stream*));
 void			pf_stream_flush(t_stream *b);
 void			pf_putc(int c, t_stream *b);

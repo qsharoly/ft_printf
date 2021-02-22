@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/27 18:24:37 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/02/21 19:16:04 by debby            ###   ########.fr       */
+/*   Updated: 2021/02/23 02:33:37 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int			ft_snprintf(char *buffer, int max_size, const char *format, ...)
 	va_list		ap;
 	t_stream	b;
 
-	pf_stream_init(&b, STDOUT_FD, buffer, max_size, putc_snprintf_internal);
+	b = pf_stream_init(STDOUT_FD, buffer, max_size, putc_snprintf_internal);
 	va_start(ap, format);
 	print_args(&b, format, ap);
 	va_end(ap);

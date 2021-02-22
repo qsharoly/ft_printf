@@ -6,23 +6,26 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/06 19:26:20 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/02/21 22:05:11 by debby            ###   ########.fr       */
+/*   Updated: 2021/02/23 02:34:11 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
 #include "libftprintf.h"
 
-void		pf_stream_init(t_stream *b, int fd, char *buffer, int size,
+t_stream	pf_stream_init(int fd, char *buffer, int size,
 				void (*putc)(int, t_stream *))
 {
-	b->putc = putc;
-	b->data = buffer;
-	b->size = size;
-	b->fd = fd;
-	b->total_written = 0;
-	b->space_left = size;
-	b->pos = 0;
+	t_stream b;
+
+	b.putc = putc;
+	b.data = buffer;
+	b.size = size;
+	b.fd = fd;
+	b.total_written = 0;
+	b.space_left = size;
+	b.pos = 0;
+	return (b);
 }
 
 /*
