@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/14 12:23:11 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/02/21 20:42:43 by debby            ###   ########.fr       */
+/*   Updated: 2021/02/23 01:45:12 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,9 @@ void	conv_percent(t_stream *out, t_fmt *f, union u_pfarg arg)
 
 	(void)arg;
 	pad_len = ft_imax(0, f->min_width - 1);
-	while (!f->left_justify && pad_len-- > 0)
-		pf_putc(f->padchar, out);
+	pf_repeat(f->padchar, !f->left_justify * pad_len, out);
 	pf_putc('%', out);
-	while (f->left_justify && pad_len-- > 0)
-		pf_putc(f->padchar, out);
+	pf_repeat(f->padchar, f->left_justify * pad_len, out);
 }
 
 #elif __linux__
@@ -52,11 +50,9 @@ void	conv_char(t_stream *out, t_fmt *f, union u_pfarg arg)
 	int		pad_len;
 
 	pad_len = ft_max(0, f->min_width - 1);
-	while (!f->left_justify && pad_len-- > 0)
-		pf_putc(f->padchar, out);
+	pf_repeat(f->padchar, !f->left_justify * pad_len, out);
 	pf_putc(arg.as_c, out);
-	while (f->left_justify && pad_len-- > 0)
-		pf_putc(f->padchar, out);
+	pf_repeat(f->padchar, f->left_justify * pad_len, out);
 }
 
 void	conv_str(t_stream *out, t_fmt *f, union u_pfarg arg)
@@ -76,9 +72,7 @@ void	conv_str(t_stream *out, t_fmt *f, union u_pfarg arg)
 	else
 		value_len = ft_strlen(arg.as_s);
 	pad_len = ft_max(0, f->min_width - value_len);
-	while (!f->left_justify && pad_len-- > 0)
-		pf_putc(f->padchar, out);
+	pf_repeat(f->padchar, !f->left_justify * pad_len, out);
 	pf_nputs(arg.as_s, value_len, out);
-	while (f->left_justify && pad_len-- > 0)
-		pf_putc(f->padchar, out);
+	pf_repeat(f->padchar, f->left_justify * pad_len, out);
 }

@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/12 05:31:25 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/02/21 21:06:02 by debby            ###   ########.fr       */
+/*   Updated: 2021/02/23 01:46:56 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,13 +42,11 @@ static int	put_if_special(t_stream *out, t_fmt *fmt, long double nb)
 		return (0);
 	sign = sign_char(ft_isneg(nb), fmt);
 	pad_len = fmt->min_width - ((sign != '\0') + ft_strlen(s));
-	if (fmt->left_justify == 0)
-		pf_repeat(' ', pad_len, out);
+	pf_repeat(' ', !fmt->left_justify * pad_len, out);
 	if (sign)
 		pf_putc(sign, out);
 	pf_puts(s, out);
-	if (fmt->left_justify)
-		pf_repeat(' ', pad_len, out);
+	pf_repeat(' ', fmt->left_justify * pad_len, out);
 	return (1);
 }
 

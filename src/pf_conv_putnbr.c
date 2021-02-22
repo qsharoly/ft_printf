@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/06 19:10:22 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/02/19 06:51:51 by debby            ###   ########.fr       */
+/*   Updated: 2021/02/23 01:43:30 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,10 @@ void	pf_putnbr(t_stream *out, const char *value_start, const char *prefix,
 	else
 		zero_fill = ft_max(0, fmt->precision - value_len);
 	pad_len = fmt->min_width - pre_len - zero_fill - value_len;
-	while (!fmt->left_justify && (pad_len-- > 0))
-		pf_putc(fmt->padchar, out);
+	pf_repeat(fmt->padchar, !fmt->left_justify * pad_len, out);
 	if (pre_len)
 		pf_puts(prefix, out);
-	while (zero_fill-- > 0)
-		pf_putc('0', out);
+	pf_repeat('0', zero_fill, out);
 	pf_puts(value_start, out);
-	while (fmt->left_justify && (pad_len-- > 0))
-		pf_putc(fmt->padchar, out);
+	pf_repeat(fmt->padchar, fmt->left_justify * pad_len, out);
 }

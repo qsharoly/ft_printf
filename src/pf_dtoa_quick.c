@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/12 04:49:33 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/02/21 21:06:47 by debby            ###   ########.fr       */
+/*   Updated: 2021/02/23 01:47:15 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,8 +89,7 @@ void					pf_dtoa_quick(t_stream *out, long double nb,
 		const t_fmt *fmt)
 {
 	t_parts	p;
-	char	buf[MAXBUF_UTOA];
-	char	buf2[MAXBUF_UTOA];
+	char	buf[MAXBUF_UTOA * 2];
 	int		pad_len;
 
 	ft_bzero(&p, sizeof(p));
@@ -100,13 +99,12 @@ void					pf_dtoa_quick(t_stream *out, long double nb,
 	p.extra_zeros = calc_extra_zeros(p.fpart, fmt->precision);
 	p.i_str = (p.ipart == 0.0) ? "0" : pf_utoa_base(buf, (unsigned long)p.ipart,
 													10, 0);
-	p.f_str = pf_utoa_base(buf2, (unsigned long)p.fpart, 10, 0);
+	p.f_str = pf_utoa_base(buf + MAXBUF_UTOA, (unsigned long)p.fpart, 10, 0);
 	pad_len = fmt->min_width - ((p.sign != 0) + ft_strlen(p.i_str)
 			+ (p.dot != 0) + p.extra_zeros + ft_strlen(p.f_str));
 	if (p.sign && fmt->pad_with_zero)
 		pf_putc(p.sign, out);
-	if (!fmt->left_justify)
-		pf_repeat(fmt->padchar, pad_len, out);
+	pf_repeat(fmt->padchar, !fmt->left_justify * pad_len, out);
 	if (p.sign && !fmt->pad_with_zero)
 		pf_putc(p.sign, out);
 	pf_puts(p.i_str, out);
@@ -114,6 +112,5 @@ void					pf_dtoa_quick(t_stream *out, long double nb,
 		pf_putc(p.dot, out);
 	pf_repeat('0', p.extra_zeros, out);
 	pf_puts(p.f_str, out);
-	if (fmt->left_justify)
-		pf_repeat(fmt->padchar, pad_len, out);
+	pf_repeat(fmt->padchar, fmt->left_justify * pad_len, out);
 }
