@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/06 19:40:23 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/02/21 21:54:29 by debby            ###   ########.fr       */
+/*   Updated: 2021/02/23 03:05:15 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,7 @@ t_big	big_mul(t_big a, t_big b)
 		while (i < BIG_N_DIGITS)
 		{
 			if (i + j >= BIG_N_DIGITS)
-			{
 				break ;
-			}
 			prod = res.val[i + j] + a.val[i] * b.val[j] + carry;
 			res.val[i + j] = prod % BIG_BASE;
 			carry = prod / BIG_BASE;

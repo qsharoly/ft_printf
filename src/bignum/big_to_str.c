@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/12 04:10:05 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/02/21 22:00:20 by debby            ###   ########.fr       */
+/*   Updated: 2021/02/23 04:16:54 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,53 +14,50 @@
 #include "libftprintf.h"
 #include "bignum.h"
 
-/*
-** caller provides a buffer of size BIG_TO_STR_BUFSIZE
-** buffer is filled with digits from right to left
-** return value is the pointer to the beginning of the resulting digit sequence
-*/
-
-char	*big_str(char buf[BIG_TO_STR_BUFSIZE], t_big a)
+static char	*copy_digit(char *pos, t_digit value, int fill_at_least)
 {
-	char	*s;
-	int		chars;
+	int	count;
+
+	count = 0;
+	while (value)
+	{
+		*pos = '0' + value % 10;
+		value /= 10;
+		pos--;
+		count++;
+	}
+	while (count < fill_at_least)
+	{
+		*pos = '0';
+		pos--;
+		count++;
+	}
+	return (pos);
+}
+
+char		*big_str(char buf[BIG_TO_STR_BUFSIZE], t_big a)
+{
+	char	*pos;
 	int		i;
 	int		used_digits;
-	t_digit	value;
+	int		fill_at_least;
 
-	s = &buf[BIG_TO_STR_BUFSIZE - 1];
-	*s = '\0';
-	s--;
+	pos = &buf[BIG_TO_STR_BUFSIZE - 1];
+	*pos = '\0';
+	pos--;
 	used_digits = BIG_N_DIGITS - 1;
 	while (a.val[used_digits] == 0)
 	{
 		used_digits--;
 	}
-	used_digits += 1;
+	used_digits++;
 	i = 0;
 	while (i < used_digits)
 	{
-		chars = 0;
-		value = a.val[i];
-		while (value)
-		{
-			*s = '0' + value % 10;
-			value /= 10;
-			s--;
-			chars++;
-		}
-		if (i == used_digits - 1)
-		{
-			break ;
-		}
-		while (chars < BIG_BASE_CHARS)
-		{
-			*s = '0';
-			s--;
-			chars++;
-		}
+		fill_at_least = i < used_digits - 1 ? BIG_BASE_CHARS : 0;
+		pos = copy_digit(pos, a.val[i], fill_at_least);
 		i++;
 	}
-	s++;
-	return (s);
+	pos++;
+	return (pos);
 }
