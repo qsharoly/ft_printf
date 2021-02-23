@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/12 04:49:33 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/02/23 01:42:10 by debby            ###   ########.fr       */
+/*   Updated: 2021/02/23 08:30:47 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,18 +15,6 @@
 #include "bignum.h"
 #include "float.h"
 #include <limits.h>
-
-static char	sign_char(int is_negative, const t_fmt *fmt)
-{
-	if (is_negative)
-		return ('-');
-	else if (fmt->prepend_plus)
-		return ('+');
-	else if (fmt->prepend_space)
-		return (' ');
-	else
-		return (0);
-}
 
 static void	digits_put(const char *digits, int split_offset, char sign, const t_fmt *fmt, t_stream *out)
 {

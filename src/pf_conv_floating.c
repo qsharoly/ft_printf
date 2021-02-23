@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/12 05:31:25 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/02/23 01:46:56 by debby            ###   ########.fr       */
+/*   Updated: 2021/02/23 08:30:33 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,16 @@
 #include "float.h"
 #include <limits.h>
 
-static char	sign_char(int is_negative, const t_fmt *fmt)
+char		sign_char(int is_negative, const t_fmt *fmt)
 {
 	if (is_negative)
 		return ('-');
-	else if (fmt->prepend_plus)
+	else if (fmt->explicit_plus)
 		return ('+');
 	else if (fmt->prepend_space)
 		return (' ');
 	else
-		return ('\0');
+		return (0);
 }
 
 static int	put_if_special(t_stream *out, t_fmt *fmt, long double nb)

@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/12 04:49:33 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/02/23 01:47:15 by debby            ###   ########.fr       */
+/*   Updated: 2021/02/23 08:30:54 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,18 +37,6 @@ static unsigned long	g_pow10[20] = {
 	1000000000000000000L,
 	10000000000000000000UL
 };
-
-static char				sign_char(int is_negative, const t_fmt *fmt)
-{
-	if (is_negative)
-		return ('-');
-	else if (fmt->prepend_plus)
-		return ('+');
-	else if (fmt->prepend_space)
-		return (' ');
-	else
-		return ('\0');
-}
 
 /*
 ** (rem == 0.5) tiebreak strategy: round half to even

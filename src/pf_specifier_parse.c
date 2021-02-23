@@ -6,27 +6,27 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/14 13:26:37 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/02/21 21:49:03 by debby            ###   ########.fr       */
+/*   Updated: 2021/02/23 08:23:42 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "libftprintf.h"
 
+static int			is_printf_flag(int c)
+{
+	return (c == '0' || c == '-' || c == '+' || c == ' ' || c == '#');
+}
+
 static const char	*parse_flags(const char *pos, t_fmt *fmt)
 {
-	while (ft_strhas("0-+ #", *pos))
+	while (is_printf_flag(*pos))
 	{
-		if (*pos == '0')
-			fmt->pad_with_zero = 1;
-		else if (*pos == '-')
-			fmt->left_justify = 1;
-		else if (*pos == '+')
-			fmt->prepend_plus = 1;
-		else if (*pos == ' ')
-			fmt->prepend_space = 1;
-		else if (*pos == '#')
-			fmt->alternative_form = 1;
+		fmt->pad_with_zero |= (*pos == '0');
+		fmt->left_justify |= (*pos == '-');
+		fmt->explicit_plus |= (*pos == '+');
+		fmt->prepend_space |= (*pos == ' ');
+		fmt->alternative_form |= (*pos == '#');
 		pos++;
 	}
 	return (pos);

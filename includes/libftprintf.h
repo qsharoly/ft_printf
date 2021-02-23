@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 15:31:58 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/02/23 02:33:05 by debby            ###   ########.fr       */
+/*   Updated: 2021/02/23 08:31:47 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,14 +60,13 @@ typedef struct	s_fmt
 {
 	unsigned	pad_with_zero:1;
 	unsigned	left_justify:1;
+	unsigned	explicit_plus:1;
 	unsigned	prepend_space:1;
-	unsigned	prepend_plus:1;
 	unsigned	alternative_form:1;
 	unsigned	has_precision:1;
 	unsigned	upcase:1;
 	int			spec_length;
 	int			min_width;
-	int			value_width;
 	int			precision;
 	enum e_size size;
 	char		padchar;
@@ -103,6 +102,7 @@ char			*pf_utoa_base(char *buffer, unsigned long long value,
 					unsigned base, int upcase);
 void			pf_putnbr(t_stream *out, const char *value_start,
 					const char *prefix, const t_fmt *fmt);
+char			sign_char(int is_negative, const t_fmt *fmt);
 void			pf_dtoa(t_stream *out, long double d, const t_fmt *fmt);
 void			pf_dtoa_quick(t_stream *out, long double nb, const t_fmt *fmt);
 void			conv_percent(t_stream *out, t_fmt *fmt, union u_pfarg arg);

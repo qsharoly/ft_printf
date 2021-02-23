@@ -6,15 +6,15 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/18 19:40:50 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/02/19 06:26:54 by debby            ###   ########.fr       */
+/*   Updated: 2021/02/23 09:33:57 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 /*
-** will overflow on INT_MIN
+** will overflow on LLONG_MIN
 */
 
-int		ft_abs(int i)
+long long	ft_abs(long long i)
 {
 	return (i < 0 ? -i : i);
 }
