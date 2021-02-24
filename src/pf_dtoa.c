@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/12 04:49:33 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/02/23 08:30:47 by debby            ###   ########.fr       */
+/*   Updated: 2021/02/23 16:46:22 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,6 +126,7 @@ void	pf_dtoa(t_stream *out, long double nb, const t_fmt *fmt)
 	t_big			big;
 	char			*digits;
 	char			buf[BIG_TO_STR_BUFSIZE];
+	t_big			pow5;
 
 	exponent = get_exponent(nb);
 	mantissa = get_mantissa(nb);
@@ -147,7 +148,8 @@ void	pf_dtoa(t_stream *out, long double nb, const t_fmt *fmt)
 	}
 	else
 	{
-		big = big_mul(big_from_number(mantissa), big_raise(5, -dec_pow));
+		pow5 = big_raise(5, -dec_pow);
+		big = big_mul(big_from_number(mantissa), pow5);
 		big = big_mul(big, big_raise(2, exponent));
 		digits = big_str(buf, big);
 		digits = digits_round(digits, ft_strlen(digits) + dec_pow, fmt->precision);

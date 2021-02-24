@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/04 16:08:51 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/02/23 09:26:32 by debby            ###   ########.fr       */
+/*   Updated: 2021/02/24 09:25:57 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,14 +56,14 @@ int				ft_isprint(int c);
 int				ft_toupper(int c);
 int				ft_tolower(int c);
 void			ft_putchar(char c);
-void			ft_putchar_fd(char c, int fd);
+void			ft_putchar_fd(int fd, char c);
 void			ft_putstr(char const *s);
-void			ft_putstr_fd(char const *s, int fd);
+void			ft_putstr_fd(int fd, char const *s);
 void			ft_putendl(char const *s);
-void			ft_putendl_fd(char const *s, int fd);
+void			ft_putendl_fd(int fd, char const *s);
 void			ft_putnbr(int n);
 void			ft_putnbr_endl(int n);
-void			ft_putnbr_fd(int n, int fd);
+void			ft_putnbr_fd(int fd, int n);
 size_t			ft_strlen(char const *s);
 int				ft_strcmp(char const *s1, char const *s2);
 int				ft_strncmp(char const *s1, char const *s2, size_t n);

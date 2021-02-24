@@ -56,6 +56,8 @@ int		main(void)
 	check_ld("%Lf", -958.125, "-958.125");
 	check_ld("%Lf", -0.3, "-0.3");
 	*/
+	//debug bignum used digit count tracking
+	check_dbl("%.100f", 0.237, "0.237");
 	/*
 	//rounding
 	check_dbl("%f", -56.2012685, "-56.2012685");
@@ -83,10 +85,8 @@ int		main(void)
 	check_dbl("%.0f", -2.5, "-2.5");
 	check_dbl("%.0f", -0.5, "-0.5");
 	//big numbers and limits
-	*/
 	check_dbl("%.2000f", __DBL_MIN__, "DBL_MIN");
 	check_dbl("%f", __DBL_MAX__, "DBL_MAX");
-	/*
 	check_ld("%.20000Lf", __LDBL_MIN__, "LDBL_MIN");
 	check_ld("%Lf", __LDBL_MAX__, "LDBL_MAX");
 	check_ld("%Lf", 12345678901234567890123456789012345678901.125, "12345678901234567890123456789012345678901.125");

@@ -6,33 +6,49 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/06 19:40:23 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/02/23 03:05:15 by debby            ###   ########.fr       */
+/*   Updated: 2021/02/24 09:53:35 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft.h"
 #include "bignum.h"
+
+void	add_with_carry_internal(t_big *res, int at_index, t_digit_tmp carry)
+{
+	t_digit_tmp	sum;
+
+	while (carry)
+	{
+		if (at_index >= BIG_N_DIGITS)
+		{
+			ft_putstr_fd(2, "bignum overflow!\n");
+			return ;
+		}
+		sum = res->val[at_index] + carry;
+		res->val[at_index] = sum % BIG_BASE;
+		carry = sum / BIG_BASE;
+		at_index++;
+	}
+	if (at_index > res->used)
+		res->used = at_index;
+}
 
 t_big	big_mul(t_big a, t_big b)
 {
 	t_big		res;
-	t_digit		carry;
-	t_digit_tmp	prod;
+	t_digit_tmp	tmp;
 	int			i;
 	int			j;
 
 	res = big_zero();
 	j = 0;
-	carry = 0;
-	while (j < BIG_N_DIGITS)
+	while (j < b.used)
 	{
 		i = 0;
-		while (i < BIG_N_DIGITS)
+		while (i < a.used)
 		{
-			if (i + j >= BIG_N_DIGITS)
-				break ;
-			prod = res.val[i + j] + a.val[i] * b.val[j] + carry;
-			res.val[i + j] = prod % BIG_BASE;
-			carry = prod / BIG_BASE;
+			tmp = a.val[i] * b.val[j];
+			add_with_carry_internal(&res, i + j, tmp);
 			i++;
 		}
 		j++;

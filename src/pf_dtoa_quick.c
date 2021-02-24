@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/12 04:49:33 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/02/23 08:30:54 by debby            ###   ########.fr       */
+/*   Updated: 2021/02/23 15:01:53 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,8 @@ static void				part_and_round(t_parts *p, long double nb, int prec)
 	if (rem > 0.5)
 		p->fpart++;
 	else if (rem == 0.5 &&
-		(((unsigned long)ft_trunc(p->fpart) % 2) == 1
-		|| (ft_trunc(p->fpart) == .0 && ((unsigned long)p->ipart % 2) == 1)))
+		((unsigned long)ft_trunc(p->fpart) % 2 == 1
+		|| (ft_trunc(p->fpart) == 0.0 && (unsigned long)p->ipart % 2 == 1)))
 		p->fpart++;
 	if (p->fpart > g_pow10[prec])
 	{
@@ -61,6 +61,10 @@ static void				part_and_round(t_parts *p, long double nb, int prec)
 		p->fpart = 0;
 	}
 }
+
+/*
+** while (fpart * 10^i < 10^prec) i++;
+*/
 
 static int				calc_extra_zeros(long double fpart, int prec)
 {
