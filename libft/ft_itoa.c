@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/10 15:18:53 by qsharoly          #+#    #+#             */
-/*   Updated: 2019/09/11 18:11:33 by qsharoly         ###   ########.fr       */
+/*   Updated: 2021/02/26 02:53:12 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,12 @@
 char		*ft_itoa(int n)
 {
 	char	*a;
-	char	buf[ITOA_BUF_SIZE];
+	char	buf[ITOA_BUF_SIZE + 1];
 	int		nb_digits;
-	int		is_neg;
+	int		negative;
 
 	nb_digits = 0;
-	is_neg = (n < 0);
+	negative = (n < 0);
 	if (n <= 0)
 	{
 		buf[ITOA_BUF_SIZE - nb_digits++] = -(n % 10) + '0';
@@ -31,11 +31,11 @@ char		*ft_itoa(int n)
 		buf[ITOA_BUF_SIZE - nb_digits++] = n % 10 + '0';
 		n = n / 10;
 	}
-	if (!(a = malloc(sizeof(*a) * (is_neg + nb_digits + 1))))
+	if (!(a = malloc(sizeof(*a) * (negative + nb_digits + 1))))
 			return (NULL);
-	if (is_neg)
+	if (negative)
 		a[0] = '-';
-	ft_memcpy(a + is_neg, buf + ITOA_BUF_SIZE - nb_digits + 1, nb_digits);
-	a[is_neg + nb_digits] = '\0';
+	ft_memcpy(a + negative, buf + ITOA_BUF_SIZE - nb_digits + 1, nb_digits);
+	a[negative + nb_digits] = '\0';
 	return (a);
 }
