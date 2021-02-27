@@ -1,4 +1,5 @@
 libft.a
+libft.so
 objects
 deps
 *.out

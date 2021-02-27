@@ -25,9 +25,13 @@ $(NAME): $(OBJ)
 	@echo "# packing $(NAME)"
 	ar rcs $(NAME) $(OBJ)
 
+so: $(OBJ)
+	gcc --shared $(OBJ) -o libft.so
+
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
 $(OBJDIR)/%.o: $(SRCDIR)/%.c $(DEPDIR)/%.d
-	$(CC) -c $< -o $@ -I $(INCDIR) $(CCFLAGS) $(DEPFLAGS)
+##	$(CC) -c $< -o $@ -I $(INCDIR) $(CCFLAGS) $(DEPFLAGS)
+	$(CC) -O3 -fpic -c $< -o $@ -I $(INCDIR) $(CCFLAGS) $(DEPFLAGS)
 
 $(DEPDIR)/%d: ;
 
