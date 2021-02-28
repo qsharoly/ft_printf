@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 15:31:58 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/02/28 12:19:06 by debby            ###   ########.fr       */
+/*   Updated: 2021/02/28 12:33:54 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,6 @@ typedef struct	s_fmt
 	void		(*write_arg)(t_stream *b, struct s_fmt *fmt, va_list ap);
 }				t_fmt;
 
-void			(*g_conv_table[256])(t_stream *, t_fmt *, va_list);
-
 typedef struct	s_parts
 {
 	long double	ipart;
@@ -87,10 +85,9 @@ void			pf_putc(int c, t_stream *b);
 void			pf_repeat(char c, int times, t_stream *b);
 void			pf_puts(const char *s, t_stream *b);
 void			pf_nputs(const char *s, int len, t_stream *b);
-void			putc_printf_internal(int c, t_stream *b);
-void			putc_snprintf_internal(int c, t_stream *b);
+void			putc_impl_printf(int c, t_stream *b);
+void			putc_impl_snprintf(int c, t_stream *b);
 
-void			init_conv_table(void);
 t_fmt			pf_parse_specifier(const char *str, va_list ap);
 char			sign_char(int is_negative, const t_fmt *fmt);
 char			*pf_utoa_base(char *buffer, unsigned long long value,
@@ -99,6 +96,9 @@ void			pf_putnbr(t_stream *out, const char *value_start,
 					const char *prefix, const t_fmt *fmt);
 void			pf_dtoa(t_stream *out, long double d, const t_fmt *fmt);
 void			pf_dtoa_quick(t_stream *out, long double nb, const t_fmt *fmt);
+
+void			(*g_conv_table[256])(t_stream *, t_fmt *, va_list);
+void			init_conv_table(void);
 void			conv_percent(t_stream *out, t_fmt *fmt, va_list ap);
 void			conv_char(t_stream *out, t_fmt *fmt, va_list ap);
 void			conv_str(t_stream *out, t_fmt *fmt, va_list ap);

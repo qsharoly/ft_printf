@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/27 18:24:37 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/02/28 12:20:43 by debby            ###   ########.fr       */
+/*   Updated: 2021/02/28 12:36:01 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 /*
 ** if `out->size == 0` we still go through the conversion
 ** to count how many chars would be written
-** (`putc_snprintf_internal` will do nothing but increase `out->total_written`
+** (`putc_impl_snprintf` will do nothing but increase `out->total_written`
 ** in this case)
 */
 
@@ -45,7 +45,7 @@ int			ft_snprintf(char *str, int max, const char *format, ...)
 	va_list		ap;
 	t_stream	b;
 
-	b = pf_stream_init(STDOUT_FD, str, max, putc_snprintf_internal);
+	b = pf_stream_init(STDOUT_FD, str, max, putc_impl_snprintf);
 	init_conv_table();
 	va_start(ap, format);
 	print_args(&b, format, ap);
