@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 15:31:58 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/02/28 11:13:31 by debby            ###   ########.fr       */
+/*   Updated: 2021/02/28 11:52:23 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ typedef struct	s_fmt
 	unsigned	alternative_form:1;
 	unsigned	has_precision:1;
 	unsigned	upcase:1;
+	int			base;
 	int			spec_length;
 	int			min_width;
 	int			precision;

@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/14 13:26:37 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/02/28 03:38:42 by debby            ###   ########.fr       */
+/*   Updated: 2021/02/28 11:51:13 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,11 +73,8 @@ static char			choose_padchar(const t_fmt *fmt)
 		padchar = '0';
 	else
 		padchar = ' ';
-	if (fmt->pad_with_zero && fmt->precision != 1
-		&& (fmt->write_arg == conv_signed
-			|| fmt->write_arg == conv_unsigned
-			|| fmt->write_arg == conv_oct
-			|| fmt->write_arg == conv_hex))
+	if (fmt->pad_with_zero && fmt->has_precision
+		&& (fmt->write_arg == conv_signed || fmt->write_arg == conv_unsigned))
 		padchar = ' ';
 	return (padchar);
 }
@@ -133,15 +130,19 @@ void				init_conv_table(void)
 	g_conv_table['d'] = conv_signed;
 	g_conv_table['i'] = conv_signed;
 	g_conv_table['u'] = conv_unsigned;
-	g_conv_table['o'] = conv_oct;
-	g_conv_table['x'] = conv_hex;
-	g_conv_table['X'] = conv_hex;
+	g_conv_table['o'] = conv_unsigned;
+	g_conv_table['x'] = conv_unsigned;
+	g_conv_table['X'] = conv_unsigned;
 	g_conv_table['f'] = conv_floating;
 }
 
 static const char	*parse_conv(const char *pos, t_fmt *f)
 {
-	f->upcase = (*pos == 'X');
+	if (ft_strchr("diuoxX", *pos))
+	{
+		f->upcase = (*pos == 'X');
+		f->base = 10 * !!ft_strchr("diu", *pos) + 8 * (*pos == 'o') + 16 * !!ft_strchr("xX", *pos);
+	}
 	f->write_arg = g_conv_table[(unsigned char)*pos];
 	if (f->write_arg)
 		pos++;
