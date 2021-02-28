@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/14 12:23:11 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/02/28 02:19:59 by debby            ###   ########.fr       */
+/*   Updated: 2021/02/28 12:06:14 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@ void	conv_percent(t_stream *out, t_fmt *f, va_list ap)
 
 	(void)ap;
 	pad_len = ft_imax(0, f->min_width - 1);
-	pf_repeat(f->padchar, !f->left_justify * pad_len, out);
+	pf_repeat(f->padchar, !f->left_align * pad_len, out);
 	pf_putc('%', out);
-	pf_repeat(f->padchar, f->left_justify * pad_len, out);
+	pf_repeat(f->padchar, f->left_align * pad_len, out);
 }
 
 #elif __linux__
@@ -45,9 +45,9 @@ void	conv_char(t_stream *out, t_fmt *f, va_list ap)
 
 	c = (char)va_arg(ap, int);
 	pad_len = ft_max(0, f->min_width - 1);
-	pf_repeat(f->padchar, !f->left_justify * pad_len, out);
+	pf_repeat(f->padchar, !f->left_align * pad_len, out);
 	pf_putc(c, out);
-	pf_repeat(f->padchar, f->left_justify * pad_len, out);
+	pf_repeat(f->padchar, f->left_align * pad_len, out);
 }
 
 void	conv_str(t_stream *out, t_fmt *f, va_list ap)
@@ -69,7 +69,7 @@ void	conv_str(t_stream *out, t_fmt *f, va_list ap)
 	else
 		value_len = ft_strlen(s);
 	pad_len = ft_max(0, f->min_width - value_len);
-	pf_repeat(f->padchar, !f->left_justify * pad_len, out);
+	pf_repeat(f->padchar, !f->left_align * pad_len, out);
 	pf_nputs(s, value_len, out);
-	pf_repeat(f->padchar, f->left_justify * pad_len, out);
+	pf_repeat(f->padchar, f->left_align * pad_len, out);
 }

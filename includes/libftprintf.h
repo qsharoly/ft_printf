@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 15:31:58 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/02/28 11:52:23 by debby            ###   ########.fr       */
+/*   Updated: 2021/02/28 12:05:50 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ enum			e_size
 typedef struct	s_fmt
 {
 	unsigned	pad_with_zero:1;
-	unsigned	left_justify:1;
+	unsigned	left_align:1;
 	unsigned	explicit_plus:1;
 	unsigned	prepend_space:1;
 	unsigned	alternative_form:1;
@@ -103,8 +103,6 @@ void			conv_str(t_stream *out, t_fmt *fmt, va_list ap);
 void			conv_ptr(t_stream *out, t_fmt *fmt, va_list ap);
 void			conv_signed(t_stream *out, t_fmt *fmt, va_list ap);
 void			conv_unsigned(t_stream *out, t_fmt *fmt, va_list ap);
-void			conv_oct(t_stream *out, t_fmt *fmt, va_list ap);
-void			conv_hex(t_stream *out, t_fmt *fmt, va_list ap);
 void			conv_floating(t_stream *out, t_fmt *fmt, va_list ap);
 int				ft_printf(const char *format, ...);
 

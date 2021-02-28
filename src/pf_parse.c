@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/14 13:26:37 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/02/28 11:51:13 by debby            ###   ########.fr       */
+/*   Updated: 2021/02/28 12:06:04 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static const char	*parse_flags(const char *pos, t_fmt *fmt)
 	while (is_printf_flag(*pos))
 	{
 		fmt->pad_with_zero |= (*pos == '0');
-		fmt->left_justify |= (*pos == '-');
+		fmt->left_align |= (*pos == '-');
 		fmt->explicit_plus |= (*pos == '+');
 		fmt->prepend_space |= (*pos == ' ');
 		fmt->alternative_form |= (*pos == '#');
@@ -69,7 +69,7 @@ static char			choose_padchar(const t_fmt *fmt)
 {
 	char	padchar;
 
-	if (fmt->pad_with_zero && !fmt->left_justify)
+	if (fmt->pad_with_zero && !fmt->left_align)
 		padchar = '0';
 	else
 		padchar = ' ';
@@ -88,7 +88,7 @@ static const char	*parse_min_width(const char *pos, t_fmt *fmt, va_list ap)
 		pos++;
 		nb = va_arg(ap, int);
 		if (nb < 0)
-			fmt->left_justify = 1;
+			fmt->left_align = 1;
 		fmt->min_width = ft_abs(nb);
 	}
 	else

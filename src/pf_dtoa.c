@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/12 04:49:33 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/02/23 16:46:22 by debby            ###   ########.fr       */
+/*   Updated: 2021/02/28 12:06:30 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static void	digits_put(const char *digits, int split_offset, char sign, const t_
 	pad_len = fmt->min_width - ((sign != 0) + i + (dot != 0) + ft_min(digits_len - split_offset, prec));
 	if (sign && fmt->pad_with_zero)
 		pf_putc(sign, out);
-	pf_repeat(fmt->padchar, !fmt->left_justify * pad_len, out);
+	pf_repeat(fmt->padchar, !fmt->left_align * pad_len, out);
 	if (sign && !fmt->pad_with_zero)
 		pf_putc(sign, out);
 	if (split_offset <= 0)
@@ -57,7 +57,7 @@ static void	digits_put(const char *digits, int split_offset, char sign, const t_
 		while (prec-- > 0)
 			pf_putc('0', out);
 	}
-	pf_repeat(fmt->padchar, fmt->left_justify * pad_len, out);
+	pf_repeat(fmt->padchar, fmt->left_align * pad_len, out);
 }
 
 char	*digits_round(char *digits, int split_offset, int precision)
