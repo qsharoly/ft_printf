@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pf_specifier_parse.c                               :+:      :+:    :+:   */
+/*   pf_parse.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/14 13:26:37 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/02/23 08:23:42 by debby            ###   ########.fr       */
+/*   Updated: 2021/02/28 03:38:42 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,42 +121,34 @@ static const char	*parse_precision(const char *pos, t_fmt *fmt, va_list ap)
 	return (pos);
 }
 
-void			(*g_conv[11])(t_stream *, t_fmt *, union u_pfarg) = {
-	conv_percent,
-	conv_char,
-	conv_str,
-	conv_ptr,
-	conv_signed,
-	conv_signed,
-	conv_unsigned,
-	conv_oct,
-	conv_hex,
-	conv_hex,
-	conv_floating
-};
+extern void			(*g_conv_table[256])(t_stream *, t_fmt *, va_list);
 
-static const char	*parse_conv(const char *pos, t_fmt *fmt)
+void				init_conv_table(void)
 {
-	char	*type;
-	char	*conversions;
-	int		index;
+	ft_bzero(g_conv_table, sizeof(void *) * 256);
+	g_conv_table['%'] = conv_percent;
+	g_conv_table['c'] = conv_char;
+	g_conv_table['s'] = conv_str;
+	g_conv_table['p'] = conv_ptr;
+	g_conv_table['d'] = conv_signed;
+	g_conv_table['i'] = conv_signed;
+	g_conv_table['u'] = conv_unsigned;
+	g_conv_table['o'] = conv_oct;
+	g_conv_table['x'] = conv_hex;
+	g_conv_table['X'] = conv_hex;
+	g_conv_table['f'] = conv_floating;
+}
 
-	if (*pos == 'X')
-		fmt->upcase = 1;
-	conversions = "%cspdiuoxXf";
-	type = ft_strchr(conversions, *pos);
-	if (type)
-	{
-		index = type - conversions;
-		fmt->write_arg = g_conv[index];
+static const char	*parse_conv(const char *pos, t_fmt *f)
+{
+	f->upcase = (*pos == 'X');
+	f->write_arg = g_conv_table[(unsigned char)*pos];
+	if (f->write_arg)
 		pos++;
-	}
-	else
-		fmt->write_arg = conv_default_noop;
 	return (pos);
 }
 
-t_fmt				pf_specifier_parse(const char *str, va_list ap)
+t_fmt				pf_parse_specifier(const char *str, va_list ap)
 {
 	t_fmt		fmt;
 	const char	*pos;

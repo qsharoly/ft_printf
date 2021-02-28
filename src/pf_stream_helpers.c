@@ -6,7 +6,7 @@
 /*   By: debby <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/09 12:54:10 by debby             #+#    #+#             */
-/*   Updated: 2021/02/21 22:03:44 by debby            ###   ########.fr       */
+/*   Updated: 2021/02/28 11:05:19 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,6 @@ void	pf_puts(const char *s, t_stream *b)
 		pf_putc(*s, b);
 		s++;
 	}
-}
-
-void	pf_puts_if(const char *s, t_stream *b)
-{
-	if (s)
-		pf_puts(s, b);
 }
 
 void	pf_nputs(const char *s, int len, t_stream *b)

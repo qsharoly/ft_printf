@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/12 05:31:25 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/02/23 08:30:33 by debby            ###   ########.fr       */
+/*   Updated: 2021/02/28 02:32:08 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,14 +50,20 @@ static int	put_if_special(t_stream *out, t_fmt *fmt, long double nb)
 	return (1);
 }
 
-void		conv_floating(t_stream *out, t_fmt *fmt, union u_pfarg arg)
+void		conv_floating(t_stream *out, t_fmt *fmt, va_list ap)
 {
+	long double	d;
+
+	if (fmt->size == Size_longdouble)
+		d = va_arg(ap, long double);
+	else
+		d = va_arg(ap, double);
 	if (fmt->has_precision == 0)
 		fmt->precision = DTOA_DEFAULT_PRECISION;
-	if (put_if_special(out, fmt, arg.as_f))
+	if (put_if_special(out, fmt, d))
 		return ;
-	if (ft_fabs(arg.as_f) < (long double)ULONG_MAX && fmt->precision < 20)
-		pf_dtoa_quick(out, arg.as_f, fmt);
+	if (ft_fabs(d) < (long double)ULONG_MAX && fmt->precision < 20)
+		pf_dtoa_quick(out, d, fmt);
 	else
-		pf_dtoa(out, arg.as_f, fmt);
+		pf_dtoa(out, d, fmt);
 }

@@ -23,8 +23,7 @@ SRC = ft_printf.c\
 	  ft_snprintf.c\
 	  pf_stream.c\
 	  pf_stream_helpers.c\
-	  pf_specifier_parse.c\
-	  pf_arg_get.c\
+	  pf_parse.c\
 	  pf_conv_basic.c\
 	  pf_conv_putnbr.c\
 	  pf_conv_diuox.c\

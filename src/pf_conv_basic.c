@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/14 12:23:11 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/02/23 01:45:12 by debby            ###   ########.fr       */
+/*   Updated: 2021/02/28 02:19:59 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,13 @@
 #include "libftprintf.h"
 #include "libft.h"
 
-void	conv_default_noop(t_stream *out, t_fmt *f, union u_pfarg arg)
-{
-	(void)out;
-	(void)f;
-	(void)arg;
-}
-
 #if __APPLE__
 
-void	conv_percent(t_stream *out, t_fmt *f, union u_pfarg arg)
+void	conv_percent(t_stream *out, t_fmt *f, va_list ap)
 {
 	int		pad_len;
 
-	(void)arg;
+	(void)ap;
 	pad_len = ft_imax(0, f->min_width - 1);
 	pf_repeat(f->padchar, !f->left_justify * pad_len, out);
 	pf_putc('%', out);
@@ -36,43 +29,47 @@ void	conv_percent(t_stream *out, t_fmt *f, union u_pfarg arg)
 
 #elif __linux__
 
-void	conv_percent(t_stream *out, t_fmt *f, union u_pfarg arg)
+void	conv_percent(t_stream *out, t_fmt *f, va_list ap)
 {
-	(void)arg;
+	(void)ap;
 	(void)f;
 	pf_putc('%', out);
 }
 
 #endif
 
-void	conv_char(t_stream *out, t_fmt *f, union u_pfarg arg)
+void	conv_char(t_stream *out, t_fmt *f, va_list ap)
 {
 	int		pad_len;
+	char	c;
 
+	c = (char)va_arg(ap, int);
 	pad_len = ft_max(0, f->min_width - 1);
 	pf_repeat(f->padchar, !f->left_justify * pad_len, out);
-	pf_putc(arg.as_c, out);
+	pf_putc(c, out);
 	pf_repeat(f->padchar, f->left_justify * pad_len, out);
 }
 
-void	conv_str(t_stream *out, t_fmt *f, union u_pfarg arg)
+void	conv_str(t_stream *out, t_fmt *f, va_list ap)
 {
 	int		value_len;
 	int		pad_len;
+	char	*s;
 
-	if (!arg.as_s)
+	s = va_arg(ap, char *);
+	if (!s)
 	{
 		if (f->has_precision && f->precision < 6)
-			arg.as_s = "";
+			s = "";
 		else
-			arg.as_s = "(null)";
+			s = "(null)";
 	}
 	if (f->has_precision && f->precision >= 0)
-		value_len = ft_min(ft_strlen(arg.as_s), f->precision);
+		value_len = ft_min(ft_strlen(s), f->precision);
 	else
-		value_len = ft_strlen(arg.as_s);
+		value_len = ft_strlen(s);
 	pad_len = ft_max(0, f->min_width - value_len);
 	pf_repeat(f->padchar, !f->left_justify * pad_len, out);
-	pf_nputs(arg.as_s, value_len, out);
+	pf_nputs(s, value_len, out);
 	pf_repeat(f->padchar, f->left_justify * pad_len, out);
 }

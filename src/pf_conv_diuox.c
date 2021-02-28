@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/14 12:55:31 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/02/23 09:43:35 by debby            ###   ########.fr       */
+/*   Updated: 2021/02/28 02:28:43 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,81 +15,127 @@
 
 #if __linux__
 
-void	conv_ptr(t_stream *out, t_fmt *fmt, union u_pfarg arg)
+void	conv_ptr(t_stream *out, t_fmt *fmt, va_list ap)
 {
 	char			str[MAXBUF_UTOA];
 	const char		*value_start;
+	void			*p;
 
-	if (!arg.as_ptr)
+	p = va_arg(ap, void *);
+	if (!p)
 	{
 		pf_putnbr(out, "(nil)", "", fmt);
 		return ;
 	}
-	value_start = pf_utoa_base(str, (unsigned long)arg.as_ptr, 16, 0);
+	value_start = pf_utoa_base(str, (unsigned long)p, 16, 0);
 	pf_putnbr(out, value_start, "0x", fmt);
 }
 
 #else
 
-void	conv_ptr(t_stream *out, t_fmt *fmt, union u_pfarg arg)
+void	conv_ptr(t_stream *out, t_fmt *fmt, va_list ap)
 {
 	char			str[MAXBUF_UTOA];
 	const char		*value_start;
+	void			*p;
 
-	value_start = pf_utoa_base(str, (unsigned long)arg.as_ptr, 16, 0);
+	p = va_arg(ap, void *);
+	value_start = pf_utoa_base(str, (unsigned long)p, 16, 0);
 	pf_putnbr(out, value_start, "0x", fmt);
 }
 
 #endif
 
-void	conv_signed(t_stream *out, t_fmt *fmt, union u_pfarg arg)
+void	conv_signed(t_stream *out, t_fmt *fmt, va_list ap)
 {
 	char			str[MAXBUF_UTOA];
 	const char		*value_start;
 	char			prefix[2];
+	long long int	arg;
 
-	value_start = pf_utoa_base(str, ft_abs(arg.as_i), 10, 0);
-	prefix[0] = sign_char(arg.as_i < 0, fmt);
+	if (fmt->size == Size_ll)
+		arg = va_arg(ap, long long);
+	else if (fmt->size == Size_l)
+		arg = va_arg(ap, long);
+	else
+		arg = va_arg(ap, int);
+	if (fmt->size == Size_hh)
+		arg = (char)arg;
+	else if (fmt->size == Size_h)
+		arg = (short)arg;
+	value_start = pf_utoa_base(str, ft_abs(arg), 10, 0);
+	prefix[0] = sign_char(arg < 0, fmt);
 	prefix[1] = '\0';
 	pf_putnbr(out, value_start, prefix, fmt);
 }
 
-void	conv_unsigned(t_stream *out, t_fmt *fmt, union u_pfarg arg)
+void	conv_unsigned(t_stream *out, t_fmt *fmt, va_list ap)
 {
-	char			str[MAXBUF_UTOA];
-	const char		*value_start;
-	const char		*prefix;
+	char				str[MAXBUF_UTOA];
+	const char			*value_start;
+	char				*prefix;
+	unsigned long long	arg;
 
-	value_start = pf_utoa_base(str, arg.as_u, 10, 0);
+	if (fmt->size == Size_ll)
+		arg = va_arg(ap, unsigned long long);
+	else if (fmt->size == Size_l)
+		arg = va_arg(ap, unsigned long);
+	else
+		arg = va_arg(ap, unsigned int);
+	if (fmt->size == Size_hh)
+		arg = (unsigned char)arg;
+	else if (fmt->size == Size_h)
+		arg = (unsigned short)arg;
 	prefix = "";
+	value_start = pf_utoa_base(str, arg, 10, 0);
 	pf_putnbr(out, value_start, prefix, fmt);
 }
 
-void	conv_oct(t_stream *out, t_fmt *fmt, union u_pfarg arg)
+void	conv_oct(t_stream *out, t_fmt *fmt, va_list ap)
 {
-	char			str[MAXBUF_UTOA];
-	const char		*value_start;
-	const char		*prefix;
+	char				str[MAXBUF_UTOA];
+	const char			*value_start;
+	char				*prefix;
+	unsigned long long	arg;
 
-	value_start = pf_utoa_base(str, arg.as_u, 8, 0);
-	if (fmt->alternative_form
-		&& ((int)ft_strlen(value_start) >= fmt->precision))
+	if (fmt->size == Size_ll)
+		arg = va_arg(ap, unsigned long long);
+	else if (fmt->size == Size_l)
+		arg = va_arg(ap, unsigned long);
+	else
+		arg = va_arg(ap, unsigned int);
+	if (fmt->size == Size_hh)
+		arg = (unsigned char)arg;
+	else if (fmt->size == Size_h)
+		arg = (unsigned short)arg;
+	value_start = pf_utoa_base(str, arg, 8, 0);
+	prefix = "";
+	if ((fmt->alternative_form)
+			&& ((int)ft_strlen(value_start) >= fmt->precision))
 		prefix = "0";
-	else
-		prefix = "";
 	pf_putnbr(out, value_start, prefix, fmt);
 }
 
-void	conv_hex(t_stream *out, t_fmt *fmt, union u_pfarg arg)
+void	conv_hex(t_stream *out, t_fmt *fmt, va_list ap)
 {
-	char			str[MAXBUF_UTOA];
-	const char		*value_start;
-	const char		*prefix;
+	char				str[MAXBUF_UTOA];
+	const char			*value_start;
+	char				*prefix;
+	unsigned long long	arg;
 
-	value_start = pf_utoa_base(str, arg.as_u, 16, fmt->upcase);
-	if (fmt->alternative_form && arg.as_u > 0)
-		prefix = fmt->upcase ? "0X" : "0x";
+	if (fmt->size == Size_ll)
+		arg = va_arg(ap, unsigned long long);
+	else if (fmt->size == Size_l)
+		arg = va_arg(ap, unsigned long);
 	else
-		prefix = "";
+		arg = va_arg(ap, unsigned int);
+	if (fmt->size == Size_hh)
+		arg = (unsigned char)arg;
+	else if (fmt->size == Size_h)
+		arg = (unsigned short)arg;
+	value_start = pf_utoa_base(str, arg, 16, fmt->upcase);
+	prefix = "";
+	if (fmt->alternative_form && arg > 0)
+		prefix = fmt->upcase ? "0X" : "0x";
 	pf_putnbr(out, value_start, prefix, fmt);
 }

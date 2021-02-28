@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/27 18:24:37 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/02/23 02:37:07 by debby            ###   ########.fr       */
+/*   Updated: 2021/02/28 03:31:05 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,49 +20,22 @@ void			pf_error(const char *msg)
 	exit(1);
 }
 
-union u_pfarg	get_arg(va_list ap, const t_fmt *fmt)
-{
-	union u_pfarg	arg;
-
-	if (fmt->write_arg == conv_percent)
-		arg = get_none(ap, fmt->size);
-	else if (fmt->write_arg == conv_char)
-		arg = get_char(ap, fmt->size);
-	else if (fmt->write_arg == conv_str)
-		arg = get_string(ap, fmt->size);
-	else if (fmt->write_arg == conv_ptr)
-		arg = get_pointer(ap, fmt->size);
-	else if (fmt->write_arg == conv_signed)
-		arg = get_signed(ap, fmt->size);
-	else if (fmt->write_arg == conv_unsigned || fmt->write_arg == conv_oct
-			|| fmt->write_arg == conv_hex)
-		arg = get_unsigned(ap, fmt->size);
-	else if (fmt->write_arg == conv_floating)
-		arg = get_floating(ap, fmt->size);
-	else
-		arg = get_none(ap, fmt->size);
-	return (arg);
-}
-
 static void		print_args(t_stream *out, const char *format, va_list ap)
 {
 	t_fmt			fmt;
-	union u_pfarg	arg;
 
 	while (*format)
 	{
 		if (*format == '%')
 		{
-			fmt = pf_specifier_parse(format, ap);
-			arg = get_arg(ap, &fmt);
-			fmt.write_arg(out, &fmt, arg);
+			fmt = pf_parse_specifier(format, ap);
+			if (fmt.write_arg)
+				fmt.write_arg(out, &fmt, ap);
 			format += fmt.spec_length;
+			continue ;
 		}
-		else
-		{
-			pf_putc(*format, out);
-			format++;
-		}
+		pf_putc(*format, out);
+		format++;
 	}
 }
 
@@ -73,6 +46,7 @@ int				ft_printf(const char *format, ...)
 	char		buffer[BUFFER_SIZE];
 
 	b = pf_stream_init(STDOUT_FD, buffer, BUFFER_SIZE, putc_printf_internal);
+	init_conv_table();
 	va_start(ap, format);
 	print_args(&b, format, ap);
 	va_end(ap);
