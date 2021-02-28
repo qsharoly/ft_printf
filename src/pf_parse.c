@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/14 13:26:37 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/02/28 12:06:04 by debby            ###   ########.fr       */
+/*   Updated: 2021/02/28 14:00:56 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,8 @@ static char			choose_padchar(const t_fmt *fmt)
 		padchar = ' ';
 	if (fmt->pad_with_zero && fmt->has_precision
 		&& (fmt->write_arg == conv_signed || fmt->write_arg == conv_unsigned))
+		padchar = ' ';
+	if (fmt->write_arg == conv_str)
 		padchar = ' ';
 	return (padchar);
 }
@@ -159,8 +161,6 @@ t_fmt				pf_parse_specifier(const char *str, va_list ap)
 	fmt.precision = 1;
 	pos = parse_flags(pos, &fmt);
 	pos = parse_min_width(pos, &fmt, ap);
-	if (ft_isdigit(*pos) || (*pos == '-' && ft_isdigit(*(pos + 1))))
-		pos = parse_min_width(pos, &fmt, ap);
 	pos = parse_precision(pos, &fmt, ap);
 	pos = parse_size_modifier(pos, &fmt);
 	pos = parse_conv(pos, &fmt);
