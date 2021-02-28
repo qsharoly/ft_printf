@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 15:31:58 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/02/28 12:05:50 by debby            ###   ########.fr       */
+/*   Updated: 2021/02/28 12:19:06 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,10 +78,8 @@ typedef struct	s_parts
 	char		*f_str;
 }				t_parts;
 
-void			init_conv_table(void);
-void			putc_printf_internal(int c, t_stream *b);
-void			putc_snprintf_internal(int c, t_stream *b);
 void			pf_error(const char *msg);
+
 t_stream		pf_stream_init(int target_fd, char *data, int size,
 					void (*putc)(int, t_stream*));
 void			pf_stream_flush(t_stream *b);
@@ -89,12 +87,16 @@ void			pf_putc(int c, t_stream *b);
 void			pf_repeat(char c, int times, t_stream *b);
 void			pf_puts(const char *s, t_stream *b);
 void			pf_nputs(const char *s, int len, t_stream *b);
+void			putc_printf_internal(int c, t_stream *b);
+void			putc_snprintf_internal(int c, t_stream *b);
+
+void			init_conv_table(void);
 t_fmt			pf_parse_specifier(const char *str, va_list ap);
+char			sign_char(int is_negative, const t_fmt *fmt);
 char			*pf_utoa_base(char *buffer, unsigned long long value,
 					unsigned base, int upcase);
 void			pf_putnbr(t_stream *out, const char *value_start,
 					const char *prefix, const t_fmt *fmt);
-char			sign_char(int is_negative, const t_fmt *fmt);
 void			pf_dtoa(t_stream *out, long double d, const t_fmt *fmt);
 void			pf_dtoa_quick(t_stream *out, long double nb, const t_fmt *fmt);
 void			conv_percent(t_stream *out, t_fmt *fmt, va_list ap);
@@ -104,6 +106,8 @@ void			conv_ptr(t_stream *out, t_fmt *fmt, va_list ap);
 void			conv_signed(t_stream *out, t_fmt *fmt, va_list ap);
 void			conv_unsigned(t_stream *out, t_fmt *fmt, va_list ap);
 void			conv_floating(t_stream *out, t_fmt *fmt, va_list ap);
+
 int				ft_printf(const char *format, ...);
+int				ft_snprintf(char *buf, int max, const char *format, ...);
 
 #endif

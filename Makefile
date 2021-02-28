@@ -37,16 +37,16 @@ SRC = ft_printf.c\
 	  bignum/big_mul.c\
 	  bignum/big_raise.c\
 	  bignum/big_to_str.c\
-	  math/ft_fabs.c\
-	  math/ft_isneg.c\
-	  math/ft_isinf.c\
-	  math/ft_isnan.c\
-	  math/ft_issub.c\
-	  math/ft_trunc.c
+	  float/ft_fabs.c\
+	  float/ft_isneg.c\
+	  float/ft_isinf.c\
+	  float/ft_isnan.c\
+	  float/ft_issub.c\
+	  float/ft_trunc.c
 
 OBJ = $(SRC:%.c=$(OBJDIR)/%.o)
 
-$(shell mkdir -p $(OBJDIR) $(OBJDIR)/bignum $(OBJDIR)/math)
+$(shell mkdir -p $(OBJDIR) $(OBJDIR)/bignum $(OBJDIR)/float)
 
 
 all: $(NAME)
@@ -64,7 +64,7 @@ $(OBJDIR)/pf_conv_floating.o: includes/float.h
 $(OBJDIR)/pf_dtoa_quick.o: includes/float.h
 $(OBJDIR)/pf_dtoa.o: includes/bignum.h includes/float.h
 $(OBJDIR)/bignum/*.o: includes/bignum.h
-$(OBJDIR)/math/*.o: includes/float.h
+$(OBJDIR)/float/*.o: includes/float.h
 
 .PHONY: all clean fclean re
 
