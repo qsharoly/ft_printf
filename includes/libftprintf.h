@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 15:31:58 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/02/28 12:33:54 by debby            ###   ########.fr       */
+/*   Updated: 2021/03/01 10:58:24 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,12 +56,12 @@ typedef struct	s_fmt
 	unsigned	alternative_form:1;
 	unsigned	has_precision:1;
 	unsigned	upcase:1;
+	char		padchar;
+	enum e_size size;
 	int			base;
 	int			spec_length;
 	int			min_width;
 	int			precision;
-	enum e_size size;
-	char		padchar;
 	void		(*write_arg)(t_stream *b, struct s_fmt *fmt, va_list ap);
 }				t_fmt;
 
