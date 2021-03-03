@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/27 18:24:37 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/02/28 12:36:01 by debby            ###   ########.fr       */
+/*   Updated: 2021/03/03 12:59:07 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ static void	print_args(t_stream *out, const char *format, va_list ap)
 	}
 }
 
+__attribute__((__format__(printf, 3, 4)))
 int			ft_snprintf(char *str, int max, const char *format, ...)
 {
 	va_list		ap;
