@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/12 04:19:11 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/02/24 09:53:00 by debby            ###   ########.fr       */
+/*   Updated: 2021/03/06 21:55:10 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 # define BIG_N_DIGITS 90
 # define BIG_BASE 100000000
 # define BIG_DIGIT_CHARS 8
-# define BIG_TO_STR_BUFSIZE (BIG_DIGIT_CHARS * BIG_N_DIGITS + 1)
+# define BIG_MAX_CHARS (BIG_DIGIT_CHARS * BIG_N_DIGITS)
 
 typedef unsigned long	t_digit;
 typedef long long		t_digit_tmp;
@@ -41,6 +41,6 @@ void					add_with_carry_internal(t_big *res, int at_index,
 t_big					big_add(t_big a, t_big b);
 t_big					big_mul(t_big a, t_big b);
 t_big					big_raise(t_digit n, t_digit power);
-char					*big_str(char buf[BIG_TO_STR_BUFSIZE], t_big a);
+char					*big_str(char buf[BIG_MAX_CHARS + 1], t_big a);
 
 #endif

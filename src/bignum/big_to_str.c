@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/12 04:10:05 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/02/24 09:16:09 by debby            ###   ########.fr       */
+/*   Updated: 2021/03/06 21:55:48 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,13 +35,13 @@ static char	*utoa_digit(char *pos, t_digit value, int fill_at_least)
 	return (pos);
 }
 
-char		*big_str(char buf[BIG_TO_STR_BUFSIZE], t_big a)
+char		*big_str(char buf[BIG_MAX_CHARS + 1], t_big a)
 {
 	char	*pos;
 	int		i;
 	int		fill_at_least;
 
-	pos = &buf[BIG_TO_STR_BUFSIZE - 1];
+	pos = &buf[BIG_MAX_CHARS];
 	*pos = '\0';
 	pos--;
 	i = 0;

@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/12 04:49:33 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/02/28 12:06:30 by debby            ###   ########.fr       */
+/*   Updated: 2021/03/06 21:55:32 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,7 @@ void	pf_dtoa(t_stream *out, long double nb, const t_fmt *fmt)
 	long			dec_pow;
 	t_big			big;
 	char			*digits;
-	char			buf[BIG_TO_STR_BUFSIZE];
+	char			buf[BIG_MAX_CHARS + 1];
 	t_big			pow5;
 
 	exponent = get_exponent(nb);
