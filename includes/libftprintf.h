@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 15:31:58 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/03/01 10:58:24 by debby            ###   ########.fr       */
+/*   Updated: 2021/03/06 18:47:16 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,9 @@ typedef struct	s_parts
 	char		*f_str;
 }				t_parts;
 
+int				ft_printf(const char *format, ...);
+int				ft_snprintf(char *buf, int max, const char *format, ...);
+
 void			pf_error(const char *msg);
 
 t_stream		pf_stream_init(int target_fd, char *data, int size,
@@ -106,8 +109,5 @@ void			conv_ptr(t_stream *out, t_fmt *fmt, va_list ap);
 void			conv_signed(t_stream *out, t_fmt *fmt, va_list ap);
 void			conv_unsigned(t_stream *out, t_fmt *fmt, va_list ap);
 void			conv_floating(t_stream *out, t_fmt *fmt, va_list ap);
-
-int				ft_printf(const char *format, ...);
-int				ft_snprintf(char *buf, int max, const char *format, ...);
 
 #endif
