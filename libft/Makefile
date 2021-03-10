@@ -1,4 +1,5 @@
 NAME = libft.a
+SONAME = libft.so
 CC = gcc
 CCFLAGS = -Wall -Wextra -Werror
 SRCDIR = .
@@ -11,7 +12,7 @@ ifeq ($(debug), yes)
 	CCFLAGS += -g
 endif
 
-SRC = $(shell ls ft_*.c) get_next_line.c
+SRC = $(shell ls ft_*.c)
 OBJ = $(SRC:%.c=$(OBJDIR)/%.o)
 DEPS = $(SRC:%.c=$(DEPDIR)/%.d)
 
@@ -26,7 +27,7 @@ $(NAME): $(OBJ)
 	ar rcs $(NAME) $(OBJ)
 
 so: $(OBJ)
-	gcc --shared $(OBJ) -o libft.so
+	gcc --shared $(OBJ) -o $(SONAME)
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
 $(OBJDIR)/%.o: $(SRCDIR)/%.c $(DEPDIR)/%.d
@@ -38,7 +39,7 @@ $(DEPDIR)/%d: ;
 clean:
 	rm -rf $(OBJDIR) $(DEPDIR)
 fclean: clean
-	rm -f $(NAME)
+	rm -f $(NAME) $(SONAME)
 re: fclean
 	make all
 
