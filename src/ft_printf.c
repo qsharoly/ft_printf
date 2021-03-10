@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/27 18:24:37 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/03/03 11:37:26 by debby            ###   ########.fr       */
+/*   Updated: 2021/03/10 07:33:23 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,24 @@ static void		print_args(t_stream *out, const char *format, va_list ap)
 		pf_putc(*format, out);
 		format++;
 	}
+}
+
+static void	putc_impl_printf(int c, t_stream *b)
+{
+	int		written;
+
+	if (b->space_left == 0)
+	{
+		written = write(b->fd, b->data, b->size);
+		if (written < 0)
+			pf_error("write error\n");
+		b->total_written += written;
+		b->pos = 0;
+		b->space_left = b->size;
+	}
+	b->data[b->pos] = c;
+	b->pos++;
+	b->space_left--;
 }
 
 __attribute__((__format__(__printf__, 1, 2)))

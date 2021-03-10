@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 15:31:58 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/03/06 18:47:16 by debby            ###   ########.fr       */
+/*   Updated: 2021/03/10 07:37:59 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ enum			e_size
 	Size_ll,
 	Size_longdouble,
 };
-
 
 typedef struct	s_fmt
 {
@@ -88,8 +87,6 @@ void			pf_putc(int c, t_stream *b);
 void			pf_repeat(char c, int times, t_stream *b);
 void			pf_puts(const char *s, t_stream *b);
 void			pf_nputs(const char *s, int len, t_stream *b);
-void			putc_impl_printf(int c, t_stream *b);
-void			putc_impl_snprintf(int c, t_stream *b);
 
 t_fmt			pf_parse_specifier(const char *str, va_list ap);
 char			sign_char(int is_negative, const t_fmt *fmt);

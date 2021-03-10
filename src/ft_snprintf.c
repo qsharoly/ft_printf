@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/27 18:24:37 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/03/10 06:18:11 by debby            ###   ########.fr       */
+/*   Updated: 2021/03/10 07:39:20 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,28 @@ static void	print_args(t_stream *out, const char *format, va_list ap)
 		}
 		pf_putc(*format, out);
 		format++;
+	}
+}
+
+/*
+** if no more space left, but we are in the middle of a variable,
+** `putc_impl_snprintf` will do a no-op until the variable finishes.
+** after that, printing will terminate in `print_args` function.
+**
+** `total_written` is always incremented to count how many characters
+** would be written when `max_size` is set to 0.
+*/
+
+static void	putc_impl_snprintf(int c, t_stream *b)
+{
+	b->total_written++;
+	if (b->space_left == 0)
+		return ;
+	if (b->data)
+	{
+		b->data[b->pos] = c;
+		b->pos++;
+		b->space_left--;
 	}
 }
 
