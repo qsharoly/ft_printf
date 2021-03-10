@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/10 15:18:53 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/02/26 02:53:12 by debby            ###   ########.fr       */
+/*   Updated: 2021/03/10 06:40:47 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ char		*ft_itoa(int n)
 		n = n / 10;
 	}
 	if (!(a = malloc(sizeof(*a) * (negative + nb_digits + 1))))
-			return (NULL);
+		return (NULL);
 	if (negative)
 		a[0] = '-';
 	ft_memcpy(a + negative, buf + ITOA_BUF_SIZE - nb_digits + 1, nb_digits);

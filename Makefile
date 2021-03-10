@@ -11,7 +11,9 @@ INCFLAGS = -I$(INCDIR) -I$(LFT_INCDIR)
 #Disable union ABI warning on linux gcc
 UNAME_S = $(shell uname -s)
 ifeq ($(UNAME_S), Linux)
+ifeq ($(CC), gcc)
 	CCFLAGS += -Wno-psabi
+endif
 endif
 
 debug = yes
@@ -52,6 +54,7 @@ $(shell mkdir -p $(OBJDIR) $(OBJDIR)/bignum $(OBJDIR)/float)
 all: $(NAME)
 
 export debug
+export CC
 $(NAME): $(OBJ)
 	make -C $(LIBFT)
 	@echo "# packing $(NAME)"
@@ -76,4 +79,3 @@ fclean: clean
 	make -C $(LIBFT) fclean
 re: fclean
 	make all
-

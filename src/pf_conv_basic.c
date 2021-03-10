@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/14 12:23:11 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/02/28 12:06:14 by debby            ###   ########.fr       */
+/*   Updated: 2021/03/10 06:20:52 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	conv_percent(t_stream *out, t_fmt *f, va_list ap)
 	int		pad_len;
 
 	(void)ap;
-	pad_len = ft_imax(0, f->min_width - 1);
+	pad_len = ft_max(0, f->min_width - 1);
 	pf_repeat(f->padchar, !f->left_align * pad_len, out);
 	pf_putc('%', out);
 	pf_repeat(f->padchar, f->left_align * pad_len, out);

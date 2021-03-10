@@ -6,11 +6,10 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/12 04:10:05 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/03/06 21:55:48 by debby            ###   ########.fr       */
+/*   Updated: 2021/03/10 06:27:35 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include "libftprintf.h"
 #include "bignum.h"
 

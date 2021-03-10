@@ -1,8 +1,5 @@
 *.a
 *.out
-*.dSYM
-*.swp
 obj/**/*.o
 pft/
 libft-unit-test/
-.vscode/
