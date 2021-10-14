@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 15:31:58 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/03/10 07:37:59 by debby            ###   ########.fr       */
+/*   Updated: 2021/10/14 04:53:37 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ void			pf_putnbr(t_stream *out, const char *value_start,
 void			pf_dtoa(t_stream *out, long double d, const t_fmt *fmt);
 void			pf_dtoa_quick(t_stream *out, long double nb, const t_fmt *fmt);
 
-void			(*g_conv_table[256])(t_stream *, t_fmt *, va_list);
+extern void		(*g_conv_table[256])(t_stream *, t_fmt *, va_list);
 void			init_conv_table(void);
 void			conv_percent(t_stream *out, t_fmt *fmt, va_list ap);
 void			conv_char(t_stream *out, t_fmt *fmt, va_list ap);

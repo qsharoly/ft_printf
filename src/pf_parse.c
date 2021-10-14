@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/14 13:26:37 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/02/28 14:00:56 by debby            ###   ########.fr       */
+/*   Updated: 2021/10/14 04:53:56 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,7 @@ static const char	*parse_precision(const char *pos, t_fmt *fmt, va_list ap)
 	return (pos);
 }
 
-extern void			(*g_conv_table[256])(t_stream *, t_fmt *, va_list);
+void				(*g_conv_table[256])(t_stream *, t_fmt *, va_list);
 
 void				init_conv_table(void)
 {
