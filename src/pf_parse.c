@@ -6,26 +6,31 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/14 13:26:37 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/10/14 04:53:56 by debby            ###   ########.fr       */
+/*   Updated: 2022/03/24 00:12:42 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "libftprintf.h"
 
-static int			is_printf_flag(int c)
+static int			is_printf_flag_char(int c)
 {
 	return (c == '0' || c == '-' || c == '+' || c == ' ' || c == '#');
 }
 
 static const char	*parse_flags(const char *pos, t_fmt *fmt)
 {
-	while (is_printf_flag(*pos))
+	fmt->align = AlignRight;
+	fmt->plus_mode = OmitSign;
+	while (is_printf_flag_char(*pos))
 	{
-		fmt->pad_with_zero |= (*pos == '0');
-		fmt->left_align |= (*pos == '-');
-		fmt->explicit_plus |= (*pos == '+');
-		fmt->prepend_space |= (*pos == ' ');
+		fmt->add_leading_zeros |= (*pos == '0');
+		if (*pos == '-')
+			fmt->align = AlignLeft;
+		if (*pos == '+')
+			fmt->plus_mode = ExplicitPlus;
+		if (*pos == ' ' && fmt->plus_mode != ExplicitPlus)
+			fmt->plus_mode = ExplicitSpace;
 		fmt->alternative_form |= (*pos == '#');
 		pos++;
 	}
@@ -69,11 +74,11 @@ static char			choose_padchar(const t_fmt *fmt)
 {
 	char	padchar;
 
-	if (fmt->pad_with_zero && !fmt->left_align)
+	if (fmt->add_leading_zeros && fmt->align == AlignRight)
 		padchar = '0';
 	else
 		padchar = ' ';
-	if (fmt->pad_with_zero && fmt->has_precision
+	if (fmt->add_leading_zeros && fmt->has_precision
 		&& (fmt->write_arg == conv_signed || fmt->write_arg == conv_unsigned))
 		padchar = ' ';
 	if (fmt->write_arg == conv_str)
@@ -90,7 +95,7 @@ static const char	*parse_min_width(const char *pos, t_fmt *fmt, va_list ap)
 		pos++;
 		nb = va_arg(ap, int);
 		if (nb < 0)
-			fmt->left_align = 1;
+			fmt->align = AlignLeft;
 		fmt->min_width = ft_abs(nb);
 	}
 	else

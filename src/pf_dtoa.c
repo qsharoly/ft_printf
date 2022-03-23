@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/12 04:49:33 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/03/06 21:55:32 by debby            ###   ########.fr       */
+/*   Updated: 2022/03/23 21:58:49 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,48 +16,46 @@
 #include "float.h"
 #include <limits.h>
 
-static void	digits_put(const char *digits, int split_offset, char sign, const t_fmt *fmt, t_stream *out)
+static void	digits_put(t_sv digits, int split_offset, t_sv sign, const t_fmt *fmt, t_stream *out)
 {
 	int		pad_len;
-	int		digits_len;
-	char	dot;
+	t_sv	dot;
 	int		i;
 	int		prec;
+	int		split;
 
-	dot = (fmt->precision > 0 || fmt->alternative_form) ? '.' : 0;
+	dot = (fmt->precision > 0 || fmt->alternative_form) ? sv_from_cstr(".") : sv_from_cstr("");
 	prec = fmt->precision;
-	digits_len = ft_strlen(digits);
-	i = ft_max(1, ft_min(digits_len, split_offset));
-	pad_len = fmt->min_width - ((sign != 0) + i + (dot != 0) + ft_min(digits_len - split_offset, prec));
-	if (sign && fmt->pad_with_zero)
-		pf_putc(sign, out);
-	pf_repeat(fmt->padchar, !fmt->left_align * pad_len, out);
-	if (sign && !fmt->pad_with_zero)
-		pf_putc(sign, out);
+	i = ft_max(1, ft_min(digits.length, split_offset));
+	pad_len = fmt->min_width - (sign.length + i + dot.length + ft_min(digits.length - split_offset, prec));
+	if (fmt->add_leading_zeros)
+		put_sv(sign, out);
+	put_repeat(fmt->padchar, (fmt->align == AlignRight) * pad_len, out);
+	if (!fmt->add_leading_zeros)
+		put_sv(sign, out);
 	if (split_offset <= 0)
 	{
 		pf_putc('0', out);
-		if (dot)
-			pf_putc(dot, out);
+		put_sv(dot, out);
 		while (split_offset++ < 0 && prec-- > 0)
 			pf_putc('0', out);
-		pf_nputs(digits, ft_min(digits_len, prec), out);
-		prec -= digits_len;
-		while (prec-- > 0)
-			pf_putc('0', out);
+		digits.length = ft_min(digits.length, prec);
+		put_sv(digits, out);
+		prec -= digits.length;
+		put_repeat('0', prec, out);
 	}
 	else
 	{
-		i = ft_min(digits_len, split_offset);
-		pf_nputs(digits, i, out);
-		if (dot)
-			pf_putc(dot, out);
-		while (i < digits_len && prec-- > 0)
-			pf_putc(digits[i++], out);
-		while (prec-- > 0)
-			pf_putc('0', out);
+		split = ft_min(digits.length, split_offset);
+		i = 0;
+		while (i < split)
+			pf_putc(digits.start[i++], out);
+		put_sv(dot, out);
+		while (i < digits.length && prec-- > 0)
+			pf_putc(digits.start[i++], out);
+		put_repeat('0', prec, out);
 	}
-	pf_repeat(fmt->padchar, fmt->left_align * pad_len, out);
+	put_repeat(fmt->padchar, (fmt->align == AlignLeft) * pad_len, out);
 }
 
 char	*digits_round(char *digits, int split_offset, int precision)
@@ -155,6 +153,6 @@ void	pf_dtoa(t_stream *out, long double nb, const t_fmt *fmt)
 		digits = digits_round(digits, ft_strlen(digits) + dec_pow, fmt->precision);
 	}
 	if (digits)
-		digits_put(digits, ft_strlen(digits) + dec_pow,
-				sign_char(ft_isneg(nb), fmt), fmt, out);
+		digits_put((t_sv){ digits, ft_strlen(digits) }, ft_strlen(digits) + dec_pow,
+				sign_prefix(ft_isneg(nb), fmt), fmt, out);
 }

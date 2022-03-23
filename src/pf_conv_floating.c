@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/12 05:31:25 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/02/28 12:06:25 by debby            ###   ########.fr       */
+/*   Updated: 2022/03/24 00:45:36 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,38 +15,36 @@
 #include "float.h"
 #include <limits.h>
 
-char		sign_char(int is_negative, const t_fmt *fmt)
+t_sv	sign_prefix(int is_negative, const t_fmt *fmt)
 {
 	if (is_negative)
-		return ('-');
-	else if (fmt->explicit_plus)
-		return ('+');
-	else if (fmt->prepend_space)
-		return (' ');
+		return (sv_from_cstr("-"));
+	else if (fmt->plus_mode == ExplicitPlus)
+		return (sv_from_cstr("+"));
+	else if (fmt->plus_mode == ExplicitSpace)
+		return (sv_from_cstr(" "));
 	else
-		return (0);
+		return (sv_from_cstr(""));
 }
 
 static int	put_if_special(t_stream *out, t_fmt *fmt, long double nb)
 {
-	char	*s;
-	char	sign;
-	int		pad_len;
+	t_sv		value;
+	t_sv		sign;
+	int			pad_length;
 
-	s = NULL;
 	if (ft_isnan(nb))
-		s = "nan";
+		value = sv_from_cstr("nan");
 	else if (ft_isinf(nb))
-		s = "inf";
-	if (s == NULL)
+		value = sv_from_cstr("inf");
+	else
 		return (0);
-	sign = sign_char(ft_isneg(nb), fmt);
-	pad_len = fmt->min_width - ((sign != '\0') + ft_strlen(s));
-	pf_repeat(' ', !fmt->left_align * pad_len, out);
-	if (sign)
-		pf_putc(sign, out);
-	pf_puts(s, out);
-	pf_repeat(' ', fmt->left_align * pad_len, out);
+	sign = sign_prefix(ft_isneg(nb), fmt);
+	pad_length = fmt->min_width - (sign.length + value.length);
+	put_repeat(' ', (fmt->align == AlignRight) * pad_length, out);
+	put_sv(sign, out);
+	put_sv(value, out);
+	put_repeat(' ', (fmt->align == AlignLeft) * pad_length, out);
 	return (1);
 }
 

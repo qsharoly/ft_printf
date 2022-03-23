@@ -23,6 +23,7 @@ endif
 
 SRC = ft_printf.c\
 	  ft_snprintf.c\
+	  sv.c\
 	  pf_stream.c\
 	  pf_stream_helpers.c\
 	  pf_parse.c\
@@ -61,7 +62,7 @@ $(NAME): $(OBJ)
 	cp $(LIBFT)/libft.a ./$(NAME)
 	ar rcs $(NAME) $(OBJ)
 
-$(OBJDIR)/%.o: $(SRCDIR)/%.c includes/libftprintf.h
+$(OBJDIR)/%.o: $(SRCDIR)/%.c includes/libftprintf.h includes/sv.h
 	$(CC) -c $< -o $@ $(INCFLAGS) $(CCFLAGS)
 $(OBJDIR)/pf_conv_floating.o: includes/float.h
 $(OBJDIR)/pf_dtoa_quick.o: includes/float.h
