@@ -32,7 +32,7 @@ so: $(OBJ)
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
 $(OBJDIR)/%.o: $(SRCDIR)/%.c $(DEPDIR)/%.d
 ##	$(CC) -c $< -o $@ -I $(INCDIR) $(CCFLAGS) $(DEPFLAGS)
-	$(CC) -O3 -fpic -c $< -o $@ -I $(INCDIR) $(CCFLAGS) $(DEPFLAGS)
+	$(CC) -O2 -fpic -c $< -o $@ -I $(INCDIR) $(CCFLAGS) $(DEPFLAGS)
 
 $(DEPDIR)/%d: ;
 

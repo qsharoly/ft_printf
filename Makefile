@@ -5,7 +5,7 @@ SRCDIR = src
 LIBFT = libft
 LFT_INCDIR = $(LIBFT)/includes
 CC = gcc
-CCFLAGS += -Wall -Wextra -Werror -O3
+CCFLAGS += -Wall -Wextra -Werror -O2
 INCFLAGS = -I$(INCDIR) -I$(LFT_INCDIR)
 
 #Disable union ABI warning on linux gcc
