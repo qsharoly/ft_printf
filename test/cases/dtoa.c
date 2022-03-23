@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <float.h>
 #include <strings.h>
-#include "print_bits.c"
+#include "../print_bits.c"
 
 double	bits2double(char *bit_values);
 void	check_dbl(const char *format, double a, const char *literal);
@@ -10,6 +10,7 @@ void	check_ld(const char *format, long double a, const char *literal);
 
 int		main(void)
 {
+	ft_printf("\n=== dtoa correctness ===\n");
 	/*
 	//specials
 	check_dbl("%f", 0.0 / 0.0, "0.0 / 0.0");
