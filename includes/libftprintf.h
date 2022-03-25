@@ -44,7 +44,7 @@ enum			e_size
 	Size_h,
 	Size_l,
 	Size_ll,
-	Size_longdouble,
+	Size_L,
 };
 
 enum			e_align

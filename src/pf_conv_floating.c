@@ -52,7 +52,7 @@ void		conv_floating(t_stream *out, t_fmt *fmt, va_list ap)
 {
 	long double	d;
 
-	if (fmt->size == Size_longdouble)
+	if (fmt->size == Size_L)
 		d = va_arg(ap, long double);
 	else
 		d = va_arg(ap, double);

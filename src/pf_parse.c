@@ -48,14 +48,11 @@ static const char	*parse_size_modifier(const char *pos, t_fmt *fmt)
 	else if (*pos == 'l')
 		fmt->size = Size_l;
 	else if (*pos == 'L')
-		fmt->size = Size_longdouble;
-	else
-		fmt->size = Size_normal;
-	if (fmt->size == Size_hh || fmt->size == Size_ll)
-		pos += 2;
-	else if (fmt->size == Size_h || fmt->size == Size_l
-			|| fmt->size == Size_longdouble)
+		fmt->size = Size_L;
+	if (fmt->size == Size_h || fmt->size == Size_l || fmt->size == Size_L)
 		pos += 1;
+	else if (fmt->size == Size_hh || fmt->size == Size_ll)
+		pos += 2;
 	return (pos);
 }
 
