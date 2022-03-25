@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 15:31:58 by qsharoly          #+#    #+#             */
-/*   Updated: 2022/03/25 23:19:46 by debby            ###   ########.fr       */
+/*   Updated: 2022/03/26 00:44:36 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ typedef struct	s_parts
 	long double	ipart;
 	long double	fpart;
 	t_sv		sign;
+	int			leading_zeros;
 	t_sv		i_str;
 	t_sv		dot;
 	int			extra_zeros;

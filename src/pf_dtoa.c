@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/12 04:49:33 by qsharoly          #+#    #+#             */
-/*   Updated: 2022/03/25 22:49:32 by debby            ###   ########.fr       */
+/*   Updated: 2022/03/26 00:42:12 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,11 @@
 static void	digits_put(t_sv digits, int split_offset, t_sv sign, const t_fmt *fmt, t_stream *out)
 {
 	int		pad_len;
+	int		leading_zeros;
 	t_sv	dot;
+	int		ilen;
 	int		i;
 	int		prec;
-	int		ilen;
 
 	dot = (fmt->precision > 0 || fmt->alternative_form) ? sv_from_cstr(".") : sv_from_cstr("");
 	prec = fmt->precision;
@@ -30,17 +31,16 @@ static void	digits_put(t_sv digits, int split_offset, t_sv sign, const t_fmt *fm
 		ilen = 1; // single zero before the decimal point.
 	else
 		ilen = ft_min(digits.length, split_offset);
-	pad_len = fmt->min_width - (sign.length + ilen + dot.length + ft_min(digits.length - split_offset, prec));
-	if (fmt->align_right_by_leading_zeros)
+	pad_len = fmt->min_width - (sign.length + ilen + dot.length + ft_max(digits.length - split_offset, prec));
+	leading_zeros = 0;
+	if (fmt->align_right_by_leading_zeros && fmt->align == AlignRight)
 	{
-		put_sv(sign, out);
-		put_repeat('0', (fmt->align == AlignRight) * pad_len, out);
+		leading_zeros = pad_len;
+		pad_len = 0;
 	}
-	else
-	{
-		put_repeat(' ', (fmt->align == AlignRight) * pad_len, out);
-		put_sv(sign, out);
-	}
+	put_repeat(' ', (fmt->align == AlignRight) * pad_len, out);
+	put_sv(sign, out);
+	put_repeat('0', leading_zeros, out);
 	if (split_offset <= 0)
 	{
 		pf_putc('0', out);

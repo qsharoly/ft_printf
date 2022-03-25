@@ -57,6 +57,16 @@ int		main(void)
 	check_ld("%Lf", -958.125, "-958.125");
 	check_ld("%Lf", -0.3, "-0.3");
 	*/
+	//zeros in front
+	check_dbl("%010f", 0.5, "0.5");
+	//zeros after
+	check_dbl("%.10f", 0.5, "0.5");
+	//space in front (slow path)
+	check_dbl("%30.25f", 0.5, "0.5");
+	//zeros in front (slow path)
+	check_dbl("%0105.100f", 0.237, "0.237");
+	//zeros in middle (slow path)
+	check_dbl("%0105.100f", 0.00000237, "0.00000237");
 	//debug bignum used digit count tracking
 	check_dbl("%.100f", 0.237, "0.237");
 	/*
