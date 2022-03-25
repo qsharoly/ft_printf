@@ -7,6 +7,7 @@ int		main(void)
 	int		i;
 	char	*st;
 
+	st = "hello";
 	ft_printf("\n=== Basic formatting ===\n");
 	//while (1)
 	{
@@ -16,7 +17,6 @@ int		main(void)
 		ft_printf("just a string\n");
 		ft_printf("just an int %d def\n", 5);
 		ft_printf("%s well\n", "very");
-		st = "hello";
 		ft_printf("my %s equals %d%%\n", st, -123);
 		ft_printf("abc %x %X %x %X\n", 42, 42, -42, -42);
 		printf("abc %x %X %x %X\n", 42, 42, -42, -42);
@@ -115,8 +115,10 @@ int		main(void)
 		//pointers
 		ft_printf("%p %p %p, %.2p\n", st, NULL, printf, NULL);
 		printf("%p %p %p, %.2p\n", st, NULL, printf, NULL);
-		ft_printf("%20p %-20p\n", NULL, NULL);
-		printf("%20p %-20p\n", NULL, NULL);
+		ft_printf("[%20p] [%-20p]\n", NULL, NULL);
+		printf("[%20p] [%-20p]\n", NULL, NULL);
+		ft_printf("[%020p] [%+-20p] [% -20p]\n", st, st, st);
+		printf("[%020p] [%+-20p] [% -20p]\n", st, st, st);
 		/*
 		*/
 		/*

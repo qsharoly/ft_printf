@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/14 12:55:31 by qsharoly          #+#    #+#             */
-/*   Updated: 2022/03/24 01:40:55 by debby            ###   ########.fr       */
+/*   Updated: 2022/03/26 01:04:18 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ void	conv_ptr(t_stream *out, t_fmt *fmt, va_list ap)
 {
 	char	buffer[MAXBUF_UTOA];
 	t_sv	value;
+	char	*prefix;
 	void	*p;
 
 	p = va_arg(ap, void *);
@@ -28,8 +29,14 @@ void	conv_ptr(t_stream *out, t_fmt *fmt, va_list ap)
 		put_sv_padded(value, fmt->min_width - value.length, fmt->align, out); 
 		return ;
 	}
+	if (fmt->plus_mode == ExplicitPlus)
+		prefix = "+0x";
+	else if (fmt->plus_mode == ExplicitSpace)
+		prefix = " 0x";
+	else
+		prefix = "0x";
 	value = pf_utoa_base(buffer, (unsigned long)p, 16, 0);
-	pf_putnbr(out, value, sv_from_cstr("0x"), fmt);
+	pf_putnbr(out, value, sv_from_cstr(prefix), fmt);
 }
 
 #else
