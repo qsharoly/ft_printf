@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 15:31:58 by qsharoly          #+#    #+#             */
-/*   Updated: 2022/03/23 23:10:20 by debby            ###   ########.fr       */
+/*   Updated: 2022/03/25 23:19:46 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,13 +62,12 @@ enum			e_plus
 
 typedef struct	s_fmt
 {
-	unsigned		add_leading_zeros:1;
+	unsigned		align_right_by_leading_zeros:1;
 	enum e_align	align:1;
 	enum e_plus		plus_mode:2;
 	unsigned		alternative_form:1;
 	unsigned		has_precision:1;
 	unsigned		upcase:1;
-	char			padchar;
 	enum e_size 	size;
 	int				base;
 	int				spec_length;

@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/12 04:49:33 by qsharoly          #+#    #+#             */
-/*   Updated: 2022/03/23 21:58:49 by debby            ###   ########.fr       */
+/*   Updated: 2022/03/25 22:49:32 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,40 +22,47 @@ static void	digits_put(t_sv digits, int split_offset, t_sv sign, const t_fmt *fm
 	t_sv	dot;
 	int		i;
 	int		prec;
-	int		split;
+	int		ilen;
 
 	dot = (fmt->precision > 0 || fmt->alternative_form) ? sv_from_cstr(".") : sv_from_cstr("");
 	prec = fmt->precision;
-	i = ft_max(1, ft_min(digits.length, split_offset));
-	pad_len = fmt->min_width - (sign.length + i + dot.length + ft_min(digits.length - split_offset, prec));
-	if (fmt->add_leading_zeros)
+	if (split_offset <= 0)
+		ilen = 1; // single zero before the decimal point.
+	else
+		ilen = ft_min(digits.length, split_offset);
+	pad_len = fmt->min_width - (sign.length + ilen + dot.length + ft_min(digits.length - split_offset, prec));
+	if (fmt->align_right_by_leading_zeros)
+	{
 		put_sv(sign, out);
-	put_repeat(fmt->padchar, (fmt->align == AlignRight) * pad_len, out);
-	if (!fmt->add_leading_zeros)
+		put_repeat('0', (fmt->align == AlignRight) * pad_len, out);
+	}
+	else
+	{
+		put_repeat(' ', (fmt->align == AlignRight) * pad_len, out);
 		put_sv(sign, out);
+	}
 	if (split_offset <= 0)
 	{
 		pf_putc('0', out);
 		put_sv(dot, out);
 		while (split_offset++ < 0 && prec-- > 0)
 			pf_putc('0', out);
-		digits.length = ft_min(digits.length, prec);
-		put_sv(digits, out);
-		prec -= digits.length;
+		i = 0;
+		while (i < digits.length && prec-- > 0)
+			pf_putc(digits.start[i++], out);
 		put_repeat('0', prec, out);
 	}
 	else
 	{
-		split = ft_min(digits.length, split_offset);
 		i = 0;
-		while (i < split)
+		while (i < ilen)
 			pf_putc(digits.start[i++], out);
 		put_sv(dot, out);
 		while (i < digits.length && prec-- > 0)
 			pf_putc(digits.start[i++], out);
 		put_repeat('0', prec, out);
 	}
-	put_repeat(fmt->padchar, (fmt->align == AlignLeft) * pad_len, out);
+	put_repeat(' ', (fmt->align == AlignLeft) * pad_len, out);
 }
 
 char	*digits_round(char *digits, int split_offset, int precision)

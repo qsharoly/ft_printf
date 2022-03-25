@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/12 04:49:33 by qsharoly          #+#    #+#             */
-/*   Updated: 2022/03/24 01:46:46 by debby            ###   ########.fr       */
+/*   Updated: 2022/03/25 23:03:04 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,14 +93,19 @@ void					pf_dtoa_quick(t_stream *out, long double nb,
 	p.f_str = pf_utoa_base(buf[1], (unsigned long)p.fpart, 10, 0);
 	pad_len = fmt->min_width - (p.sign.length + p.i_str.length
 			+ p.dot.length + p.extra_zeros + p.f_str.length);
-	if (fmt->add_leading_zeros)
+	if (fmt->align_right_by_leading_zeros)
+	{
 		put_sv(p.sign, out);
-	put_repeat(fmt->padchar, (fmt->align == AlignRight) * pad_len, out);
-	if (!fmt->add_leading_zeros)
+		put_repeat('0', (fmt->align == AlignRight) * pad_len, out);
+	}
+	else
+	{
+		put_repeat(' ', (fmt->align == AlignRight) * pad_len, out);
 		put_sv(p.sign, out);
+	}
 	put_sv(p.i_str, out);
 	put_sv(p.dot, out);
 	put_repeat('0', p.extra_zeros, out);
 	put_sv(p.f_str, out);
-	put_repeat(fmt->padchar, (fmt->align == AlignLeft) * pad_len, out);
+	put_repeat(' ', (fmt->align == AlignLeft) * pad_len, out);
 }

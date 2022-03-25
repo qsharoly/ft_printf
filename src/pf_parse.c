@@ -6,32 +6,32 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/14 13:26:37 by qsharoly          #+#    #+#             */
-/*   Updated: 2022/03/24 00:12:42 by debby            ###   ########.fr       */
+/*   Updated: 2022/03/25 23:20:25 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "libftprintf.h"
 
-static int			is_printf_flag_char(int c)
+static int			is_flag_character(char c)
 {
 	return (c == '0' || c == '-' || c == '+' || c == ' ' || c == '#');
 }
 
 static const char	*parse_flags(const char *pos, t_fmt *fmt)
 {
-	fmt->align = AlignRight;
-	fmt->plus_mode = OmitSign;
-	while (is_printf_flag_char(*pos))
+	while (is_flag_character(*pos))
 	{
-		fmt->add_leading_zeros |= (*pos == '0');
-		if (*pos == '-')
+		if (*pos == '0')
+			fmt->align_right_by_leading_zeros = 1;
+		else if (*pos == '-')
 			fmt->align = AlignLeft;
-		if (*pos == '+')
+		else if (*pos == '+')
 			fmt->plus_mode = ExplicitPlus;
-		if (*pos == ' ' && fmt->plus_mode != ExplicitPlus)
+		else if (*pos == ' ' && fmt->plus_mode != ExplicitPlus)
 			fmt->plus_mode = ExplicitSpace;
-		fmt->alternative_form |= (*pos == '#');
+		else if (*pos == '#')
+			fmt->alternative_form = 1;
 		pos++;
 	}
 	return (pos);
@@ -68,22 +68,6 @@ static const char	*parse_a_number(const char *pos, int *value)
 		pos++;
 	}
 	return (pos);
-}
-
-static char			choose_padchar(const t_fmt *fmt)
-{
-	char	padchar;
-
-	if (fmt->add_leading_zeros && fmt->align == AlignRight)
-		padchar = '0';
-	else
-		padchar = ' ';
-	if (fmt->add_leading_zeros && fmt->has_precision
-		&& (fmt->write_arg == conv_signed || fmt->write_arg == conv_unsigned))
-		padchar = ' ';
-	if (fmt->write_arg == conv_str)
-		padchar = ' ';
-	return (padchar);
 }
 
 static const char	*parse_min_width(const char *pos, t_fmt *fmt, va_list ap)
@@ -169,7 +153,6 @@ t_fmt				pf_parse_specifier(const char *str, va_list ap)
 	pos = parse_precision(pos, &fmt, ap);
 	pos = parse_size_modifier(pos, &fmt);
 	pos = parse_conv(pos, &fmt);
-	fmt.padchar = choose_padchar(&fmt);
 	fmt.spec_length = pos - str;
 	return (fmt);
 }
