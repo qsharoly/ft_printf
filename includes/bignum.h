@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/12 04:19:11 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/03/06 21:55:10 by debby            ###   ########.fr       */
+/*   Updated: 2022/03/26 22:59:15 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@
 
 # define BIG_N_DIGITS 90
 # define BIG_BASE 100000000
-# define BIG_DIGIT_CHARS 8
-# define BIG_MAX_CHARS (BIG_DIGIT_CHARS * BIG_N_DIGITS)
+# define BIG_CHARS_PER_DIGIT 8
+# define BIG_MAX_CHARS (BIG_CHARS_PER_DIGIT * BIG_N_DIGITS)
 
 typedef unsigned long	t_digit;
 typedef long long		t_digit_tmp;
