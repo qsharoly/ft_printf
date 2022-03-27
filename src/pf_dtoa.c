@@ -161,5 +161,5 @@ void	pf_dtoa(t_stream *out, long double nb, const t_fmt *fmt)
 	}
 	if (digits)
 		digits_put((t_sv){ digits, ft_strlen(digits) }, ft_strlen(digits) + dec_pow,
-				sign_prefix(ft_isneg(nb), fmt), fmt, out);
+				sign_prefix(fp_isneg(nb), fmt), fmt, out);
 }

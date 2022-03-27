@@ -40,12 +40,12 @@ SRC = ft_printf.c\
 	  bignum/big_mul.c\
 	  bignum/big_raise.c\
 	  bignum/big_to_str.c\
-	  float/ft_fabs.c\
-	  float/ft_isneg.c\
-	  float/ft_isinf.c\
-	  float/ft_isnan.c\
-	  float/ft_issub.c\
-	  float/ft_trunc.c
+	  float/fp_fabs.c\
+	  float/fp_isneg.c\
+	  float/fp_isinf.c\
+	  float/fp_isnan.c\
+	  float/fp_issub.c\
+	  float/fp_trunc.c
 
 OBJ = $(SRC:%.c=$(OBJDIR)/%.o)
 

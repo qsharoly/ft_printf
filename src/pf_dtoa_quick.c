@@ -46,14 +46,14 @@ static void				part_and_round(t_parts *p, long double nb, int prec)
 {
 	long double	rem;
 
-	p->ipart = ft_trunc(ft_fabs(nb));
-	p->fpart = ((ft_fabs(nb) - p->ipart) * g_pow10[prec]);
-	rem = p->fpart - ft_trunc(p->fpart);
+	p->ipart = fp_trunc(fp_fabs(nb));
+	p->fpart = ((fp_fabs(nb) - p->ipart) * g_pow10[prec]);
+	rem = p->fpart - fp_trunc(p->fpart);
 	if (rem > 0.5)
 		p->fpart++;
 	else if (rem == 0.5 &&
-		((unsigned long)ft_trunc(p->fpart) % 2 == 1
-		|| (ft_trunc(p->fpart) == 0.0 && (unsigned long)p->ipart % 2 == 1)))
+		((unsigned long)fp_trunc(p->fpart) % 2 == 1
+		|| (fp_trunc(p->fpart) == 0.0 && (unsigned long)p->ipart % 2 == 1)))
 		p->fpart++;
 	if (p->fpart > g_pow10[prec])
 	{
@@ -85,7 +85,7 @@ void					pf_dtoa_quick(t_stream *out, long double nb,
 	int		pad_len;
 
 	ft_bzero(&p, sizeof(p));
-	p.sign = sign_prefix(ft_isneg(nb), fmt);
+	p.sign = sign_prefix(fp_isneg(nb), fmt);
 	p.dot = (fmt->precision > 0 || fmt->alternative_form) ? sv_from_cstr(".") : sv_from_cstr("");
 	part_and_round(&p, nb, fmt->precision);
 	p.extra_zeros = calc_extra_zeros(p.fpart, fmt->precision);

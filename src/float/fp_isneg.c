@@ -1,41 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_isinf.c                                         :+:      :+:    :+:   */
+/*   fp_isneg.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: debby <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/06/18 15:09:44 by debby             #+#    #+#             */
-/*   Updated: 2020/08/21 21:03:03 by debby            ###   ########.fr       */
+/*   Created: 2020/08/21 20:58:34 by debby             #+#    #+#             */
+/*   Updated: 2022/03/27 20:38:40 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "float.h"
 
-/*
-**int		ft_isinf64(double nb)
-**{
-**	union u_f64	tmp;
-**
-**	tmp.f = nb;
-**	if (tmp.bits.exponent == 0x7ff && tmp.bits.mantissa == 0)
-**		return (tmp.bits.sign ? -1 : 1);
-**	else
-**		return (0);
-**}
-*/
-
-/*
-** mantissa bit shift accounts for explicit leading 1 in f80 mantissa
-*/
-
-int		ft_isinf(long double nb)
+int	fp_isneg(long double nb)
 {
 	union u_f80	tmp;
 
 	tmp.f = nb;
-	if (tmp.bits.exponent == 0x7fff && (tmp.bits.mantissa << 1) == 0)
-		return (tmp.bits.sign ? -1 : 1);
-	else
+	if (tmp.bits.sign == 0)
 		return (0);
+	else
+		return (1);
 }
