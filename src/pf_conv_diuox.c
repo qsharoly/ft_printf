@@ -26,7 +26,7 @@ void	conv_ptr(t_stream *out, t_fmt *fmt, va_list ap)
 	if (!p)
 	{
 		value = sv_from_cstr("(nil)");
-		put_sv_padded(value, fmt->min_width - value.length, fmt->align, out); 
+		put_sv_padded(value, fmt->min_width - value.length, fmt->align, out);
 		return ;
 	}
 	if (fmt->plus_mode == ExplicitPlus)

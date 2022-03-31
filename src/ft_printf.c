@@ -6,11 +6,12 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/27 18:24:37 by qsharoly          #+#    #+#             */
-/*   Updated: 2021/03/10 07:44:47 by debby            ###   ########.fr       */
+/*   Updated: 2022/03/31 13:43:32 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
+#include <stdlib.h>
 #include "libft.h"
 #include "libftprintf.h"
 
@@ -64,8 +65,7 @@ int				ft_printf(const char *format, ...)
 	t_stream	b;
 	char		buffer[BUFFER_SIZE];
 
-	b = pf_stream_init(STDOUT_FD, buffer, BUFFER_SIZE, putc_impl_printf);
-	init_conv_table();
+	b = pf_stream_init(STDOUT, buffer, BUFFER_SIZE, putc_impl_printf);
 	va_start(ap, format);
 	print_args(&b, format, ap);
 	va_end(ap);
@@ -81,10 +81,20 @@ int				ft_dprintf(int fd, const char *format, ...)
 	char		buffer[BUFFER_SIZE];
 
 	b = pf_stream_init(fd, buffer, BUFFER_SIZE, putc_impl_printf);
-	init_conv_table();
 	va_start(ap, format);
 	print_args(&b, format, ap);
 	va_end(ap);
+	pf_stream_flush(&b);
+	return (b.total_written);
+}
+
+int				ft_vdprintf(int fd, const char *format, va_list ap)
+{
+	t_stream	b;
+	char		buffer[BUFFER_SIZE];
+
+	b = pf_stream_init(fd, buffer, BUFFER_SIZE, putc_impl_printf);
+	print_args(&b, format, ap);
 	pf_stream_flush(&b);
 	return (b.total_written);
 }

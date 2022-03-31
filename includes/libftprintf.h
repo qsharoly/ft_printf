@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 15:31:58 by qsharoly          #+#    #+#             */
-/*   Updated: 2022/03/26 00:44:36 by debby            ###   ########.fr       */
+/*   Updated: 2022/03/31 13:43:16 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@
 # include <stdarg.h>
 # include "sv.h"
 
-# define STDOUT_FD 1
+# define STDOUT STDOUT_FILENO
+# define STDERR STDERR_FILENO
 # define BUFFER_SIZE 4096
 
 /*
@@ -89,6 +90,8 @@ typedef struct	s_parts
 }				t_parts;
 
 int				ft_printf(const char *format, ...);
+int				ft_dprintf(int fd, const char *format, ...);
+int				ft_vdprintf(int fd, const char *format, va_list ap);
 int				ft_snprintf(char *buf, int max, const char *format, ...);
 
 void			pf_error(const char *msg);
@@ -112,7 +115,6 @@ void			pf_putnbr(t_stream *out, t_sv value, t_sv prefix,
 void			pf_dtoa(t_stream *out, long double d, const t_fmt *fmt);
 void			pf_dtoa_quick(t_stream *out, long double nb, const t_fmt *fmt);
 
-extern void		(*g_conv_table[256])(t_stream *, t_fmt *, va_list);
 void			init_conv_table(void);
 void			conv_percent(t_stream *out, t_fmt *fmt, va_list ap);
 void			conv_char(t_stream *out, t_fmt *fmt, va_list ap);

@@ -39,7 +39,7 @@ static char	*fast_utoa_oct(char *pos, unsigned long long value,
 }
 
 static char	*general_utoa_base(char *pos, unsigned long long value,
-				unsigned base, const char *digits)
+				unsigned int base, const char *digits)
 {
 	while (value)
 	{
@@ -51,8 +51,8 @@ static char	*general_utoa_base(char *pos, unsigned long long value,
 	return (pos);
 }
 
-t_sv		pf_utoa_base(char *buffer, unsigned long long value,
-				unsigned base, int upcase)
+t_sv	pf_utoa_base(char *buffer, unsigned long long value,
+				unsigned int base, int upcase)
 {
 	t_sv		view;
 	char		*pos;
