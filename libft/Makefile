@@ -1,16 +1,15 @@
 NAME = libft.a
 SONAME = libft.so
-CC = gcc
-CCFLAGS = -Wall -Wextra -Werror
+CC ?= gcc
+CCFLAGS += -Wall -Wextra -Werror
 SRCDIR = .
 INCDIR = includes
 OBJDIR = objects
 DEPDIR = deps
 DEPFLAGS = -MT $@ -MMD -MP -MF $(DEPDIR)/$*.d
 
-ifeq ($(debug), yes)
-	CCFLAGS += -g
-endif
+debug ?= -g
+optimize ?= -O2
 
 SRC = $(shell ls ft_*.c)
 OBJ = $(SRC:%.c=$(OBJDIR)/%.o)
@@ -32,7 +31,7 @@ so: $(OBJ)
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
 $(OBJDIR)/%.o: $(SRCDIR)/%.c $(DEPDIR)/%.d
 ##	$(CC) -c $< -o $@ -I $(INCDIR) $(CCFLAGS) $(DEPFLAGS)
-	$(CC) -O2 -fpic -c $< -o $@ -I $(INCDIR) $(CCFLAGS) $(DEPFLAGS)
+	$(CC) $(optimize) $(debug) -fpic -c $< -o $@ -I $(INCDIR) $(CCFLAGS) $(DEPFLAGS)
 
 $(DEPDIR)/%d: ;
 
