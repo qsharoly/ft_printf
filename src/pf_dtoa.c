@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/12 04:49:33 by qsharoly          #+#    #+#             */
-/*   Updated: 2022/03/31 15:46:53 by debby            ###   ########.fr       */
+/*   Updated: 2022/04/01 04:29:38 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static void	digits_put(t_sv digits, int split_offset, t_sv sign, const t_fmt *fm
 		ilen = 1; // single zero before the decimal point.
 	else
 		ilen = ft_min(digits.length, split_offset);
-	pad_len = fmt->min_width - (sign.length + ilen + dot.length + ft_max(digits.length - split_offset, prec));
+	pad_len = fmt->min_width - (sign.length + ilen + dot.length + prec);//ft_max(ft_min(digits.length - split_offset, prec), prec));
 	leading_zeros = 0;
 	if (fmt->align_right_by_leading_zeros && fmt->align == AlignRight)
 	{
@@ -65,44 +65,48 @@ static void	digits_put(t_sv digits, int split_offset, t_sv sign, const t_fmt *fm
 	put_repeat(' ', (fmt->align == AlignLeft) * pad_len, out);
 }
 
-char	*digits_round(char *digits, int split_offset, int precision)
+char	*digits_round(char *digits, int rounding_position)
 {
 	int	i;
 	int	dig_len;
-	int	rounding_position;
+	int	rp;
 
 	dig_len = ft_strlen(digits);
-	rounding_position = split_offset + precision;
-	if (rounding_position < 0 || rounding_position > dig_len)
+	rp = rounding_position;
+	if (rp < 0 || rp > dig_len)
 		return (digits);
-	if (digits[rounding_position] > '4')
+	if (digits[rp] <= '4')
+		return (digits);
+	if (digits[rp] == '5')
 	{
-		if (digits[rounding_position] == '5')
-		{
-			i = rounding_position + 1;
-			while (i < dig_len && digits[i] == '0')
-			{
-				i++;
-			}
-			if (i == dig_len && (rounding_position == 0
-					|| (digits[rounding_position - 1] - '0') % 2 == 0))
-			{
-				return (digits);
-			}
-		}
-		i = rounding_position - 1;
-		while (i >= 0 && digits[i] == '9')
-		{
-			digits[i] = '0';
-			i--;
-		}
-		if (i < 0)
-		{
-			digits--;
-			*digits = '1';
-		}
-		else
-			digits[i] = digits[i] + 1;
+		//dont round up when precisely at a half (tail is all zeros)
+		//and previous digit is even.
+		i = rp + 1;
+		while (i < dig_len && digits[i] == '0')
+			i++;
+		if (i == dig_len && (digits[rp - 1] - '0') % 2 == 0)
+			return (digits);
+	}
+	//add +1 (with carry) to the digit before the rounding_position
+	i = rp - 1;
+	while (i >= 0 && digits[i] == '9')
+	{
+		digits[i] = '0';
+		i--;
+	}
+	if (i < 0)
+	{
+		digits--;
+		*digits = '1';
+	}
+	else
+		digits[i] += 1;
+	//zero out the tail
+	i = rp + 1;
+	while (i < dig_len)
+	{
+		digits[i] = '0';
+		i++;
 	}
 	return (digits);
 }
@@ -162,7 +166,7 @@ void	pf_dtoa(t_stream *out, long double nb, const t_fmt *fmt)
 			return ;
 		}
 		digits = big_str(buf, big);
-		digits = digits_round(digits, ft_strlen(digits) + dec_pow, fmt->precision);
+		digits = digits_round(digits, ft_strlen(digits) + dec_pow + fmt->precision);
 	}
 	if (digits)
 		digits_put((t_sv){ digits, ft_strlen(digits) }, ft_strlen(digits) + dec_pow,
