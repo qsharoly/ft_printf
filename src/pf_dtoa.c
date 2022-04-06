@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/12 04:49:33 by qsharoly          #+#    #+#             */
-/*   Updated: 2022/04/01 04:29:38 by debby            ###   ########.fr       */
+/*   Updated: 2022/04/06 17:00:18 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,11 +80,11 @@ char	*digits_round(char *digits, int rounding_position)
 	if (digits[rp] == '5')
 	{
 		//dont round up when precisely at a half (tail is all zeros)
-		//and previous digit is even.
+		//and the digit before the rounding_position is even.
 		i = rp + 1;
 		while (i < dig_len && digits[i] == '0')
 			i++;
-		if (i == dig_len && (digits[rp - 1] - '0') % 2 == 0)
+		if (i == dig_len && (rp == 0 || (digits[rp - 1] - '0') % 2 == 0))
 			return (digits);
 	}
 	//add +1 (with carry) to the digit before the rounding_position
