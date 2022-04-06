@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/12 04:49:33 by qsharoly          #+#    #+#             */
-/*   Updated: 2022/04/06 17:00:18 by debby            ###   ########.fr       */
+/*   Updated: 2022/04/06 17:47:01 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,10 +132,8 @@ void	pf_dtoa(t_stream *out, long double nb, const t_fmt *fmt)
 	long			exponent;
 	unsigned long	mantissa;
 	long			dec_pow;
-	t_big			big;
 	char			*digits;
 	char			buf[BIG_MAX_CHARS + 1];
-	t_big			pow5;
 
 	exponent = get_exponent(nb);
 	mantissa = get_mantissa(nb);
@@ -157,15 +155,26 @@ void	pf_dtoa(t_stream *out, long double nb, const t_fmt *fmt)
 	}
 	else
 	{
-		pow5 = big_raise(5, -dec_pow);
-		big = big_mul(big_from_number(mantissa), pow5);
-		big = big_mul(big, big_raise(2, exponent));
-		if (big.overflow_occured)
+		t_digit	memory[4][BIG_N_DIGITS];
+		t_big p, m, t1, t2;
+		big_init(&p, memory[0], 0);
+		big_init(&t1, memory[1], 0);
+		big_init(&t2, memory[2], 0);
+		big_init(&m, memory[3], mantissa);
+
+
+		big_raise(&p, &t1, &t2, 5, -dec_pow);
+		big_mul(&t1, &m, &p);
+		big_shallow_swap(&m, &t1);
+		big_raise(&p, &t1, &t2, 2, exponent);
+		big_mul(&t1, &m, &p);
+		big_shallow_swap(&m, &t1);
+		if (m.overflow_occured)
 		{
 			put_sv(sv_from_cstr("bignum overflow!"), out);
 			return ;
 		}
-		digits = big_str(buf, big);
+		digits = big_str(buf, m);
 		digits = digits_round(digits, ft_strlen(digits) + dec_pow + fmt->precision);
 	}
 	if (digits)

@@ -32,9 +32,7 @@ SRC = ft_printf.c\
 	  pf_utoa_base.c\
 	  pf_dtoa.c\
 	  pf_dtoa_quick.c\
-	  bignum/big_zero.c\
-	  bignum/big_from_digit.c\
-	  bignum/big_add.c\
+	  bignum/big_init.c\
 	  bignum/big_mul.c\
 	  bignum/big_raise.c\
 	  bignum/big_to_str.c\
