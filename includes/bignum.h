@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/12 04:19:11 by qsharoly          #+#    #+#             */
-/*   Updated: 2022/04/06 17:46:15 by debby            ###   ########.fr       */
+/*   Updated: 2022/04/08 06:02:51 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	big_set_to_small(t_big *a, unsigned long n);
 void	big_shallow_swap(t_big *a, t_big *b);
 void	big_addc_small(t_big *res, int at_index, t_digit_tmp n);
 void	big_mul(t_big *res, const t_big *a, const t_big *b);
-void	big_raise(t_big *res, t_big *tmp1, t_big *tmp2, t_digit base, t_digit power);
+void	big_raise(t_big *res, unsigned long base, unsigned long power);
 char	*big_str(char buf[BIG_MAX_CHARS + 1], t_big a);
 
 #endif

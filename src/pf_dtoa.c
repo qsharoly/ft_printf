@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/12 04:49:33 by qsharoly          #+#    #+#             */
-/*   Updated: 2022/04/06 17:47:01 by debby            ###   ########.fr       */
+/*   Updated: 2022/04/08 06:03:04 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,10 +163,10 @@ void	pf_dtoa(t_stream *out, long double nb, const t_fmt *fmt)
 		big_init(&m, memory[3], mantissa);
 
 
-		big_raise(&p, &t1, &t2, 5, -dec_pow);
+		big_raise(&p, 5, -dec_pow);
 		big_mul(&t1, &m, &p);
 		big_shallow_swap(&m, &t1);
-		big_raise(&p, &t1, &t2, 2, exponent);
+		big_raise(&p, 2, exponent);
 		big_mul(&t1, &m, &p);
 		big_shallow_swap(&m, &t1);
 		if (m.overflow_occured)

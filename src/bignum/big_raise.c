@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/06 19:45:05 by qsharoly          #+#    #+#             */
-/*   Updated: 2022/04/06 16:45:55 by debby            ###   ########.fr       */
+/*   Updated: 2022/04/08 06:06:31 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,21 @@ void	big_shallow_swap(t_big *a, t_big *b)
 	*b = tmp;
 }
 
-void	big_raise(t_big *res, t_big *tmp1, t_big *tmp2, t_digit base, t_digit power)
+void	big_mul_by_small(t_big *res, t_digit b)
+{
+	int carry = 0;
+	int i = 0;
+	while (i < res->used)
+	{
+		t_digit_tmp prod = res->val[i] * b + carry;
+		res->val[i] = prod % BIG_BASE;
+		carry = prod / BIG_BASE;
+		i++;
+	}
+	big_addc_small(res, i, carry);
+}
+
+void	big_raise(t_big *res, t_digit base, t_digit power)
 {
 	if (base == 0 && power == 0)
 	{
@@ -48,20 +62,11 @@ void	big_raise(t_big *res, t_big *tmp1, t_big *tmp2, t_digit base, t_digit power
 		big_set_to_small(res, 0);
 		return;
 	}
-	big_set_to_small(tmp1, 1);
-	big_set_to_small(tmp2, base);
+	big_set_to_small(res, 1);
 	t_digit i = 0;
 	while (i < power)
 	{
-		big_mul(res, tmp1, tmp2);
-		big_shallow_swap(res, tmp1);
+		big_mul_by_small(res, base);
 		i++;
-		if (i < power)
-		{
-			big_mul(res, tmp1, tmp2);
-			big_shallow_swap(res, tmp1);
-			i++;
-		}
 	}
-	big_shallow_swap(res, tmp1);
 }
