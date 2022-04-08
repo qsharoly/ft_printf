@@ -6,24 +6,20 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/06 19:45:05 by qsharoly          #+#    #+#             */
-/*   Updated: 2022/04/08 06:06:31 by debby            ###   ########.fr       */
+/*   Updated: 2022/04/08 08:25:46 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "bignum.h"
 
-void	big_set_to_small(t_big *a, t_digit n)
+void	big_set_to_small(t_big *a, t_twodigit n)
 {
-	if (n > BIG_BASE)
+	a->used = 1;
+	a->val[0] = n % BIG_BASE;
+	while (n /= BIG_BASE)
 	{
-		a->used = 2;
-		a->val[0] = n % BIG_BASE;
-		a->val[1] = n / BIG_BASE;
-	}
-	else
-	{
-		a->used = 1;
-		a->val[0] = n;
+		a->val[a->used] = n % BIG_BASE;
+		a->used++;
 	}
 }
 
@@ -38,11 +34,11 @@ void	big_shallow_swap(t_big *a, t_big *b)
 
 void	big_mul_by_small(t_big *res, t_digit b)
 {
-	int carry = 0;
+	t_twodigit carry = 0;
 	int i = 0;
 	while (i < res->used)
 	{
-		t_digit_tmp prod = res->val[i] * b + carry;
+		t_twodigit prod = (t_twodigit)res->val[i] * (t_twodigit)b + carry;
 		res->val[i] = prod % BIG_BASE;
 		carry = prod / BIG_BASE;
 		i++;

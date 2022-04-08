@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/12 04:49:33 by qsharoly          #+#    #+#             */
-/*   Updated: 2022/04/08 06:03:04 by debby            ###   ########.fr       */
+/*   Updated: 2022/04/08 11:21:44 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #include "libftprintf.h"
 #include "bignum.h"
 #include "float.h"
-#include <limits.h>
 
 static void	digits_put(t_sv digits, int split_offset, t_sv sign, const t_fmt *fmt, t_stream *out)
 {
@@ -127,6 +126,19 @@ static unsigned long	get_mantissa(long double nb)
 	return (f.bits.mantissa);
 }
 
+#ifdef DEBUGLOG
+#include <stdio.h>
+void	put_big(t_big a)
+{
+	printf("%*u ", BIG_CHARS_PER_DIGIT, a.val[a.used - 1]);
+	for (int i = a.used - 2; i >= 0; i--)
+	{
+		printf("%0*u ", BIG_CHARS_PER_DIGIT, a.val[i]);
+	}
+	printf("\n");
+}
+#endif //DEBUGLOG
+
 void	pf_dtoa(t_stream *out, long double nb, const t_fmt *fmt)
 {
 	long			exponent;
@@ -155,20 +167,35 @@ void	pf_dtoa(t_stream *out, long double nb, const t_fmt *fmt)
 	}
 	else
 	{
-		t_digit	memory[4][BIG_N_DIGITS];
-		t_big p, m, t1, t2;
+		t_digit	memory[3][BIG_N_DIGITS];
+		t_big p, m, t;
 		big_init(&p, memory[0], 0);
-		big_init(&t1, memory[1], 0);
-		big_init(&t2, memory[2], 0);
-		big_init(&m, memory[3], mantissa);
+		big_init(&t, memory[1], 0);
+		big_init(&m, memory[2], mantissa);
 
 
+#ifdef DEBUGLOG
+		printf("\n");
+		printf("m: %lu\n", mantissa);
+		printf("m used: %d\n", m.used); put_big(m);
 		big_raise(&p, 5, -dec_pow);
-		big_mul(&t1, &m, &p);
-		big_shallow_swap(&m, &t1);
+		printf("5^%ld used: %d\n", -dec_pow, p.used); put_big(p);
+		big_mul(&t, &m, &p);
+		big_shallow_swap(&m, &t);
+		printf("m * 5^%ld used: %d\n", -dec_pow, m.used); put_big(m);
 		big_raise(&p, 2, exponent);
-		big_mul(&t1, &m, &p);
-		big_shallow_swap(&m, &t1);
+		printf("2^%ld used: %d\n", exponent, p.used); put_big(p);
+		big_mul(&t, &m, &p);
+		big_shallow_swap(&m, &t);
+		printf("m * 5^%ld * 2^%ld used: %d\n", -dec_pow, exponent, m.used); put_big(m);
+#else
+		big_raise(&p, 5, -dec_pow);
+		big_mul(&t, &m, &p);
+		big_shallow_swap(&m, &t);
+		big_raise(&p, 2, exponent);
+		big_mul(&t, &m, &p);
+		big_shallow_swap(&m, &t);
+#endif //DEBUGLOG
 		if (m.overflow_occured)
 		{
 			put_sv(sv_from_cstr("bignum overflow!"), out);
