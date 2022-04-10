@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/14 12:23:11 by qsharoly          #+#    #+#             */
-/*   Updated: 2022/03/24 01:16:16 by debby            ###   ########.fr       */
+/*   Updated: 2022/04/10 05:20:41 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 
 #if __APPLE__
 
-void	conv_percent(t_stream *out, t_fmt *f, va_list ap)
+void	conv_percent(t_stream *out, const t_fmt *f, va_list ap)
 {
 	int		pad_len;
 	char	cto[1];
@@ -29,7 +29,7 @@ void	conv_percent(t_stream *out, t_fmt *f, va_list ap)
 
 #elif __linux__
 
-void	conv_percent(t_stream *out, t_fmt *f, va_list ap)
+void	conv_percent(t_stream *out, const t_fmt *f, va_list ap)
 {
 	(void)ap;
 	(void)f;
@@ -38,7 +38,7 @@ void	conv_percent(t_stream *out, t_fmt *f, va_list ap)
 
 #endif
 
-void	conv_char(t_stream *out, t_fmt *f, va_list ap)
+void	conv_character(t_stream *out, const t_fmt *f, va_list ap)
 {
 	int		pad_len;
 	char	c[1];
@@ -48,7 +48,7 @@ void	conv_char(t_stream *out, t_fmt *f, va_list ap)
 	put_sv_padded((t_sv){ c, 1 }, pad_len, f->align, out);
 }
 
-void	conv_str(t_stream *out, t_fmt *f, va_list ap)
+void	conv_string(t_stream *out, const t_fmt *f, va_list ap)
 {
 	int		pad_len;
 	char	*s;

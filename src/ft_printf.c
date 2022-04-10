@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/27 18:24:37 by qsharoly          #+#    #+#             */
-/*   Updated: 2022/03/31 13:43:32 by debby            ###   ########.fr       */
+/*   Updated: 2022/04/10 06:57:35 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,17 +23,20 @@ void			pf_error(const char *msg)
 
 static void		print_args(t_stream *out, const char *format, va_list ap)
 {
-	t_fmt			fmt;
+	t_fmt	fmt;
+	size_t	spec_length;
 
 	while (*format)
 	{
 		if (*format == '%')
 		{
-			fmt = pf_parse_specifier(format, ap);
-			if (fmt.write_arg)
-				fmt.write_arg(out, &fmt, ap);
-			format += fmt.spec_length;
-			continue ;
+			spec_length = pf_parse_specifier(&fmt, format, ap);
+			if (spec_length > 0)
+			{
+				write_argument(out, &fmt, ap);
+				format += spec_length;
+				continue ;
+			}
 		}
 		pf_putc(*format, out);
 		format++;

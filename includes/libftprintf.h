@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 15:31:58 by qsharoly          #+#    #+#             */
-/*   Updated: 2022/03/31 13:43:16 by debby            ###   ########.fr       */
+/*   Updated: 2022/04/10 06:57:09 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define LIBFTPRINTF_H
 
 # include <stdarg.h>
+# include <unistd.h>
 # include "sv.h"
 
 # define STDOUT STDOUT_FILENO
@@ -48,6 +49,18 @@ enum			e_size
 	Size_L,
 };
 
+enum			e_type
+{
+	Unrecognized = 0,
+	Signed_integer,
+	Unsigned_integer,
+	Pointer,
+	Character,
+	String,
+	Floating_point,
+	Percent_sign,
+};
+
 enum			e_align
 {
 	AlignRight,
@@ -71,10 +84,9 @@ typedef struct	s_fmt
 	unsigned		upcase:1;
 	enum e_size 	size;
 	int				base;
-	int				spec_length;
 	int				min_width;
 	int				precision;
-	void			(*write_arg)(t_stream *b, struct s_fmt *fmt, va_list ap);
+	enum e_type		type;
 }				t_fmt;
 
 typedef struct	s_parts
@@ -106,7 +118,7 @@ void			put_sv(t_sv view, t_stream *b);
 void			put_sv_padded(t_sv view, int pad_len, enum e_align align,
 					t_stream *b);
 
-t_fmt			pf_parse_specifier(const char *str, va_list ap);
+size_t			pf_parse_specifier(t_fmt *fmt, const char *str, va_list ap);
 t_sv			sign_prefix(int is_negative, const t_fmt *fmt);
 t_sv			pf_utoa_base(char *buffer, unsigned long long value,
 					unsigned base, int upcase);
@@ -115,13 +127,13 @@ void			pf_putnbr(t_stream *out, t_sv value, t_sv prefix,
 void			pf_dtoa(t_stream *out, long double d, const t_fmt *fmt);
 void			pf_dtoa_quick(t_stream *out, long double nb, const t_fmt *fmt);
 
-void			init_conv_table(void);
-void			conv_percent(t_stream *out, t_fmt *fmt, va_list ap);
-void			conv_char(t_stream *out, t_fmt *fmt, va_list ap);
-void			conv_str(t_stream *out, t_fmt *fmt, va_list ap);
-void			conv_ptr(t_stream *out, t_fmt *fmt, va_list ap);
-void			conv_signed(t_stream *out, t_fmt *fmt, va_list ap);
-void			conv_unsigned(t_stream *out, t_fmt *fmt, va_list ap);
-void			conv_floating(t_stream *out, t_fmt *fmt, va_list ap);
+void			write_argument(t_stream *out, const t_fmt *fmt, va_list ap);
+void			conv_percent(t_stream *out, const t_fmt *fmt, va_list ap);
+void			conv_character(t_stream *out, const t_fmt *fmt, va_list ap);
+void			conv_string(t_stream *out, const t_fmt *fmt, va_list ap);
+void			conv_pointer(t_stream *out, const t_fmt *fmt, va_list ap);
+void			conv_signed(t_stream *out, const t_fmt *fmt, va_list ap);
+void			conv_unsigned(t_stream *out, const t_fmt *fmt, va_list ap);
+void			conv_floating(t_stream *out, const t_fmt *fmt, va_list ap);
 
 #endif

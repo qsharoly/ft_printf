@@ -6,26 +6,12 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/14 13:26:37 by qsharoly          #+#    #+#             */
-/*   Updated: 2022/03/31 13:51:24 by debby            ###   ########.fr       */
+/*   Updated: 2022/04/10 06:51:12 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "libftprintf.h"
-
-static void	(* const g_conv_table[256])(t_stream *, t_fmt *, va_list) = {
-	['%'] = conv_percent,
-	['c'] = conv_char,
-	['s'] = conv_str,
-	['p'] = conv_ptr,
-	['d'] = conv_signed,
-	['i'] = conv_signed,
-	['u'] = conv_unsigned,
-	['o'] = conv_unsigned,
-	['x'] = conv_unsigned,
-	['X'] = conv_unsigned,
-	['f'] = conv_floating,
-};
 
 static int			is_flag_character(char c)
 {
@@ -120,32 +106,70 @@ static const char	*parse_precision(const char *pos, t_fmt *fmt, va_list ap)
 	return (pos);
 }
 
-static const char	*parse_conv(const char *pos, t_fmt *f)
+static const char	*parse_type(const char *pos, t_fmt *f)
 {
-	if (ft_strchr("diuoxX", *pos))
-	{
-		f->upcase = (*pos == 'X');
-		f->base = 10 * !!ft_strchr("diu", *pos) + 8 * (*pos == 'o') + 16 * !!ft_strchr("xX", *pos);
-	}
-	f->write_arg = g_conv_table[(unsigned char)*pos];
-	if (f->write_arg)
-		pos++;
-	return (pos);
+	// all other elements will be initialized to `0` which is `Unrecognized`
+	enum e_type	type_char_table[256] = {
+		['%'] = Percent_sign,
+		['d'] = Signed_integer,
+		['i'] = Signed_integer,
+		['u'] = Unsigned_integer,
+		['o'] = Unsigned_integer,
+		['x'] = Unsigned_integer,
+		['X'] = Unsigned_integer,
+		['c'] = Character,
+		['s'] = String,
+		['p'] = Pointer,
+		['f'] = Floating_point,
+	};
+
+	f->base = 10 * (*pos == 'd' || *pos == 'i' || *pos == 'u')
+		+ 8 * (*pos == 'o')
+		+ 16 * (*pos == 'x' || *pos == 'X');
+	f->upcase = (*pos == 'X');
+	f->type = type_char_table[(unsigned char)*pos];
+	if (f->type == Unrecognized)
+		return (pos);
+	return (pos + 1);
 }
 
-t_fmt				pf_parse_specifier(const char *str, va_list ap)
+size_t	pf_parse_specifier(t_fmt *fmt, const char *str, va_list ap)
 {
-	t_fmt		fmt;
 	const char	*pos;
 
-	pos = str + 1;
-	ft_bzero((char *)&fmt, sizeof(t_fmt));
-	fmt.precision = 1;
-	pos = parse_flags(pos, &fmt);
-	pos = parse_min_width(pos, &fmt, ap);
-	pos = parse_precision(pos, &fmt, ap);
-	pos = parse_size_modifier(pos, &fmt);
-	pos = parse_conv(pos, &fmt);
-	fmt.spec_length = pos - str;
-	return (fmt);
+	ft_bzero((char *)fmt, sizeof(t_fmt));
+	pos = str + 1; //skip initial `%`
+	pos = parse_flags(pos, fmt);
+	pos = parse_min_width(pos, fmt, ap);
+	pos = parse_precision(pos, fmt, ap);
+	pos = parse_size_modifier(pos, fmt);
+	pos = parse_type(pos, fmt);
+	if (fmt->type == Unrecognized)
+		return (0);
+	if (!fmt->has_precision)
+	{
+		if (fmt->type == Floating_point)
+			fmt->precision = 6;
+		else
+			fmt->precision = 1;
+	}
+	return (pos - str);
+}
+
+void	write_argument(t_stream *out, const t_fmt *fmt, va_list ap)
+{
+	if (fmt->type == Signed_integer)
+		conv_signed(out, fmt, ap);
+	else if (fmt->type == Unsigned_integer)
+		conv_unsigned(out, fmt, ap);
+	else if (fmt->type == Pointer)
+		conv_pointer(out, fmt, ap);
+	else if (fmt->type == Character)
+		conv_character(out, fmt, ap);
+	else if (fmt->type == String)
+		conv_string(out, fmt, ap);
+	else if (fmt->type == Floating_point)
+		conv_floating(out, fmt, ap);
+	else if (fmt->type == Percent_sign)
+		conv_percent(out, fmt, ap);
 }
