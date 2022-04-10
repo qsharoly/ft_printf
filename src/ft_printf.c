@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/27 18:24:37 by qsharoly          #+#    #+#             */
-/*   Updated: 2022/04/10 06:57:35 by debby            ###   ########.fr       */
+/*   Updated: 2022/04/10 08:05:03 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,22 +43,20 @@ static void		print_args(t_stream *out, const char *format, va_list ap)
 	}
 }
 
-static void	putc_impl_printf(int c, t_stream *b)
+static void	putc_to_fd(int c, t_stream *b)
 {
 	int		written;
 
-	if (b->space_left == 0)
+	if (b->used == b->size)
 	{
 		written = write(b->fd, b->data, b->size);
 		if (written < 0)
 			pf_error("write error\n");
 		b->total_written += written;
-		b->pos = 0;
-		b->space_left = b->size;
+		b->used = 0;
 	}
-	b->data[b->pos] = c;
-	b->pos++;
-	b->space_left--;
+	b->data[b->used] = c;
+	b->used++;
 }
 
 __attribute__((__format__(__printf__, 1, 2)))
@@ -68,7 +66,7 @@ int				ft_printf(const char *format, ...)
 	t_stream	b;
 	char		buffer[BUFFER_SIZE];
 
-	b = pf_stream_init(STDOUT, buffer, BUFFER_SIZE, putc_impl_printf);
+	b = pf_stream_init(STDOUT, buffer, BUFFER_SIZE, putc_to_fd);
 	va_start(ap, format);
 	print_args(&b, format, ap);
 	va_end(ap);
@@ -83,7 +81,7 @@ int				ft_dprintf(int fd, const char *format, ...)
 	t_stream	b;
 	char		buffer[BUFFER_SIZE];
 
-	b = pf_stream_init(fd, buffer, BUFFER_SIZE, putc_impl_printf);
+	b = pf_stream_init(fd, buffer, BUFFER_SIZE, putc_to_fd);
 	va_start(ap, format);
 	print_args(&b, format, ap);
 	va_end(ap);
@@ -96,7 +94,7 @@ int				ft_vdprintf(int fd, const char *format, va_list ap)
 	t_stream	b;
 	char		buffer[BUFFER_SIZE];
 
-	b = pf_stream_init(fd, buffer, BUFFER_SIZE, putc_impl_printf);
+	b = pf_stream_init(fd, buffer, BUFFER_SIZE, putc_to_fd);
 	print_args(&b, format, ap);
 	pf_stream_flush(&b);
 	return (b.total_written);

@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/27 18:24:37 by qsharoly          #+#    #+#             */
-/*   Updated: 2022/04/10 06:57:52 by debby            ###   ########.fr       */
+/*   Updated: 2022/04/10 08:33:17 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,32 @@
 #include "libftprintf.h"
 
 /*
+** if no more space left, but we are in the middle of a `conv_foo` function,
+** `putc_to_string_buffer` will no-op until the `conv_foo` finishes.
+** after that, printing will terminate in `print_args` function.
+*/
+
+static void	putc_to_string_buffer(int c, t_stream *b)
+{
+	if (b->used == b->size)
+		return ;
+	b->total_written++;
+	if (b->data)
+	{
+		b->data[b->used] = c;
+		b->used++;
+	}
+}
+
+static void	putc_only_count(int c, t_stream *b)
+{
+	(void)c;
+	b->total_written++;
+}
+
+/*
 ** if `out->size == 0` we still go through the conversion
 ** to count how many chars would be written
-** (`putc_impl_snprintf` will do nothing but increase `out->total_written`
-** in this case)
 */
 
 static void	print_args(t_stream *out, const char *format, va_list ap)
@@ -25,8 +47,10 @@ static void	print_args(t_stream *out, const char *format, va_list ap)
 	t_fmt	fmt;
 	size_t	spec_length;
 
-	while ((out->space_left > 0 || (out->size == 0)) && *format)
+	while (*format)
 	{
+		if (out->used >= out->size && out->putc != putc_only_count)
+			break;
 		if (*format == '%')
 		{
 			spec_length = pf_parse_specifier(&fmt, format, ap);
@@ -42,27 +66,6 @@ static void	print_args(t_stream *out, const char *format, va_list ap)
 	}
 }
 
-/*
-** if no more space left, but we are in the middle of a variable,
-** `putc_impl_snprintf` will do a no-op until the variable finishes.
-** after that, printing will terminate in `print_args` function.
-**
-** `total_written` is always incremented to count how many characters
-** would be written when `max_size` is set to 0.
-*/
-
-static void	putc_impl_snprintf(int c, t_stream *b)
-{
-	b->total_written++;
-	if (b->space_left == 0)
-		return ;
-	if (b->data)
-	{
-		b->data[b->pos] = c;
-		b->pos++;
-		b->space_left--;
-	}
-}
 
 __attribute__((__format__(printf, 3, 4)))
 int			ft_snprintf(char *str, int max, const char *format, ...)
@@ -70,7 +73,10 @@ int			ft_snprintf(char *str, int max, const char *format, ...)
 	va_list		ap;
 	t_stream	b;
 
-	b = pf_stream_init(STDOUT, str, max, putc_impl_snprintf);
+	if (max == 0)
+		b = pf_stream_init(STDOUT, str, max, putc_only_count);
+	else
+		b = pf_stream_init(STDOUT, str, max, putc_to_string_buffer);
 	va_start(ap, format);
 	print_args(&b, format, ap);
 	va_end(ap);

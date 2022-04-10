@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 15:31:58 by qsharoly          #+#    #+#             */
-/*   Updated: 2022/04/10 06:57:09 by debby            ###   ########.fr       */
+/*   Updated: 2022/04/10 08:04:35 by debby            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,9 @@ typedef struct	s_stream
 	void	(*putc)(int c, struct s_stream *out);
 	char	*data;
 	int		size;
+	int		used;
 	int		fd;
 	int		total_written;
-	int		pos;
-	int		space_left;
 }				t_stream;
 
 enum			e_size
