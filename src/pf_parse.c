@@ -16,7 +16,7 @@
 static void	(* const g_conv_table[256])(t_stream *, t_fmt *, va_list) = {
 	['%'] = conv_percent,
 	['c'] = conv_char,
-	['s'] = conv_str,
+	['s'] = conv_cstr,
 	['p'] = conv_ptr,
 	['d'] = conv_signed,
 	['i'] = conv_signed,
@@ -25,6 +25,7 @@ static void	(* const g_conv_table[256])(t_stream *, t_fmt *, va_list) = {
 	['x'] = conv_unsigned,
 	['X'] = conv_unsigned,
 	['f'] = conv_floating,
+	['v'] = conv_sv,
 };
 
 static int			is_flag_character(char c)

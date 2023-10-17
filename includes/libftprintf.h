@@ -103,7 +103,9 @@ void			pf_putc(int c, t_stream *b);
 void			pf_puts(const char *s, t_stream *b);
 void			put_repeat(char c, int times, t_stream *b);
 void			put_sv(t_sv view, t_stream *b);
-void			put_sv_padded(t_sv view, int pad_len, enum e_align align,
+void			put_sv_padded_len(t_sv view, int pad_len, enum e_align align,
+					t_stream *b);
+void			put_sv_padded(t_sv view, int min_width, enum e_align align,
 					t_stream *b);
 
 t_fmt			pf_parse_specifier(const char *str, va_list ap);
@@ -118,10 +120,11 @@ void			pf_dtoa_quick(t_stream *out, long double nb, const t_fmt *fmt);
 void			init_conv_table(void);
 void			conv_percent(t_stream *out, t_fmt *fmt, va_list ap);
 void			conv_char(t_stream *out, t_fmt *fmt, va_list ap);
-void			conv_str(t_stream *out, t_fmt *fmt, va_list ap);
+void			conv_cstr(t_stream *out, t_fmt *fmt, va_list ap);
 void			conv_ptr(t_stream *out, t_fmt *fmt, va_list ap);
 void			conv_signed(t_stream *out, t_fmt *fmt, va_list ap);
 void			conv_unsigned(t_stream *out, t_fmt *fmt, va_list ap);
 void			conv_floating(t_stream *out, t_fmt *fmt, va_list ap);
+void			conv_sv(t_stream *out, t_fmt *f, va_list ap);
 
 #endif
