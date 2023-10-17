@@ -62,8 +62,8 @@ __attribute__((__format__(__printf__, 1, 2)))
 int				ft_printf(const char *format, ...)
 {
 	va_list		ap;
-	t_stream	b;
 	char		buffer[BUFFER_SIZE];
+	t_stream	b;
 
 	b = pf_stream_init(STDOUT, buffer, BUFFER_SIZE, putc_impl_printf);
 	va_start(ap, format);
