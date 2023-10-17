@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 15:31:58 by qsharoly          #+#    #+#             */
-/*   Updated: 2022/03/31 13:43:16 by debby            ###   ########.fr       */
+/*   Updated: 2023/01/20 21:36:20 by kith             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,8 @@ enum			e_size
 
 enum			e_align
 {
-	AlignRight,
-	AlignLeft,
+	Align_right,
+	Align_left,
 };
 
 enum			e_plus

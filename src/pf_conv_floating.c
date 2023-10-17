@@ -41,10 +41,10 @@ static int	put_if_special(t_stream *out, t_fmt *fmt, long double nb)
 		return (0);
 	sign = sign_prefix(fp_isneg(nb), fmt);
 	pad_length = fmt->min_width - (sign.length + value.length);
-	put_repeat(' ', (fmt->align == AlignRight) * pad_length, out);
+	put_repeat(' ', (fmt->align == Align_right) * pad_length, out);
 	put_sv(sign, out);
 	put_sv(value, out);
-	put_repeat(' ', (fmt->align == AlignLeft) * pad_length, out);
+	put_repeat(' ', (fmt->align == Align_left) * pad_length, out);
 	return (1);
 }
 

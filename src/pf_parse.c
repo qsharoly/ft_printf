@@ -39,7 +39,7 @@ static const char	*parse_flags(const char *pos, t_fmt *fmt)
 		if (*pos == '0')
 			fmt->align_right_by_leading_zeros = 1;
 		else if (*pos == '-')
-			fmt->align = AlignLeft;
+			fmt->align = Align_left;
 		else if (*pos == '+')
 			fmt->plus_mode = ExplicitPlus;
 		else if (*pos == ' ' && fmt->plus_mode != ExplicitPlus)
@@ -90,7 +90,7 @@ static const char	*parse_min_width(const char *pos, t_fmt *fmt, va_list ap)
 		pos++;
 		nb = va_arg(ap, int);
 		if (nb < 0)
-			fmt->align = AlignLeft;
+			fmt->align = Align_left;
 		fmt->min_width = ft_abs(nb);
 	}
 	else
