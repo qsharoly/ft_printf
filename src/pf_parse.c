@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/14 13:26:37 by qsharoly          #+#    #+#             */
-/*   Updated: 2023/10/18 16:47:28 by kith             ###   ########.fr       */
+/*   Updated: 2024/02/17 08:51:59 by kith             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,5 +172,6 @@ void	write_argument(t_stream *out, const t_fmt *fmt, va_list ap)
 		conv_sv(out, fmt, ap);
 		break;
 	default:
+		;
 	}
 }
