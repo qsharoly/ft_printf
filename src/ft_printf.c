@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/27 18:24:37 by qsharoly          #+#    #+#             */
-/*   Updated: 2023/10/17 12:12:33 by kith             ###   ########.fr       */
+/*   Updated: 2024/07/26 00:33:08 by kith             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,9 +93,14 @@ int				ft_vdprintf(int fd, const char *format, va_list ap)
 {
 	t_stream	b;
 	char		buffer[BUFFER_SIZE];
+	va_list		ap_copy;
 
 	b = pf_stream_init(fd, buffer, BUFFER_SIZE, putc_to_fd);
-	print_args(&b, format, &ap);
+	/* Note: This seemingly unnecessary copy is required in case va_list
+	 * is an array type. */
+	va_copy(ap_copy, ap);
+	print_args(&b, format, &ap_copy);
+	va_end(ap_copy);
 	pf_stream_flush(&b);
 	return (b.total_written);
 }
