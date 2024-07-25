@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/27 18:24:37 by qsharoly          #+#    #+#             */
-/*   Updated: 2023/10/17 12:42:00 by kith             ###   ########.fr       */
+/*   Updated: 2024/07/26 00:54:32 by kith             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,24 +18,6 @@
 ** `putc_to_string_buffer` will no-op until the `conv_foo` finishes.
 ** after that, printing will terminate in `print_args` function.
 */
-
-static void	putc_to_string_buffer(int c, t_stream *b)
-{
-	if (b->used == b->size)
-		return ;
-	b->total_written++;
-	if (b->data)
-	{
-		b->data[b->used] = c;
-		b->used++;
-	}
-}
-
-static void	putc_only_count(int c, t_stream *b)
-{
-	(void)c;
-	b->total_written++;
-}
 
 /*
 ** if `out->size == 0` we still go through the conversion
@@ -49,7 +31,7 @@ static void	print_args(t_stream *out, const char *format, va_list *ap)
 
 	while (*format)
 	{
-		if (out->used >= out->size && out->putc != putc_only_count)
+		if (out->used >= out->size && out->write_mode != CALC_REQUIRED_SIZE)
 			break;
 		if (*format == '%')
 		{
@@ -82,9 +64,9 @@ int			ft_snprintf(char *buffer, int bufsz, const char *format, ...)
 	t_stream	b;
 
 	if (bufsz == 0)
-		b = pf_stream_init(STDOUT, buffer, bufsz, putc_only_count);
+		b = pf_stream_init(STDOUT, buffer, bufsz, CALC_REQUIRED_SIZE, NULL);
 	else
-		b = pf_stream_init(STDOUT, buffer, bufsz, putc_to_string_buffer);
+		b = pf_stream_init(STDOUT, buffer, bufsz, WRITE_TO_STRING_BUFFER, NULL);
 	va_start(ap, format);
 	print_args(&b, format, &ap);
 	va_end(ap);

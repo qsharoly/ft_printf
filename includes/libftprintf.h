@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 15:31:58 by qsharoly          #+#    #+#             */
-/*   Updated: 2023/10/17 15:14:00 by kith             ###   ########.fr       */
+/*   Updated: 2024/07/26 00:49:59 by kith             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,18 @@
 # define MAXBUF_UTOA (sizeof(long long unsigned) * 8 + 1)
 # define DTOA_DEFAULT_PRECISION 6
 
+enum			e_write_mode
+{
+	WRITE_TO_FD_BUFFERED,
+	WRITE_TO_STRING_BUFFER,
+	CALC_REQUIRED_SIZE,
+	USE_CUSTOM_PUTC_CALLBACK,
+};
+
 typedef struct	s_stream
 {
-	void	(*putc)(int c, struct s_stream *out);
+	enum	e_write_mode write_mode;
+	void	(*putc_custom_callback)(int c, struct s_stream *out);
 	char	*data;
 	int		size;
 	int		used;
@@ -95,8 +104,8 @@ int				ft_snprintf(char *buf, int max, const char *format, ...);
 
 void			pf_error(const char *msg);
 
-t_stream		pf_stream_init(int target_fd, char *data, int size,
-					void (*putc)(int, t_stream*));
+t_stream		pf_stream_init(int fd, char *buffer, int size,
+				enum e_write_mode mode, void (*custom_putc)(int, t_stream *));
 void			pf_stream_flush(t_stream *b);
 void			pf_putc(int c, t_stream *b);
 void			pf_puts(const char *s, t_stream *b);
