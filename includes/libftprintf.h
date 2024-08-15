@@ -6,7 +6,7 @@
 /*   By: qsharoly <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 15:31:58 by qsharoly          #+#    #+#             */
-/*   Updated: 2024/07/26 00:49:59 by kith             ###   ########.fr       */
+/*   Updated: 2024/08/15 22:22:16 by kith             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ enum			e_write_mode
 typedef struct	s_stream
 {
 	enum	e_write_mode write_mode;
-	void	(*putc_custom_callback)(int c, struct s_stream *out);
+	void	(*custom_putc_callback)(int c, struct s_stream *out);
 	char	*data;
 	int		size;
 	int		used;
