@@ -18,7 +18,6 @@ endif
 endif
 
 SRC = ft_printf.c\
-	  ft_snprintf.c\
 	  sv.c\
 	  pf_stream.c\
 	  pf_stream_helpers.c\
